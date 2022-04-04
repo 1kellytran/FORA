@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fora.Shared
 {
-    public class UserDtoModel
+    internal class UserDTO
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
     }
 }
