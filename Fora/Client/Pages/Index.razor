@@ -1,9 +1,14 @@
 ﻿@page "/"
+@inject IUserManager IUserManager
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, Kelly och fredrik!</h1>
+Welcome to FORA
 
-Welcome to your new app.
+<EditForm>
+    <InputText @bind-Value="UserToAdd.Username" placeholder="Username"></InputText>
+</EditForm>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code{
+    public UserDtoModel UserToAdd { get; set; } = new();
+}
