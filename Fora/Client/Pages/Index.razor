@@ -10,16 +10,21 @@
 <EditForm Model="UserToAdd" OnValidSubmit="SignUpUser">
     <DataAnnotationsValidator/>
     <div>
-    <label>Username:</label>
-    <InputText @bind-Value="UserToAdd.Username" placeholder="Username"></InputText>
+        <label>Username:</label>
+        <InputText @bind-Value="UserToAdd.Username" placeholder="Username" class="form-control"></InputText>
     </div>
-    <label>Password:</label>
-    <InputText type="password" @bind-Value="UserToAdd.Password" placeholder="Password"></InputText>
-    <br />
-    <label>Verify password:</label>
-    <InputText type="password" @bind-Value="UserToAdd.VerifiedPassword" placeholder="Verify Password"></InputText>
-    <br />
-    <button type="submit" >Submit</button>
+     <div>
+        <label>Password:</label>
+        <InputText type="password" @bind-Value="UserToAdd.Password" placeholder="Password" class="form-control"></InputText>
+    </div>
+    <div>
+        <label>Verify password:</label>
+        <InputText type="password" @bind-Value="UserToAdd.VerifiedPassword" placeholder="Verify Password" class="form-control"></InputText>
+     </div>
+     <br />
+     <div>
+        <button type="submit" >Submit</button>
+     </div>
     <ValidationSummary/>
 </EditForm>
 
