@@ -1,14 +1,42 @@
 ﻿@page "/"
-@inject IUserManager IUserManager
+@inject IUserManager UserManager
 
 <PageTitle>Index</PageTitle>
 
-Welcome to FORA
-
-<EditForm>
+<h1>Welcome to FORA</h1>
+<br />
+<h3>Sign up!</h3>
+ 
+<EditForm Model="UserToAdd" OnValidSubmit="SignUpUser">
+    <DataAnnotationsValidator/>
+    <div>
+    <label>Username:</label>
     <InputText @bind-Value="UserToAdd.Username" placeholder="Username"></InputText>
+    </div>
+    <label>Password:</label>
+    <InputText type="password" @bind-Value="UserToAdd.Password" placeholder="Password"></InputText>
+    <br />
+    <label>Verify password:</label>
+    <InputText type="password" @bind-Value="UserToAdd.VerifiedPassword" placeholder="Verify Password"></InputText>
+    <br />
+    <button type="submit" >Submit</button>
+    <ValidationSummary/>
 </EditForm>
+
 
 @code{
     public UserDTOModel UserToAdd { get; set; } = new();
+
+
+    private async Task SignUpUser()
+    {
+        var token = await UserManager.AddUser(UserToAdd);
+
+        // add token to the local storage (blazore)
+    }
+
+
+
+
+
 }

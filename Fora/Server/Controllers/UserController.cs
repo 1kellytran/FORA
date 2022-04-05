@@ -11,27 +11,43 @@ namespace Fora.Server.Controllers
     {
         private readonly AppDbContext _context;
         private readonly AuthDbContext _authContext;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<IdentityUser> signInManager) 
+        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager) 
         {
             _context = context;
             _authContext = authContext;
             _signInManager = signInManager;
         }
-        public async Task SignUpAsync(string username, string password)
+
+        [HttpPost]
+        public async Task<ActionResult<string>> SignUpAsync([FromBody]UserDTOModel userToSignUp)
         {
             // ***** REGISTER USER *****
 
             // Create empty, new user
-            IdentityUser newUser = new();
+            ApplicationUser newUser = new();
 
             // Add properties to identity user
-            newUser.UserName = username;
-
+            newUser.UserName = userToSignUp.Username;
+            
             // Create user
-            var createUserResult = await _signInManager.UserManager.CreateAsync(newUser, password);
+            var createUserResult = await _signInManager.UserManager.CreateAsync(newUser, userToSignUp.Password);
+
+            if(createUserResult.Succeeded)
+            {
+                // Generate token
+
+                string token = Guid.NewGuid().ToString();
+
+                // Send that token back
+
+                return Ok(token);
+            }
+
+            return BadRequest("Couldn't create user");
         }
+
         // GET: api/<UserController>
         [HttpGet("{id}")]
         public ActionResult<UserModel> GetUser(int id)

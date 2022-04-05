@@ -17,9 +17,15 @@ namespace Fora.Client.Services
             return user;
         }
 
-        //public async Task AddUser(UserModel user)
-        //{
-        //    await _httpClient.PostAsJsonAsyn("api/user", user);
-        //}
+        public async Task<string> AddUser(UserDTOModel user)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/user", user);
+
+            var token = await response.Content.ReadAsStringAsync();
+
+            return token;
+        }
+
+       
     }
 }
