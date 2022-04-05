@@ -13,13 +13,14 @@ namespace Fora.Server.Controllers
         private readonly AppDbContext _context;
         private readonly AuthDbContext _authContext;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public UserManager userManager; 
+        private readonly IAccountManager _accountManager;
 
-        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager) 
+        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager, IAccountManager accountManager) 
         {
             _context = context;
             _authContext = authContext;
             _signInManager = signInManager;
+            _accountManager = accountManager;
         }
 
         [HttpPost]
@@ -42,12 +43,11 @@ namespace Fora.Server.Controllers
             if(createUserResult.Succeeded)
             {
                 // Generate token
-
-                string token = Guid.NewGuid().ToString();
+                string token = _accountManager.GenerateToken();
 
                 // Send that token back
                 newUser.Token = token;
-                await userManager.UpdateUserToken(newUser);
+                await _accountManager.UpdateUserInDb(newUser);
 
                 return Ok(token);
             }

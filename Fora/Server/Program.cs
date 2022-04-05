@@ -1,5 +1,7 @@
 global using Fora.Server.Data;
 global using Fora.Shared;
+using Fora.Client.Services;
+using Fora.Server.App;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +18,7 @@ var connectionStringAuth = builder.Configuration.GetConnectionString("AuthConnec
 builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionStringAuth));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
+builder.Services.AddScoped<IAccountManager, AccountManager>();
 
 var app = builder.Build();
 
