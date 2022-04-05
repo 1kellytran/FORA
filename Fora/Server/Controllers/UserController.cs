@@ -29,8 +29,10 @@ namespace Fora.Server.Controllers
             ApplicationUser newUser = new();
 
             // Add properties to identity user
+
             newUser.UserName = userToSignUp.Username;
             newUser.Token = "";
+
             
             // Create user
             var createUserResult = await _signInManager.UserManager.CreateAsync(newUser, userToSignUp.Password);
@@ -43,11 +45,20 @@ namespace Fora.Server.Controllers
 
                 // Send that token back
                 newUser.Token = token;
-                _authContext.Add(newUser.Token);
-                    return Ok(token);
+
+
+                await UpdateUserToken(newUser);
+
+                return Ok(token);
+
             }
 
             return BadRequest("Couldn't create user");
+        }
+
+        private async Task UpdateUserToken(ApplicationUser newUser)
+        {
+            await _signInManager.UserManager.UpdateAsync(newUser);
         }
 
         // GET: api/<UserController>
