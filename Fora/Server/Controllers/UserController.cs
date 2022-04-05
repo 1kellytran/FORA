@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Fora.Server.App;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,6 +13,7 @@ namespace Fora.Server.Controllers
         private readonly AppDbContext _context;
         private readonly AuthDbContext _authContext;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        public UserManager userManager; 
 
         public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager) 
         {
@@ -43,12 +45,15 @@ namespace Fora.Server.Controllers
 
                 // Send that token back
                 newUser.Token = token;
-                _authContext.Add(newUser.Token);
-                    return Ok(token);
+                await userManager.UpdateUserToken(newUser);
+
+                return Ok(token);
             }
 
             return BadRequest("Couldn't create user");
         }
+
+       
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
