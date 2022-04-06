@@ -1,21 +1,90 @@
 ﻿@page "/mypage"
+@inject IUserManager _usermanager
+@inject IDataManager _datamanager
 
 
-<h3>Welcome to your page </h3>
-<br />
-<h4>Your interests:</h4>
-<div>
-    <ul>
-        <li>Motorcycle</li>
-        <li>Fish</li>
-    </ul>
-</div>
+<h1>My Page</h1>
+<hr />
 
 
+<form>
+
+    <div>
+        <label>My current interest:</label>
+        <br />
+       @* @foreach (var interest in UserInterest)
+        {
+            <p>interest <button>Remove</button></p>
+            
+            <br>
+        }*@
+    </div>
+
+    <hr />
+
+    <div>
+        <label>Add interest from existing interest:</label>
+        <br />
+
+     @*   @foreach (var interest in ListOfAllInterest)
+        {
+            <ul>
+                <li>interest<button>Add as favourite </button></li>
+                <br />
+            </ul>
+            
+        }*@
+    </div>
+
+    <hr />
+    @*<form method="post">
+    <label>Create new interests:</label>
+    <Input type="text" style="width:350px" placeholder="Enter interest">
+    </form>
+        <hr />*@
+
+        <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
+    <DataAnnotationsValidator/>
+    <div>
+        <label>Username:</label>
+        <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
+    </div>
+   
+    <div>
+        <button type="submit" >Submit</button>
+     </div>
+
+    <ValidationSummary/>
+</EditForm>
+
+
+
+</form>
 
 
 @code {
+    //Sets new userinterest
+    public InterestModel InterestToAdd { get; set; } = new();
+
+    private async Task AddPersonalInterest()
+    {
+        InterestToAdd.Threads = new();
+        await _datamanager.CreateInterest(InterestToAdd);
+    }
+    //Gets and sets the current userinterest
+    public List<UserInterestModel> UserInterest { get; set; }
+
+    private async Task GetCurrentUserList()
+    {
+        
+
+    }
+
+        
+       
+        
     
+
 
 
 }
