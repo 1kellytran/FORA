@@ -3,7 +3,7 @@ namespace Fora.Server.App
 {
     public interface IAccountManager
     {
-        Task UpdateUserInDb(ApplicationUser newUser);
+        Task UpdateUserInAuthDb(ApplicationUser newUser);
         string GenerateToken();
     }
 }
