@@ -31,6 +31,9 @@ namespace Fora.Server.Controllers
         {
             return Ok("");
         }
+        
+      
+        
 
         [HttpPost]
         public async Task<ActionResult<string>> SignUpAsync([FromBody] UserDTOModel userToSignUp)
@@ -54,7 +57,12 @@ namespace Fora.Server.Controllers
 
                 //give user token
                 newUser.Token = token;
+
+                //update user in authDb
                 await _accountManager.UpdateUserInAuthDb(newUser);
+
+                //add user to Fora database
+                await _accountManager.AddUserToForaDb(userToSignUp);
 
                 // Send that token back
                 return Ok(token);
@@ -64,7 +72,7 @@ namespace Fora.Server.Controllers
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
-        public ActionResult<UserModel> GetUser(int id)
+        public ActionResult<UserModel> GetUserById(int id)
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
             if (user == null)
@@ -73,6 +81,7 @@ namespace Fora.Server.Controllers
             }
             return Ok(user);
         }
+
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
@@ -83,9 +92,19 @@ namespace Fora.Server.Controllers
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task DeleteUser(int id)
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
+
+
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
+            }
+            
+
+
         }
     }
 }
