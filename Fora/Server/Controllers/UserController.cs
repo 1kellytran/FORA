@@ -15,7 +15,7 @@ namespace Fora.Server.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccountManager _accountManager;
 
-        public UserController(AppDbContext context, /*AuthDbContext authContext,*/ SignInManager<ApplicationUser> signInManager, IAccountManager accountManager) 
+        public UserController(AppDbContext context, /*AuthDbContext authContext,*/ SignInManager<ApplicationUser> signInManager, IAccountManager accountManager)
         {
             _context = context;
             //_authContext = authContext;
@@ -31,7 +31,7 @@ namespace Fora.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> SignUpAsync([FromBody]UserDTOModel userToSignUp)
+        public async Task<ActionResult<string>> SignUpAsync([FromBody] UserDTOModel userToSignUp)
         {
             // ***** REGISTER USER *****
 
@@ -45,7 +45,7 @@ namespace Fora.Server.Controllers
             // Create user
             var createUserResult = await _signInManager.UserManager.CreateAsync(newUser, userToSignUp.Password);
 
-            if(createUserResult.Succeeded)
+            if (createUserResult.Succeeded)
             {
                 // Generate token
                 string token = _accountManager.GenerateToken();
@@ -61,14 +61,14 @@ namespace Fora.Server.Controllers
             return BadRequest("Couldn't create user");
         }
 
-       
+
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
         public ActionResult<UserModel> GetUser(int id)
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("404 - User not found");
             }
@@ -78,9 +78,9 @@ namespace Fora.Server.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value )
+        public void Post([FromBody] string value)
         {
-            
+
         }
 
         // PUT api/<UserController>/5
