@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Shared\Fora.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\sample-data\" />
+  </ItemGroup>
+
 </Project>
