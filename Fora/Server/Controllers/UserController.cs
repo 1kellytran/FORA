@@ -11,14 +11,14 @@ namespace Fora.Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
-        //private readonly AuthDbContext _authContext; ta bort??
+        private readonly AuthDbContext _authContext;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccountManager _accountManager;
 
-        public UserController(AppDbContext context, /*AuthDbContext authContext,*/ SignInManager<ApplicationUser> signInManager, IAccountManager accountManager) 
+        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager, IAccountManager accountManager) 
         {
             _context = context;
-            //_authContext = authContext;
+            _authContext = authContext;
             _signInManager = signInManager;
             _accountManager = accountManager;
         }
