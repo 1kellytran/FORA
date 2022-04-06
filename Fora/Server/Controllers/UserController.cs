@@ -59,11 +59,8 @@ namespace Fora.Server.Controllers
                 // Send that token back
                 return Ok(token);
             }
-
             return BadRequest("Couldn't create user");
         }
-
-
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
