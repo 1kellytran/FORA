@@ -67,11 +67,8 @@ namespace Fora.Server.Controllers
                 // Send that token back
                 return Ok(token);
             }
-
             return BadRequest("Couldn't create user");
         }
-
-
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
@@ -84,7 +81,6 @@ namespace Fora.Server.Controllers
             }
             return Ok(user);
         }
-
 
 
         // PUT api/<UserController>/5
@@ -100,12 +96,14 @@ namespace Fora.Server.Controllers
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
 
+
             if (user != null)
             {
                 _context.Users.Remove(user);
                 //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
             }
             
+
 
         }
     }
