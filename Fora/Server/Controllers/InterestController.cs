@@ -32,14 +32,14 @@ namespace Fora.Server.Controllers
 
         // POST api/<InterestController>
         [HttpPost]
-        public async Task CreateInterest([FromBody] InterestModel iterestToAdd)
+        public async Task CreateInterest([FromBody] InterestModel interestToAdd)
         {
-
-            _context.Interests.Add(iterestToAdd);
+            
+            _context.Interests.Add(interestToAdd);
             await _context.SaveChangesAsync();
 
-
         }
+
 
         // PUT api/<InterestController>/5
         [HttpPut("{id}")]
