@@ -32,11 +32,9 @@ namespace Fora.Server.Controllers
             ApplicationUser newUser = new();
 
             // Add properties to identity user
-
             newUser.UserName = userToSignUp.Username;
             newUser.Token = "";
 
-            
             // Create user
             var createUserResult = await _signInManager.UserManager.CreateAsync(newUser, userToSignUp.Password);
 
@@ -95,6 +93,9 @@ namespace Fora.Server.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
+
+
         }
     }
 }
