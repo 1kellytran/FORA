@@ -5,7 +5,7 @@ namespace Fora.Client.Services
 {
     public interface IDataManager
     {
-        Task CreateIntrest(InterestModel interestToAdd);
+        Task CreateInterest(InterestModel interestToAdd);
         Task<List<InterestModel>> GetAllInterests();
     }
 }

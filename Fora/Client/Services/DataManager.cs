@@ -12,7 +12,7 @@ namespace Fora.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task CreateIntrest(InterestModel interestToAdd)
+        public async Task CreateInterest(InterestModel interestToAdd)
         {
             await _httpClient.PostAsJsonAsync("api/interest", interestToAdd);
         }
