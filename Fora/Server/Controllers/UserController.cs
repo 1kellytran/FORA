@@ -24,6 +24,13 @@ namespace Fora.Server.Controllers
         }
 
         [HttpPost]
+        [Route("signin")]
+        public async Task<ActionResult<string>> SignInAsync([FromBody] UserDTOModel userToSignIn)
+        {
+            return Ok("");
+        }
+
+        [HttpPost]
         public async Task<ActionResult<string>> SignUpAsync([FromBody]UserDTOModel userToSignUp)
         {
             // ***** REGISTER USER *****
