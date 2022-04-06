@@ -16,7 +16,7 @@ namespace Fora.Server.Controllers
         private readonly IAccountManager _accountManager;
 
 
-        public UserController(AppDbContext context, /*AuthDbContext authContext,*/ SignInManager<ApplicationUser> signInManager, IAccountManager accountManager)
+        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager, IAccountManager accountManager)
 
         {
             _context = context;
@@ -77,18 +77,11 @@ namespace Fora.Server.Controllers
             return Ok(user);
         }
 
-
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-
-        }
-
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+
         }
 
         // DELETE api/<UserController>/5
@@ -96,8 +89,6 @@ namespace Fora.Server.Controllers
         public void Delete(int id)
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
-
-
         }
     }
 }
