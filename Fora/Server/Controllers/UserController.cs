@@ -16,7 +16,7 @@ namespace Fora.Server.Controllers
         private readonly IAccountManager _accountManager;
 
 
-        public UserController(AppDbContext context, /*AuthDbContext authContext,*/ SignInManager<ApplicationUser> signInManager, IAccountManager accountManager)
+        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager, IAccountManager accountManager)
 
         {
             _context = context;
@@ -59,11 +59,8 @@ namespace Fora.Server.Controllers
                 // Send that token back
                 return Ok(token);
             }
-
             return BadRequest("Couldn't create user");
         }
-
-
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
@@ -78,12 +75,12 @@ namespace Fora.Server.Controllers
         }
 
 
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+        //// POST api/<UserController>
+        //[HttpPost]
+        //public void Post([FromBody] string value)
+        //{
 
-        }
+        //}
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
