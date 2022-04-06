@@ -17,7 +17,7 @@ namespace Fora.Client.Services
             return user;
         }
 
-        public async Task<string> AddUser(UserDTOModel user)
+        public async Task<string> SignUpUser(UserDTOModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user", user);
 
@@ -26,6 +26,10 @@ namespace Fora.Client.Services
             return token;
         }
 
-       
+        public async Task<string> SignInUser(UserDTOModel user)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/user/signin", user);
+            throw new NotImplementedException();
+        }
     }
 }

@@ -2,62 +2,38 @@
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
-
-<PageTitle>Index</PageTitle>
+<PageTitle>Sign In</PageTitle>
 
 <h1>Welcome to FORA</h1>
 <br />
-<h3>Sign up!</h3>
- 
-<EditForm Model="UserToAdd" OnValidSubmit="SignUpUser">
+
+<h3>Sign in</h3>
+<EditForm Model="User" OnValidSubmit="SignInUser">
     <DataAnnotationsValidator/>
     <div>
         <label>Username:</label>
-        <InputText @bind-Value="UserToAdd.Username" placeholder="Username" class="form-control"></InputText>
+        <InputText @bind-Value="User.Username" placeholder="Username" class="form-control mb-2"></InputText>
     </div>
      <div>
         <label>Password:</label>
-        <InputText type="password" @bind-Value="UserToAdd.Password" placeholder="Password" class="form-control"></InputText>
+        <InputText type="password" @bind-Value="User.Password" placeholder="Password" class="form-control mb-2"></InputText>
     </div>
-    <div>
-        <label>Verify password:</label>
-        <InputText type="password" @bind-Value="UserToAdd.VerifiedPassword" placeholder="Verify Password" class="form-control"></InputText>
-     </div>
-     <br />
      <div>
-        <button type="submit" >Submit</button>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+        <a href="SignUp">Not a member? Sign up here!</a>
      </div>
+     @*<div>
+        <InputText type="password" @bind-Value="User.VerifiedPassword" class="form-control mb-2" hidden>@User.Password</InputText>
+    </div>*@
     <ValidationSummary/>
 </EditForm>
 
 
 @code{
-    public UserDTOModel UserToAdd { get; set; } = new();
+    public UserDTOModel User { get; set; } = new();
 
-
-    private async Task SignUpUser()
+    private async Task SignInUser()
     {
-        var token = await UserManager.AddUser(UserToAdd);
-
-         //add token to the local storage (blazore)
-        UpdateLocalStorage(token);
-
-
+        var token = await UserManager.SignInUser(User);
     }
-    public async void UpdateLocalStorage(string tokenToAdd)
-    {
-        await localStore.SetItemAsync("Token", tokenToAdd);
-    }
-
-    //public async void ClearLocalStorage()
-
-    //{
-    //    noteContent = "";
-    //    await localStore.ClearAsync();
-    //}                                                             ///Ska läggas till vid utloggning
-
-
-
-
-
 }
