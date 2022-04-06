@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace Fora.Server.Controllers
 {
@@ -45,10 +45,11 @@ namespace Fora.Server.Controllers
                 // Generate token
                 string token = _accountManager.GenerateToken();
 
-                // Send that token back
+                //give user token
                 newUser.Token = token;
                 await _accountManager.UpdateUserInDb(newUser);
 
+                // Send that token back
                 return Ok(token);
             }
 
