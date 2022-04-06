@@ -8,19 +8,13 @@ namespace Fora.Server.Controllers
     [ApiController]
     public class InterestController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public InterestController(AppDbContext context)
-        {
-            _context = context;
-        }
 
         // GET: api/<InterestController>
         [HttpGet]
-        public async Task<List<InterestModel>> GetAllInterests()
+        public IEnumerable<string> Get()
         {
-            return _context.Interests.ToList();
-            
+            return new string[] { "value1", "value2" };
+
         }
 
         // GET api/<InterestController>/5
@@ -34,6 +28,8 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+
+
 
 
         }
