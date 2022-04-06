@@ -5,11 +5,12 @@ namespace Fora.Server.App
     public class AccountManager : IAccountManager
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AppDbContext _context;
 
-        public AccountManager(SignInManager<ApplicationUser> signInManager)
+        public AccountManager(SignInManager<ApplicationUser> signInManager, AppDbContext context)
         {
             _signInManager = signInManager;
-
+            _context = context;
         }
 
         public async Task UpdateUserInAuthDb(ApplicationUser newUser)
@@ -21,6 +22,18 @@ namespace Fora.Server.App
         {
             string token = Guid.NewGuid().ToString();
             return token;
+        }
+
+        public async Task AddUserToForaDb (UserDTOModel dtoModel)
+        {
+            UserModel userToAdd = new();
+            userToAdd.Username = dtoModel.Username;
+            userToAdd.Deleted = false;
+            userToAdd.Banned = false;
+
+            _context.Users.Add(userToAdd);
+            _context.SaveChanges();
+
         }
     }
 }

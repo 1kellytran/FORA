@@ -4,9 +4,11 @@ namespace Fora.Client.Services
 {
     public interface IUserManager
     {
-        Task<UserModel> GetUser(int id);
+        Task<UserModel> GetUserById(int id);
         Task<string> SignUpUser(UserDTOModel user);
 
         Task<string> SignInUser(UserDTOModel user);
+
+        Task DeleteUser(int id);
     }
 }
