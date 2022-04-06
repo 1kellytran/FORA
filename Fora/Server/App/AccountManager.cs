@@ -15,6 +15,7 @@ namespace Fora.Server.App
         {
             await _signInManager.UserManager.UpdateAsync(newUser);
         }
+        
         public string GenerateToken()
         {
             string token = Guid.NewGuid().ToString();
