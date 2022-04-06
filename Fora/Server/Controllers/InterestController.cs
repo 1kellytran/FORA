@@ -32,10 +32,11 @@ namespace Fora.Server.Controllers
 
         // POST api/<InterestController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task CreateInterest([FromBody] InterestModel iterestToAdd)
         {
 
-
+            _context.Interests.Add(iterestToAdd);
+            await _context.SaveChangesAsync();
 
 
         }
@@ -48,8 +49,19 @@ namespace Fora.Server.Controllers
 
         // DELETE api/<InterestController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<String> DeleteInterest(int id)
         {
+            string message = "";
+
+            InterestModel interestToDelete = new();
+            interestToDelete = _context.Interests.FirstOrDefault(x => x.Id == id);
+            if (interestToDelete != null)
+            {
+                _context.Interests.Remove(interestToDelete);
+                await _context.SaveChangesAsync();
+                return message = "Interest deleted!";
+            }
+            else return message = "Something went wrong, cannot delete user!";
         }
     }
 }

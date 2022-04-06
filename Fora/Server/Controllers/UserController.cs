@@ -11,14 +11,14 @@ namespace Fora.Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly AuthDbContext _authContext;
+        //private readonly AuthDbContext _authContext; ta bort??
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccountManager _accountManager;
 
-        public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager, IAccountManager accountManager) 
+        public UserController(AppDbContext context, /*AuthDbContext authContext,*/ SignInManager<ApplicationUser> signInManager, IAccountManager accountManager) 
         {
             _context = context;
-            _authContext = authContext;
+            //_authContext = authContext;
             _signInManager = signInManager;
             _accountManager = accountManager;
         }
@@ -52,7 +52,7 @@ namespace Fora.Server.Controllers
 
                 //give user token
                 newUser.Token = token;
-                await _accountManager.UpdateUserInDb(newUser);
+                await _accountManager.UpdateUserInAuthDb(newUser);
 
                 // Send that token back
                 return Ok(token);
@@ -75,20 +75,13 @@ namespace Fora.Server.Controllers
             return Ok(user);
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
-        //// POST api/<UserController>
-        //[HttpPost]
-        //public async Task<UserModel> AddUser([FromBody]UserModel userToAdd)
-        //{
-        //    _context.Users.Add(userToAdd);
-        //    return userToAdd;
-        //}
+        // POST api/<UserController>
+        [HttpPost]
+        public void Post([FromBody] string value )
+        {
+            
+        }
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
