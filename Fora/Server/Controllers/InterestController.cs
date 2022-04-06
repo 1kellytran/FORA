@@ -8,12 +8,18 @@ namespace Fora.Server.Controllers
     [ApiController]
     public class InterestController : ControllerBase
     {
+        private readonly AppDbContext _context;
+
+        public InterestController(AppDbContext context)
+        {
+            _context = context;
+        }
 
         // GET: api/<InterestController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<List<InterestModel>> GetAllInterests()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Interests.ToList();
 
         }
 
