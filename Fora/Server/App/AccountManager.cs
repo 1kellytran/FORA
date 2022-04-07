@@ -24,7 +24,6 @@ namespace Fora.Server.App
             return token;
         }
 
-
         //in prgress, dont know if it works
         public async void ChangePassword(ApplicationUser userToChange, string password)
         {
@@ -33,6 +32,7 @@ namespace Fora.Server.App
             await _signInManager.UserManager.RemovePasswordAsync(userToChange);
             //adds new password? requirements, add in page?? 
             await _signInManager.UserManager.AddPasswordAsync(userToChange, password);
+        }
 
         }
 
@@ -45,7 +45,6 @@ namespace Fora.Server.App
 
             _context.Users.Add(userToAdd);
             _context.SaveChanges();
-
         }
     }
 

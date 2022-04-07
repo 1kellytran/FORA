@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-
-
 namespace Fora.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -15,9 +13,7 @@ namespace Fora.Server.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager; //move to accoutManager?? (all code)
         private readonly IAccountManager _accountManager;
 
-
         public UserController(AppDbContext context, AuthDbContext authContext, SignInManager<ApplicationUser> signInManager, IAccountManager accountManager)
-
         {
             _context = context;
             _authContext = authContext;
@@ -26,16 +22,7 @@ namespace Fora.Server.Controllers
         }
 
         [HttpPost]
-        [Route("signin")]
-        public async Task<ActionResult<string>> SignInAsync([FromBody] UserDTOModel userToSignIn)
-        {
-            return Ok("");
-        }
-        
-      
-        
-
-        [HttpPost]
+        //[Route("SignUp")]
         public async Task<ActionResult<string>> SignUpAsync([FromBody] UserDTOModel userToSignUp)
         {
             // ***** REGISTER USER *****
@@ -55,13 +42,13 @@ namespace Fora.Server.Controllers
                 // Generate token
                 string token = _accountManager.GenerateToken();
 
-                //give user token
+                // Give user token
                 newUser.Token = token;
 
-                //update user in authDb
+                // Update user in authDb
                 await _accountManager.UpdateUserInAuthDb(newUser);
 
-                //add user to Fora database
+                // Add user to Fora database
                 await _accountManager.AddUserToForaDb(userToSignUp);
 
                 // Send that token back
@@ -70,13 +57,43 @@ namespace Fora.Server.Controllers
             return BadRequest("Couldn't create user");
         }
 
+        [HttpPost]
+        [Route("signin")]
+        public async Task<ActionResult> SignInUser(SignInModel userToSignIn)
+        {
+            var signInResult = await _signInManager.PasswordSignInAsync(userToSignIn.Username, userToSignIn.Password, false, false);
 
+            if (signInResult.Succeeded)
+            {
+                //Generate token
+                string token = _accountManager.GenerateToken();
+
+                //Send token back
+                userToSignIn.Token = token;
+                return Ok(token);
+            }
+            return BadRequest("User not found");
+        }
+
+        //[HttpPost]
+        //[Route("signin")]
+        //public async Task<ActionResult> SignInAsync(SignInModel userToSignIn)
+        //{
+        //    var signInResult = await _signInManager.PasswordSignInAsync(userToSignIn.Username, userToSignIn.Password, false, false);
+        //    if (signInResult.Succeeded)
+        //    {
+        //        string token = _accountManager.GenerateToken();
+        //        userToSignIn.Token = token;
+
+        //        return Ok(token);
+        //    }
+        //    //return BadRequest("User not found.");
+        //    return NotFound();
+        //}
 
         // GET: api/<UserController>
         [HttpGet("{id}")]
-
         public ActionResult<UserModel> GetUserById(int id)
-
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
             if (user == null)
@@ -85,7 +102,6 @@ namespace Fora.Server.Controllers
             }
             return Ok(user);
         }
-
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
@@ -100,15 +116,11 @@ namespace Fora.Server.Controllers
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
 
-
             if (user != null)
             {
                 _context.Users.Remove(user);
                 //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
             }
-            
-
-
         }
     }
 }
