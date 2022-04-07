@@ -1,6 +1,7 @@
 ﻿using Fora.Shared;
 using System.Net.Http.Json;
 
+
 namespace Fora.Client.Services
 {
     public class DataManager : IDataManager
@@ -14,7 +15,7 @@ namespace Fora.Client.Services
 
         public async Task CreateInterest(InterestModel interestToAdd)
         {
-            await _httpClient.PostAsJsonAsync("api/interest", interestToAdd);
+            var response=await _httpClient.PostAsJsonAsync("api/interest", interestToAdd);
         }
 
         public async Task<List<InterestModel>> GetAllInterests()
