@@ -27,10 +27,13 @@ namespace Fora.Server.App
         //in prgress, dont know if it works
         public async void ChangePassword(ApplicationUser userToChange, string password)
         {
+            //await _signInManager.UserManager.ChangePasswordAsync()
             //removes password?
             await _signInManager.UserManager.RemovePasswordAsync(userToChange);
             //adds new password? requirements, add in page?? 
             await _signInManager.UserManager.AddPasswordAsync(userToChange, password);
+        }
+
         }
 
         public async Task AddUserToForaDb (UserDTOModel dtoModel)
@@ -44,4 +47,6 @@ namespace Fora.Server.App
             _context.SaveChanges();
         }
     }
-}
+
+        
+    }
