@@ -22,5 +22,15 @@ namespace Fora.Server.App
             string token = Guid.NewGuid().ToString();
             return token;
         }
+
+        //in prgress, dont know if it works
+        public async void ChangePassword(ApplicationUser userToChange,string password)
+        {
+            //removes password?
+            await _signInManager.UserManager.RemovePasswordAsync(userToChange);
+            //adds new password? requirements, add in page?? 
+            await _signInManager.UserManager.AddPasswordAsync(userToChange, password);
+
+        }
     }
 }

@@ -11,8 +11,8 @@ namespace Fora.Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly AuthDbContext _authContext;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AuthDbContext _authContext; //not neccesary??
+        private readonly SignInManager<ApplicationUser> _signInManager; //move to accoutManager?? (all code)
         private readonly IAccountManager _accountManager;
 
 
@@ -62,9 +62,11 @@ namespace Fora.Server.Controllers
             return BadRequest("Couldn't create user");
         }
 
+
+
         // GET: api/<UserController>
         [HttpGet("{id}")]
-        public ActionResult<UserModel> GetUser(int id)
+        public ActionResult<UserModel> GetUser([FromRoute]int id)
         {
             UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
             if (user == null)
