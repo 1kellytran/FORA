@@ -27,6 +27,12 @@ namespace Fora.Client.Services
             
         }
 
+        public async Task<string> DeleteInterest(int id)
+        {
+            var result = await _httpClient.DeleteAsync("api/intesrest");
+            return result.ToString(); //är detta strängen message?
+        }
+
 
     }
 }

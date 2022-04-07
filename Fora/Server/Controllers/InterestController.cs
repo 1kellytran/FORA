@@ -49,7 +49,7 @@ namespace Fora.Server.Controllers
 
         // DELETE api/<InterestController>/5
         [HttpDelete("{id}")]
-        public async Task<String> DeleteInterest(int id)
+        public async Task<string> DeleteInterest(int id)
         {
             string message = "";
 
