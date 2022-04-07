@@ -11,7 +11,7 @@ namespace Fora.Client.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<UserModel> GetUser(int id)
+        public async Task<UserModel> GetUserById(int id)
         {
             UserModel user = await _httpClient.GetFromJsonAsync<UserModel>($"api/user/{id}");
             return user;
@@ -30,6 +30,13 @@ namespace Fora.Client.Services
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/signin", user);
             throw new NotImplementedException();
+        }
+
+       
+        public async Task DeleteUser(int id)
+        {
+            await _httpClient.DeleteAsync($"api/user/{id}");
+            
         }
     }
 }
