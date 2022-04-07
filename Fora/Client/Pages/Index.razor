@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject NavigationManager NavigationManager
 
 <PageTitle>Sign In</PageTitle>
 
@@ -22,18 +23,26 @@
         <button type="submit" class="btn btn-primary">Sign In</button>
         <a href="SignUp">Not a member? Sign up here!</a>
      </div>
-     @*<div>
-        <InputText type="password" @bind-Value="User.VerifiedPassword" class="form-control mb-2" hidden>@User.Password</InputText>
-    </div>*@
     <ValidationSummary/>
 </EditForm>
 
 
 @code{
-    public UserDTOModel User { get; set; } = new();
+    public SignInModel User { get; set; } = new();
 
     private async Task SignInUser()
     {
         var token = await UserManager.SignInUser(User);
+
+        UpdateLocalStorage(token);
+
+        if (token != "User not found")
+        {
+            NavigationManager.NavigateTo($"/Welcome");
+        }
+    }
+    public async void UpdateLocalStorage(string tokenToAdd)
+    {
+        await localStore.SetItemAsync("Token", tokenToAdd);
     }
 }

@@ -7,7 +7,7 @@ namespace Fora.Client.Services
         Task<UserModel> GetUserById(int id);
         Task<string> SignUpUser(UserDTOModel user);
 
-        Task<string> SignInUser(UserDTOModel user);
+        Task<string> SignInUser(SignInModel user);
 
         Task DeleteUser(int id);
     }

@@ -29,16 +29,14 @@
 @code{
     public UserDTOModel UserToAdd { get; set; } = new();
 
-
     private async Task SignUpUser()
     {
         var token = await UserManager.SignUpUser(UserToAdd);
 
-         //add token to the local storage (blazore)
+        // Add token to the local storage (blazore)
         UpdateLocalStorage(token);
-
-
     }
+
     public async void UpdateLocalStorage(string tokenToAdd)
     {
         await localStore.SetItemAsync("Token", tokenToAdd);

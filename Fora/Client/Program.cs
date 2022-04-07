@@ -14,4 +14,6 @@ builder.Services.AddScoped<IUserManager, UserManager>();
 builder.Services.AddScoped<IDataManager, DataManager>();
 builder.Services.AddBlazoredLocalStorage();
 
+//builder.Services.AddAuthorizationCore();
+
 await builder.Build().RunAsync();
