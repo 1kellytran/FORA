@@ -31,9 +31,11 @@
 
     private async Task SignInUser()
     {
-        var token = await UserManager.SignInUser(User);
+        var localStorageList = await UserManager.SignInUser(User);
+        string token = localStorageList[0];
+        string name = localStorageList[1];
 
-        UpdateLocalStorage(token);
+        UpdateLocalStorage(token, name);
 
         if (token != "User not found")
         {
@@ -41,8 +43,9 @@
         }
     }
 
-    public async void UpdateLocalStorage(string tokenToAdd)
+    public async void UpdateLocalStorage(string tokenToAdd, string name)
     {
         await localStore.SetItemAsync("Token", tokenToAdd);
+        await localStore.SetItemAsync("Name", name);
     }
 }
