@@ -22,12 +22,13 @@ namespace Fora.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> SignUpUser([FromBody] UserDTOModel userToSignUp)
+        public async Task<ActionResult<List<string>>> SignUpUser([FromBody] UserDTOModel userToSignUp)
         {
             // ***** REGISTER USER *****
 
             // Create empty, new user
             ApplicationUser newUser = new();
+            List<string> localStorageInfo = new();
 
             // Add properties to identity user
             newUser.UserName = userToSignUp.Username;
@@ -50,17 +51,20 @@ namespace Fora.Server.Controllers
                 // Add user to Fora database
                 await _accountManager.AddUserToForaDb(userToSignUp);
 
+                localStorageInfo.Add(token);
+                localStorageInfo.Add(userToSignUp.Username);
                 // Send that token back
-                return Ok(token);
+                return Ok(localStorageInfo);
             }
             return BadRequest("Could not create user");
         }
 
         [HttpPost]
         [Route("signin")]
-        public async Task<ActionResult> SignInUser(SignInModel userToSignIn)
+        public async Task<ActionResult<List<string>>> SignInUser(SignInModel userToSignIn)
         {
             var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToSignIn.Username);
+            List<string> localStorageInfo = new();
 
             if(applicationUser != null)
             {
@@ -77,23 +81,21 @@ namespace Fora.Server.Controllers
                     // Add the new token (update) in the identity db
                     await  _accountManager.UpdateUserInAuthDb(applicationUser);
 
-                    return Ok(token);
+                    localStorageInfo.Add(token);
+                    localStorageInfo.Add(applicationUser.UserName);
+
+                    return Ok(localStorageInfo);
                 }
             }
             return BadRequest("User not found");
         }
 
         // GET: api/<UserController>
-        [HttpGet("{id}")]
-        public ActionResult<UserModel> GetUserById(int id)
-        {
-            UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
-            if (user == null)
-            {
-                return BadRequest("404 - User not found");
-            }
-            return Ok(user);
-        }
+        //[HttpGet("{token}")]
+        //public async ActionResult<SignInModel> GetUserByToken(string token)
+        //{
+        //    var signInUser = await _signInManager.UserManager.
+        //}
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]

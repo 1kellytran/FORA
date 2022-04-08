@@ -11,26 +11,33 @@ namespace Fora.Client.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<UserModel> GetUserById(int id)
+        
+        public async Task<UserModel> GetUserToken(string token)
         {
-            UserModel user = await _httpClient.GetFromJsonAsync<UserModel>($"api/user/{id}");
+            UserModel user = await _httpClient.GetFromJsonAsync<UserModel>($"api/user/{token}");
             return user;
         }
 
-        public async Task<string> SignUpUser(UserDTOModel user)
+        public async Task<List<string>> SignUpUser(UserDTOModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user", user);
-            var token = await response.Content.ReadAsStringAsync();
+            var list = await response.Content.ReadFromJsonAsync<List<string>>();
 
-            return token;
+            return list;
         }
 
-        public async Task<string> SignInUser(SignInModel user)
+        public async Task<List<string>> SignInUser(SignInModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/signin", user);
-            var token = await response.Content.ReadAsStringAsync();
+     
+            var list = await response.Content.ReadFromJsonAsync<List<string>>();
 
-            return token;
+            return list;
+        }
+
+        public async Task SignOutUser()
+        {
+
         }
 
         public async Task DeleteUser(int id)

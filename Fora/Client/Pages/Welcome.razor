@@ -1,5 +1,6 @@
 ﻿@page "/Welcome"
 @inject HttpClient Http
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="row">
     <img src="/images/Fora - Logo.png" width="500" height="400"/>
@@ -9,21 +10,27 @@
 </div>
 
 @code {
-    [Parameter]
-    public string Username { get; set; }
-    private SignInModel userToShow = new();
-    private List<SignInModel> allUsers = new();
 
-    protected override void OnParametersSet()
-    {
-        userToShow = allUsers.FirstOrDefault(x => x.Username == Username);
-    }
-
+    public bool isLoggedIn { get; set; }
+    public bool isAdmin { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        // Hämta alla annvändare från databasen?
-        // Måste göra metod för att hämta alla användare?
 
-        allUsers = await Http.GetFromJsonAsync<List<SignInModel>>("/api/users"); 
+        //allUsers = await Http.GetFromJsonAsync<List<SignInModel>>("/api/users"); 
+
+        // Varje sida som kräver att man är inloggad:
+
+        // 1. Skicka token till api i onInitializedAsync
+        var token = await localStorage.GetItemAsStringAsync("Token");
+
+        token = token.Replace("\"", "");
+
+
+
+    // 2. Sätt en bool som representerar inloggad state och admin state
+
+    // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
     }
+
+    
 }

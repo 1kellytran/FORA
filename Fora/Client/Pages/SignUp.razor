@@ -32,20 +32,24 @@
 
     private async Task SignUpUser()
     {
-        var token = await UserManager.SignUpUser(UserToAdd);
+        var localStorageList = await UserManager.SignUpUser(UserToAdd);
+        string token = localStorageList[0];
+        string name = localStorageList[1];
+
 
         // Add token to the local storage (blazore)
-        UpdateLocalStorage(token);
+        UpdateLocalStorage(token, name);
 
-        if(token != "Could not create user")
+        if(token != "Could create user")
         {
             NavigationManager.NavigateTo("/Welcome");
         }
     }
 
-    public async void UpdateLocalStorage(string tokenToAdd)
+    public async void UpdateLocalStorage(string tokenToAdd, string name)
     {
         await localStore.SetItemAsync("Token", tokenToAdd);
+        await localStore.SetItemAsync("Name", name);
     }
 
     //public async void ClearLocalStorage()
