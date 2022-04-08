@@ -1,7 +1,29 @@
-﻿@page "/welcome/{username:string}"
+﻿@page "/Welcome"
+@inject HttpClient Http
 
-<h3>Welcome, </h3>
-
+<div class="row">
+    <img src="/images/Fora - Logo.png" width="500" height="400"/>
+</div>
+<div class="text-center">
+    <h1>Welcome, </h1>
+</div>
 
 @code {
+    [Parameter]
+    public string Username { get; set; }
+    private SignInModel userToShow = new();
+    private List<SignInModel> allUsers = new();
+
+    protected override void OnParametersSet()
+    {
+        userToShow = allUsers.FirstOrDefault(x => x.Username == Username);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Hämta alla annvändare från databasen?
+        // Måste göra metod för att hämta alla användare?
+
+        allUsers = await Http.GetFromJsonAsync<List<SignInModel>>("/api/users"); 
+    }
 }

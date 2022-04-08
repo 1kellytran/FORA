@@ -33,10 +33,8 @@ namespace Fora.Server.App
             //adds new password? requirements, add in page?? 
             await _signInManager.UserManager.AddPasswordAsync(userToChange, password);
         }
-
-        }
-
-        public async Task AddUserToForaDb (UserDTOModel dtoModel)
+       
+        public async Task AddUserToForaDb(UserDTOModel dtoModel)
         {
             UserModel userToAdd = new();
             userToAdd.Username = dtoModel.Username;
@@ -47,6 +45,7 @@ namespace Fora.Server.App
             _context.SaveChanges();
         }
     }
+}
 
-        
-    }
+
+

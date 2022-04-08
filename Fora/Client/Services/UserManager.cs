@@ -20,7 +20,6 @@ namespace Fora.Client.Services
         public async Task<string> SignUpUser(UserDTOModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user", user);
-
             var token = await response.Content.ReadAsStringAsync();
 
             return token;
@@ -29,8 +28,6 @@ namespace Fora.Client.Services
         public async Task<string> SignInUser(SignInModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/signin", user);
-            //throw new NotImplementedException();
-
             var token = await response.Content.ReadAsStringAsync();
 
             return token;
@@ -38,8 +35,7 @@ namespace Fora.Client.Services
 
         public async Task DeleteUser(int id)
         {
-            await _httpClient.DeleteAsync($"api/user/{id}");
-            
+            await _httpClient.DeleteAsync($"api/user/{id}");            
         }
     }
 }
