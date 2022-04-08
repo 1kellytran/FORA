@@ -62,9 +62,28 @@
 </form>
 
 
+@if(isLoggedIn)
+{
+    <h1>You only see this because you are logged in</h1>
+
+    @if(isAdmin)
+    {
+        <h1>You only see this because you are an admin</h1>
+    }
+}
+
+<h1>You have to log in to see this page</h1>
+
 @code {
     //Sets new userinterest
     public InterestModel InterestToAdd { get; set; } = new();
+    private bool isLoggedIn;
+    private bool isAdmin;
+
+    // Varje sida som kräver att man är inloggad:
+    // 1. Skicka token till api i onInitializedAsync
+    // 2. Sätt en bool som representerar inloggad state och admin state
+    // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
 
     private async Task AddPersonalInterest()
     {

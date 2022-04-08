@@ -22,8 +22,7 @@ namespace Fora.Server.Controllers
         }
 
         [HttpPost]
-        //[Route("SignUp")]
-        public async Task<ActionResult<string>> SignUpAsync([FromBody] UserDTOModel userToSignUp)
+        public async Task<ActionResult<string>> SignUpUser([FromBody] UserDTOModel userToSignUp)
         {
             // ***** REGISTER USER *****
 
@@ -54,42 +53,35 @@ namespace Fora.Server.Controllers
                 // Send that token back
                 return Ok(token);
             }
-            return BadRequest("Couldn't create user");
+            return BadRequest("Could not create user");
         }
 
         [HttpPost]
         [Route("signin")]
         public async Task<ActionResult> SignInUser(SignInModel userToSignIn)
         {
-            var signInResult = await _signInManager.PasswordSignInAsync(userToSignIn.Username, userToSignIn.Password, false, false);
+            var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToSignIn.Username);
 
-            if (signInResult.Succeeded)
+            if(applicationUser != null)
             {
-                //Generate token
-                string token = _accountManager.GenerateToken();
+                var signInResult = await _signInManager.CheckPasswordSignInAsync(applicationUser, userToSignIn.Password, false);
 
-                //Send token back
-                userToSignIn.Token = token;
-                return Ok(token);
+                if (signInResult.Succeeded)
+                {
+                    //Generate token
+                    string token = _accountManager.GenerateToken();
+
+                    //Send token back
+                    applicationUser.Token = token;
+
+                    // Add the new token (update) in the identity db
+                    await  _accountManager.UpdateUserInAuthDb(applicationUser);
+
+                    return Ok(token);
+                }
             }
             return BadRequest("User not found");
         }
-
-        //[HttpPost]
-        //[Route("signin")]
-        //public async Task<ActionResult> SignInAsync(SignInModel userToSignIn)
-        //{
-        //    var signInResult = await _signInManager.PasswordSignInAsync(userToSignIn.Username, userToSignIn.Password, false, false);
-        //    if (signInResult.Succeeded)
-        //    {
-        //        string token = _accountManager.GenerateToken();
-        //        userToSignIn.Token = token;
-
-        //        return Ok(token);
-        //    }
-        //    //return BadRequest("User not found.");
-        //    return NotFound();
-        //}
 
         // GET: api/<UserController>
         [HttpGet("{id}")]

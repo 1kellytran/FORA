@@ -1,6 +1,7 @@
 ﻿@page "/signup"
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject NavigationManager NavigationManager
 
 <h3>Sign Up</h3>
 
@@ -35,6 +36,11 @@
 
         // Add token to the local storage (blazore)
         UpdateLocalStorage(token);
+
+        if(token != "Could not create user")
+        {
+            NavigationManager.NavigateTo("/Welcome");
+        }
     }
 
     public async void UpdateLocalStorage(string tokenToAdd)

@@ -17,7 +17,6 @@ namespace Fora.Shared
         public string Password { get; set; }
         [Required(ErrorMessage = "Verify Password is required")]
         [Compare(nameof(Password), ErrorMessage = "Passwords don't match")]
-        public string VerifiedPassword { get; set; }
-       
+        public string VerifiedPassword { get; set; }       
     }
 }

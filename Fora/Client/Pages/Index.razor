@@ -5,8 +5,7 @@
 
 <PageTitle>Sign In</PageTitle>
 
-<h1>Welcome to FORA</h1>
-<br />
+<h1>WELCOME TO <img src="/images/Fora - Logo.png" width="150" height="75"/></h1>
 
 <h3>Sign in</h3>
 <EditForm Model="User" OnValidSubmit="SignInUser">
@@ -21,7 +20,7 @@
     </div>
      <div>
         <button type="submit" class="btn btn-primary">Sign In</button>
-        <a href="SignUp">Not a member? Sign up here!</a>
+            <a class="align-right" href="SignUp">Not a member? Sign up here!</a>
      </div>
     <ValidationSummary/>
 </EditForm>
@@ -41,6 +40,7 @@
             NavigationManager.NavigateTo($"/Welcome");
         }
     }
+
     public async void UpdateLocalStorage(string tokenToAdd)
     {
         await localStore.SetItemAsync("Token", tokenToAdd);
