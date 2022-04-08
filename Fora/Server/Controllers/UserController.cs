@@ -71,7 +71,7 @@ namespace Fora.Server.Controllers
                     //Generate token
                     string token = _accountManager.GenerateToken();
 
-                    //Send token back
+                    //give user token
                     applicationUser.Token = token;
 
                     // Add the new token (update) in the identity db
