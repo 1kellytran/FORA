@@ -1,6 +1,7 @@
 ﻿@page "/Welcome"
 @inject HttpClient Http
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IUserManager UserManager
 
 <div class="row">
     <img src="/images/Fora - Logo.png" width="500" height="400"/>
@@ -11,26 +12,23 @@
 
 @code {
 
-    public bool isLoggedIn { get; set; }
-    public bool isAdmin { get; set; }
+    public UserStatusDTOModel userStatus { get; set; }
+
+
     protected override async Task OnInitializedAsync()
     {
 
-        //allUsers = await Http.GetFromJsonAsync<List<SignInModel>>("/api/users"); 
-
-        // Varje sida som kräver att man är inloggad:
-
-        // 1. Skicka token till api i onInitializedAsync
-        var token = await localStorage.GetItemAsStringAsync("Token");
-
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
         token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        userStatus = result;
 
+        // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
 
-
-    // 2. Sätt en bool som representerar inloggad state och admin state
-
-    // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
     }
-
     
+
 }

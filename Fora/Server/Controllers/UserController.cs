@@ -66,6 +66,8 @@ namespace Fora.Server.Controllers
             var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToSignIn.Username);
             List<string> localStorageInfo = new();
 
+            
+
             if(applicationUser != null)
             {
                 var signInResult = await _signInManager.CheckPasswordSignInAsync(applicationUser, userToSignIn.Password, false);
@@ -115,6 +117,24 @@ namespace Fora.Server.Controllers
                 _context.Users.Remove(user);
                 //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
             }
+        }
+
+        [HttpGet]
+        [Route("check")]
+        public async Task<ActionResult<UserStatusDTOModel>> CheckUserLogin([FromQuery]string accessToken)
+        {
+           var result = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
+
+            if (result.Token == accessToken)
+            {
+                UserStatusDTOModel userStatus = new();
+                userStatus.IsLoggedIn = true;
+
+                //userStatus.IsAdmin = await _signInManager.UserManager.IsInRoleAsync()
+
+                return Ok(userStatus);
+            }
+            else { return BadRequest(); }
         }
     }
 }

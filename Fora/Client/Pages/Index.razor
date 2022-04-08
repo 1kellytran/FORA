@@ -1,6 +1,5 @@
 ﻿@page "/"
 @inject IUserManager UserManager
-@inject Blazored.LocalStorage.ILocalStorageService localStore
 @inject NavigationManager NavigationManager
 
 <PageTitle>Sign In</PageTitle>
@@ -28,24 +27,16 @@
 
 @code{
     public SignInModel User { get; set; } = new();
+   
 
     private async Task SignInUser()
     {
-        var localStorageList = await UserManager.SignInUser(User);
-        string token = localStorageList[0];
-        string name = localStorageList[1];
-
-        UpdateLocalStorage(token, name);
-
-        if (token != "User not found")
-        {
-            NavigationManager.NavigateTo($"/Welcome");
-        }
+        var storageList = await UserManager.SignInUser(User);
+        
+        if (storageList != null){NavigationManager.NavigateTo($"/Welcome");}
+             
+        
     }
 
-    public async void UpdateLocalStorage(string tokenToAdd, string name)
-    {
-        await localStore.SetItemAsync("Token", tokenToAdd);
-        await localStore.SetItemAsync("Name", name);
-    }
+    
 }

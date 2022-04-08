@@ -10,5 +10,7 @@ namespace Fora.Client.Services
         Task<List<string>> SignInUser(SignInModel user);
 
         Task DeleteUser(int id);
+
+        Task<UserStatusDTOModel> CheckUserLogin(string token);
     }
 }
