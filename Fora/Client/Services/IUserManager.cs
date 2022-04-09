@@ -12,5 +12,6 @@ namespace Fora.Client.Services
         Task DeleteUser(int id);
 
         Task<UserStatusDTOModel> CheckUserLogin(string token);
+         Task UpdateUserModel(UserModel updatedUser);
     }
 }
