@@ -123,6 +123,7 @@ namespace Fora.Server.Controllers
             
 
             _context.Users.Update(userToUpdate);
+            _context.SaveChanges();
         }
 
         // DELETE api/<UserController>/5 test alex
