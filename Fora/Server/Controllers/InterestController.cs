@@ -34,8 +34,7 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async Task CreateInterest([FromBody]InterestModel interestToAdd)
         {
-            
-            _context.Interests.Add(interestToAdd);
+            await _context.Interests.AddAsync(interestToAdd);
             await _context.SaveChangesAsync();
 
         }
@@ -45,6 +44,7 @@ namespace Fora.Server.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+          
         }
 
         // DELETE api/<InterestController>/5

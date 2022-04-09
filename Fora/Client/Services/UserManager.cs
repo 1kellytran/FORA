@@ -19,10 +19,16 @@ namespace Fora.Client.Services
             _localStorage = localStorage;
         }
         
-        public async Task<UserModel> GetUserToken(string token)
+        public async Task<UserModel> GetUserByToken(string accessToken)
         {
-            UserModel user = await _httpClient.GetFromJsonAsync<UserModel>($"api/user/{token}");
-            return user;
+            var response = await _httpClient.GetAsync($"api/user/getbytoken?accessToken={accessToken}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var userFromDb = JsonConvert.DeserializeObject<UserModel>(result);
+                return userFromDb;
+            }
+            return null;
         }
 
         public async Task<List<string>> SignUpUser(UserDTOModel user)
@@ -73,8 +79,12 @@ namespace Fora.Client.Services
                 return data;
             }
             return null;
-            
-
+    
+        }
+        //test alex
+        public async Task UpdateUserModel(UserModel updatedUser)
+        {
+            await _httpClient.PutAsJsonAsync<UserModel>("api/user", updatedUser);
         }
     }
 }
