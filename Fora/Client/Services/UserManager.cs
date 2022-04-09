@@ -1,10 +1,7 @@
-﻿
 using Blazored.LocalStorage;
 using Fora.Shared;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
-
-
 
 namespace Fora.Client.Services
 {
@@ -42,9 +39,8 @@ namespace Fora.Client.Services
         public async Task<List<string>> SignInUser(SignInModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/signin", user);
-     
-            var list = await response.Content.ReadFromJsonAsync<List<string>>();
 
+            var list = await response.Content.ReadFromJsonAsync<List<string>>();
 
             if (list != null)
             {
@@ -54,32 +50,31 @@ namespace Fora.Client.Services
             }
 
             return null;
-
-
         }
-
-        //public async Task SignOutUser()
-        //{
-
-        //}
+        public async Task SignOutUser()
+        {
+            await _localStorage.RemoveItemAsync("Token");
+            await _localStorage.RemoveItemAsync("Name");
+        }
 
         public async Task DeleteUser(int id)
         {
-            await _httpClient.DeleteAsync($"api/user/{id}");            
+            await _httpClient.DeleteAsync($"api/user/{id}");
         }
 
         public async Task<UserStatusDTOModel> CheckUserLogin(string token)
         {
-            var response = await _httpClient.GetAsync($"api/user/check?accessToken={token}");
+            var response = await _httpClient.GetAsync($"accounts/check?accessToken={token}");
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
+
                 var data = JsonConvert.DeserializeObject<UserStatusDTOModel>(result);
+
                 return data;
             }
             return null;
-    
         }
         //test alex
         public async Task UpdateUserModel(UserModel updatedUser)
