@@ -92,21 +92,40 @@ namespace Fora.Server.Controllers
             return BadRequest("User not found");
         }
 
-        // GET: api/<UserController>
-        //[HttpGet("{token}")]
-        //public async ActionResult<SignInModel> GetUserByToken(string token)
-        //{
-        //    var signInUser = await _signInManager.UserManager.
-        //}
-
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        //GET: api/<UserController>
+        [HttpGet]
+        [Route("getbytoken")]
+        public async Task<ActionResult<UserModel>> GetUserByToken([FromQuery]string accessToken)
         {
-
+            var userFromAuthDb =  _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
+            if (userFromAuthDb.Token == accessToken)
+            {
+                var userFromForaDb = _context.Users.FirstOrDefault(x => x.Username == userFromAuthDb.UserName);
+                return userFromForaDb;
+            }
+            else { return BadRequest("No user for you my friend"); }
         }
 
-        // DELETE api/<UserController>/5
+        
+        // PUT api/<UserController>/5 test alex
+        [HttpPut]
+        public async Task UpdateUser([FromBody] UserModel updatedUser)
+        {
+            UserModel userToUpdate = new();
+            userToUpdate.Id = updatedUser.Id;
+            userToUpdate.Username = updatedUser.Username;
+            userToUpdate.UserInterests = updatedUser.UserInterests;
+            userToUpdate.Interests = updatedUser.Interests;
+            userToUpdate.Messages = updatedUser.Messages;
+            userToUpdate.Banned = updatedUser.Banned;
+            userToUpdate.Deleted = updatedUser.Deleted;
+            userToUpdate.Threads = updatedUser.Threads; 
+            
+
+            _context.Users.Update(userToUpdate);
+        }
+
+        // DELETE api/<UserController>/5 test alex
         [HttpDelete("{id}")]
         public async Task DeleteUser(int id)
         {
@@ -123,7 +142,7 @@ namespace Fora.Server.Controllers
         [Route("check")]
         public async Task<ActionResult<UserStatusDTOModel>> CheckUserLogin([FromQuery]string accessToken)
         {
-           var result = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
+            var result = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
 
             if (result.Token == accessToken)
             {

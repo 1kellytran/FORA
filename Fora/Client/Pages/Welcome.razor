@@ -12,7 +12,7 @@
 
 @code {
 
-    public UserStatusDTOModel userStatus { get; set; }
+    public UserStatusDTOModel UserStatus { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -24,7 +24,7 @@
         token = token.Replace("\"", "");
         //kollar att user finns i databas med token
         var result = await UserManager.CheckUserLogin(token);
-        userStatus = result;
+        UserStatus = result;
 
         // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
 
