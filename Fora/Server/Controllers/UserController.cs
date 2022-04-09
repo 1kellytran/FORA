@@ -59,14 +59,29 @@ namespace Fora.Server.Controllers
             return BadRequest("Could not create user");
         }
 
+        [HttpGet]
+        [Route("check")]
+        public async Task<ActionResult<UserStatusDto>> CheckUserLogin([FromQuery] string accessToken)
+        {
+            var user = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
+
+            if(user != null)
+            {
+                UserStatusDto userStatus = new();
+                userStatus.IsLoggedIn = true;
+                userStatus.IsAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Admin");
+
+                return Ok(userStatus);
+            }
+            return BadRequest("User not found");
+        }
+
         [HttpPost]
         [Route("signin")]
         public async Task<ActionResult<List<string>>> SignInUser(SignInModel userToSignIn)
         {
             var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToSignIn.Username);
             List<string> localStorageInfo = new();
-
-            
 
             if(applicationUser != null)
             {
@@ -136,24 +151,6 @@ namespace Fora.Server.Controllers
                 _context.Users.Remove(user);
                 //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
             }
-        }
-
-        [HttpGet]
-        [Route("check")]
-        public async Task<ActionResult<UserStatusDTOModel>> CheckUserLogin([FromQuery]string accessToken)
-        {
-            var result = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
-
-            if (result.Token == accessToken)
-            {
-                UserStatusDTOModel userStatus = new();
-                userStatus.IsLoggedIn = true;
-
-                //userStatus.IsAdmin = await _signInManager.UserManager.IsInRoleAsync()
-
-                return Ok(userStatus);
-            }
-            else { return BadRequest(); }
         }
     }
 }

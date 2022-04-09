@@ -99,7 +99,6 @@
         ActiveUser = await UserManager.GetUserByToken(token);
         //hämtar alla intressen
         AllInterests = await Datamanager.GetAllInterests();
-
     }
 
     private async Task AddPersonalInterest()
@@ -123,11 +122,13 @@
 
     }
 
-        
-       
-        
-    
-
-
-
+        // Hämta token 
+        // Skicka token till API:t
+        // API: Jämför token med tokens i databasen
+        // API: Skickar tillbaka en UserStatusDto med (om token fanns - IsLoggedIn = true / om token inte fanna - IsLoggedIn = false)
+        // Använd denna UserStatusDto på varje sida och rendera delar med if(userStatus.IsLoggedIn) if(userStatus.isAdmin)
 }
+
+
+
+

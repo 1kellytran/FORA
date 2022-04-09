@@ -11,16 +11,22 @@
 </div>
 
 @code {
-
     public UserStatusDTOModel UserStatus { get; set; }
-
 
     protected override async Task OnInitializedAsync()
     {
-
         //*****CHECK USER LOGIN (att användas på alla sidor)
         //Hämtar token från localstorage
         var token = await localStorage.GetItemAsync<string>("Token");
+
+        public bool isLoggedIn { get; set; }
+        public bool isAdmin { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Hämta token
+        var token = await localStorage.GetItemAsStringAsync("Token");
         token = token.Replace("\"", "");
         //kollar att user finns i databas med token
         var result = await UserManager.CheckUserLogin(token);
@@ -28,7 +34,8 @@
 
         // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
 
-    }
+        // Checka user
+        await UserManager.CheckUserLogin(token);
+    }    
     
-
 }
