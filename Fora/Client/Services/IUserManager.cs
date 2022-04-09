@@ -4,7 +4,7 @@ namespace Fora.Client.Services
 {
     public interface IUserManager
     {
-        Task<UserModel> GetUserToken(string token);
+        Task<UserModel> GetUserByToken(string accessToken);
         Task<List<string>> SignUpUser(UserDTOModel user);
 
         Task<List<string>> SignInUser(SignInModel user);

@@ -1,7 +1,7 @@
 ﻿@page "/mypage"
-@inject IUserManager _usermanager
-@inject IDataManager _datamanager
-
+@inject IUserManager UserManager
+@inject IDataManager Datamanager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <h1>My Page</h1>
 <hr />
@@ -26,14 +26,16 @@
         <label>Add interest from existing interest:</label>
         <br />
 
-     @*   @foreach (var interest in ListOfAllInterest)
+        @foreach (var interest in AllInterests)
         {
-            <ul>
-                <li>interest<button>Add as favourite </button></li>
-                <br />
-            </ul>
-            
-        }*@
+
+                <div class="card">
+                    <div class="card-body">
+                       <strong><h4>@interest.Name </h4></strong><button class="btn btn-light" style="float: right">Add!</button>
+                    </div>
+                </div>
+                
+        }
     </div>
 
     <hr />
@@ -49,27 +51,29 @@
         <label>Username:</label>
         <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
     </div>
-   
+   <br />
+   <br />
     <div>
-        <button type="submit" >Submit</button>
+        <button class="btn btn-primary" type="submit" >Create interest!</button>
      </div>
 
     <ValidationSummary/>
 </EditForm>
 
-<ChangePassword></ChangePassword>
+@*<ChangePassword></ChangePassword>*@
 
 </form>
 
 
-@if(isLoggedIn)
+@if (@UserStatus.IsLoggedIn)
 {
-    <h1>You only see this because you are logged in</h1>
+    <h3>You only see this because you are logged in</h3>
 
-    @if(isAdmin)
+    @if (@UserStatus.IsAdmin)
     {
-        <h1>You only see this because you are an admin</h1>
+        <h3>You only see this because you are an admin</h3>
     }
+
 }
 
 <h1>You have to log in to see this page</h1>
@@ -77,19 +81,38 @@
 @code {
     //Sets new userinterest
     public InterestModel InterestToAdd { get; set; } = new();
-    private bool isLoggedIn;
-    private bool isAdmin;
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    public List<InterestModel> AllInterests { get; set;} = new();
 
-    // Varje sida som kräver att man är inloggad:
-    // 1. Skicka token till api i onInitializedAsync
+    protected override async Task OnInitializedAsync()
+    {
 
-    // 2. Sätt en bool som representerar inloggad state och admin state
-    // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+        //hämtar alla intressen
+        AllInterests = await Datamanager.GetAllInterests();
+
+    }
 
     private async Task AddPersonalInterest()
     {
+
         InterestToAdd.Threads = new();
-        await _datamanager.CreateInterest(InterestToAdd);
+        //adding user id to interestmodel
+        InterestToAdd.UserId = ActiveUser.Id;
+        await Datamanager.CreateInterest(InterestToAdd);
+         
+        //adding created interest to usermodel
+        //await UserManager.UpdateUserModel(ActiveUser);
+
     }
     //Gets and sets the current userinterest
     public List<UserInterestModel> UserInterest { get; set; }
