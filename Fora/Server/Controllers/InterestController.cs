@@ -34,9 +34,16 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async Task CreateInterest([FromBody]InterestModel interestToAdd)
         {
+            InterestModel interestModel = new();
+            UserInterestModel userInterestModel = new();
             await _context.Interests.AddAsync(interestToAdd);
             await _context.SaveChangesAsync();
 
+            interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
+            userInterestModel.InterestId = interestToAdd.Id;
+            userInterestModel.UserId = (int)interestToAdd.UserId;
+            await _context.UserInterests.AddAsync(userInterestModel);
+            await _context.SaveChangesAsync();
         }
 
 
