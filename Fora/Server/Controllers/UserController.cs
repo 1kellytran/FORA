@@ -61,19 +61,23 @@ namespace Fora.Server.Controllers
 
         [HttpGet]
         [Route("check")]
-        public async Task<ActionResult<UserStatusDto>> CheckUserLogin([FromQuery] string accessToken)
+        public async Task<ActionResult<UserStatusDTOModel>> CheckUserLogin([FromQuery] string accessToken)
         {
-            var user = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
+            var result = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
 
-            if(user != null)
+            if(result.Token == accessToken)
             {
-                UserStatusDto userStatus = new();
+                UserStatusDTOModel userStatus = new();
                 userStatus.IsLoggedIn = true;
-                userStatus.IsAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Admin");
+                //userStatus.IsAdmin = await _signInManager.UserManager.IsInRoleAsync(user, "Admin");
 
                 return Ok(userStatus);
             }
-            return BadRequest("User not found");
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpPost]

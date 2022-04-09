@@ -36,6 +36,7 @@ namespace Fora.Server.Controllers
         {
             InterestModel interestModel = new();
             UserInterestModel userInterestModel = new();
+
             await _context.Interests.AddAsync(interestToAdd);
             await _context.SaveChangesAsync();
 

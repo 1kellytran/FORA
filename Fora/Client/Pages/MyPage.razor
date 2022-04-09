@@ -48,10 +48,9 @@
    
     }
    
-   @* <form method="post">
-    <label>Create new interests:</label>
-    <Input type="text" style="width:350px" placeholder="Enter interest">
-    </form>*@
+    </form>
+
+    
     <br/>
     <hr />
 
@@ -71,9 +70,9 @@
 <br />
 <br />
 <hr />
-<buton class="btn btn-primary" @onclick="DisplayPasswordInfo">Change Password</buton>
-    <br />
-</form>
+@*<buton class="btn btn-primary" @onclick="DisplayPasswordInfo">Change Password</buton>*@
+   @* <br />
+</form>*@
 
 @*PASSWORD*@
 
@@ -97,11 +96,11 @@
 
 
 
-@if (@UserStatus.IsLoggedIn)
+@if (UserStatus.IsLoggedIn)
 {
     <h3>You only see this because you are logged in</h3>
 
-    @if (@UserStatus.IsAdmin)
+    @if (UserStatus.IsAdmin)
     {
         <h3>You only see this because you are an admin</h3>
     }
@@ -133,6 +132,7 @@
         //kollar att user finns i databas med token
         var result = await UserManager.CheckUserLogin(token);
         UserStatus = result;
+
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
         //hämtar alla intressen
@@ -147,6 +147,7 @@
         InterestToAdd.UserId = ActiveUser.Id;
         //creating intesrest in db
         await Datamanager.CreateInterest(InterestToAdd);
+        AllInterests = await Datamanager.GetAllInterests();
 
         ////adding created interest to usermodel, is this neccessary? :/
         //ActiveUser.Interests.Add(InterestToAdd);
