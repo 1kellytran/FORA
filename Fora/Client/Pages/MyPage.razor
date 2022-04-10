@@ -124,7 +124,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         //*****CHECK USER LOGIN (att användas på alla sidor)
         //Hämtar token från localstorage
         var token = await localStorage.GetItemAsync<string>("Token");
@@ -141,7 +140,6 @@
 
     private async Task AddPersonalInterest()
     {
-
         InterestToAdd.Threads = new();
         //adding user id to interestmodel
         InterestToAdd.UserId = ActiveUser.Id;
@@ -152,26 +150,27 @@
         ////adding created interest to usermodel, is this neccessary? :/
         //ActiveUser.Interests.Add(InterestToAdd);
         //await UserManager.UpdateUserModel(ActiveUser);
-
     }
+
      //Allinterest button
     private void ShowAllInterests()
     {
         displayAllInterests = true;
     }
+
     //Hide all interests
      private void HideAllInterests()
     {
         displayAllInterests = false;
     }
+
     //ChangePassword button
     private void DisplayPasswordInfo()
     {
         showPasswordInfo = true;
     }
-    //Gets and sets the current userinterest
-    
 
+    //Gets and sets the current userinterest 
     private async Task GetCurrentUserList()
     {
         

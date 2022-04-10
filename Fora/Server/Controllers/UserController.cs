@@ -65,7 +65,7 @@ namespace Fora.Server.Controllers
         {
             var result = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
 
-            if(result.Token == accessToken)
+            if (result.Token == accessToken)
             {
                 UserStatusDTOModel userStatus = new();
                 userStatus.IsLoggedIn = true;
@@ -77,7 +77,6 @@ namespace Fora.Server.Controllers
             {
                 return BadRequest();
             }
-            
         }
 
         [HttpPost]
@@ -87,7 +86,7 @@ namespace Fora.Server.Controllers
             var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToSignIn.Username);
             List<string> localStorageInfo = new();
 
-            if(applicationUser != null)
+            if (applicationUser != null)
             {
                 var signInResult = await _signInManager.CheckPasswordSignInAsync(applicationUser, userToSignIn.Password, false);
 
@@ -100,7 +99,7 @@ namespace Fora.Server.Controllers
                     applicationUser.Token = token;
 
                     // Add the new token (update) in the identity db
-                    await  _accountManager.UpdateUserInAuthDb(applicationUser);
+                    await _accountManager.UpdateUserInAuthDb(applicationUser);
 
                     localStorageInfo.Add(token);
                     localStorageInfo.Add(applicationUser.UserName);
@@ -114,18 +113,20 @@ namespace Fora.Server.Controllers
         //GET: api/<UserController>
         [HttpGet]
         [Route("getbytoken")]
-        public async Task<ActionResult<UserModel>> GetUserByToken([FromQuery]string accessToken)
+        public async Task<ActionResult<UserModel>> GetUserByToken([FromQuery] string accessToken)
         {
-            var userFromAuthDb =  _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
+            var userFromAuthDb = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
             if (userFromAuthDb.Token == accessToken)
             {
                 var userFromForaDb = _context.Users.FirstOrDefault(x => x.Username == userFromAuthDb.UserName);
                 return userFromForaDb;
             }
-            else { return BadRequest("No user for you my friend"); }
+            else
+            {
+                return BadRequest("No user for you my friend");
+            }
         }
 
-        
         // PUT api/<UserController>/5 test alex
         [HttpPut]
         public async Task UpdateUser([FromBody] UserModel updatedUser)
@@ -138,8 +139,7 @@ namespace Fora.Server.Controllers
             userToUpdate.Messages = updatedUser.Messages;
             userToUpdate.Banned = updatedUser.Banned;
             userToUpdate.Deleted = updatedUser.Deleted;
-            userToUpdate.Threads = updatedUser.Threads; 
-            
+            userToUpdate.Threads = updatedUser.Threads;
 
             _context.Users.Update(userToUpdate);
             _context.SaveChanges();

@@ -1,9 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="page">
     <div class="sidebar">
-        @*Byt meny med if-sats för den som har tillgång!!!!*@
-        <NavMenu />
+        @if(SignedIn == true)
+        {            
+            <MemberNavMenu />
+        }
+        else
+        {
+            <NavMenu />
+        }
     </div>
 
     <main>
@@ -16,3 +23,25 @@
         </article>
     </main>
 </div>
+
+@code{
+    private bool SignedIn = true;
+    public UserStatusDTOModel UserStatus { get; set; }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var username = localStorage.GetItemAsync<string>("Name");
+    //    username = username.Replace("\"", "");
+
+    //    UserStatus = await UserManager.CheckUserLogin(username);
+
+    //    if (UserStatus.IsLoggedIn == true)
+    //    {
+    //        SignedIn = true;
+    //    }
+    //    else
+    //    {
+    //        SignedIn = false;
+    //    }
+    //}
+}
