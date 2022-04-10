@@ -28,15 +28,13 @@
 @code{
     public SignInModel User { get; set; } = new();
    
-
     private async Task SignInUser()
     {
         var storageList = await UserManager.SignInUser(User);
         
-        if (storageList != null){NavigationManager.NavigateTo($"/Welcome");}
-             
-        
-    }
-
-    
+        if(storageList != null)
+        {
+            NavigationManager.NavigateTo($"/Welcome");
+        }          
+    }    
 }

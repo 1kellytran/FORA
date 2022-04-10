@@ -1,11 +1,12 @@
 ﻿@page "/SignOut"
 @inject IUserManager UserManager
+@inject NavigationManager NavigationManager
 
-@*<div>
+<div>
     <h3>Sign Out</h3>
-    <h5>Are you sure you want to sign out?</h5>
+    <em class="mb-2">Are you sure you want to sign out?</em>
     <div>
-        <button>Cancel</button><button @onclick="SignOutWebb">Sign Out</button>
+        <button class="btn btn-primary" "mr-4" @onclick="StaySignedIn">Cancel</button><button class="btn btn-danger" @onclick="SignOutWebb">Sign Out</button>
     </div>
 </div>
 
@@ -13,5 +14,12 @@
     public async void SignOutWebb()
     {
         await UserManager.SignOutUser();
+
+        NavigationManager.NavigateTo("/");
     }
-}*@
+
+    public void StaySignedIn()
+    {
+        NavigationManager.NavigateTo("/MyPage");
+    }
+}

@@ -48,20 +48,19 @@ namespace Fora.Client.Services
                 await _localStorage.SetItemAsync("Name", list[1]);
                 return list;
             }
-
             return null;
         }
-        //public async Task SignOutUser()
-        //{
-        //    await _localStorage.RemoveItemAsync("Token");
-        //    await _localStorage.RemoveItemAsync("Name");
-        //}
+
+        public async Task SignOutUser()
+        {
+            await _localStorage.RemoveItemAsync("Token");
+            await _localStorage.RemoveItemAsync("Name");
+        }
 
         public async Task DeleteUser(int id)
         {
             await _httpClient.DeleteAsync($"api/user/{id}");
         }
-
 
         public async Task<UserStatusDTOModel> CheckUserLogin(string token)
         {
@@ -74,7 +73,6 @@ namespace Fora.Client.Services
                 return data;
             }
             return null;
-
         }
         //test alex
         public async Task UpdateUserModel(UserModel updatedUser)
