@@ -16,24 +16,23 @@ namespace Fora.Server.Controllers
         }
 
         // GET: api/<ThreadController>
-        //[HttpGet]
-        //public async Task<List<ThreadModel>> GetAllThreads(int id)
-        //{
-        //    InterestModel interest = new();
-        //    ThreadModel threads = new();
+        [HttpGet]
+        [Route("allThreads")]
+        public async Task<List<ThreadModel>> GetAllThreads([FromQuery] int interestID)
+        {
+            List<ThreadModel> threads = new();
 
-        //    threads = _context.Threads.Where(t => t.Id == id).ToList();
-            
-        //    interest = _context.Interests.FirstOrDefault(i => i.Id == id);
-        //    return _context.Threads.ToList();
-        //}
+            threads = _context.Threads.Where(t => t.InterestId == interestID).ToList();
+
+            return threads;
+        }
 
         // GET api/<ThreadController>/5
-        //[HttpGet("{id}")]
-        //public async Task<List<ThreadModel>> GetThreadByID(int id)
-        //{
-        //    return _context.Threads.FirstOrDefault(t => t.InterestId == id).ToList();            
-        //}
+        [HttpGet("{id}")]
+        public async Task<List<ThreadModel>> GetThreadByID(int id)
+        {
+            return null;
+        }
 
         // POST api/<ThreadController>
         [HttpPost]
