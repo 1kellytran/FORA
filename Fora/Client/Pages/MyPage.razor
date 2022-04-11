@@ -1,18 +1,35 @@
-
-﻿@page "/mypage"
+@page "/mypage"
 @inject IUserManager UserManager
 @inject IDataManager Datamanager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
 
+
+
 <h1>Welcome to your page @ActiveUser.Username !</h1>
-<hr />
+<br />
+<br />
+<h3>Your Current interest:</h3>
+@foreach (var interest in UserInterests)
+{
+<div class="card bg-primary p-2 text-dark bg-opacity-10">
+<div class="card-body">
+<strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Go to interest</button>
+</div>
+</div>
+<br />
+
+}
+
+
 
 
 
 
 <form>
+
+
 
 
 
@@ -23,9 +40,13 @@
 {
 <p>@interest <button>Remove</button></p>
 
+
+
 <br>
 }
 </div>
+
+
 
 
 
@@ -35,18 +56,25 @@
 
 
 
+
+
 @if (displayAllInterests)
-{ <br />
+{
+<br />
 <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
 <br />
 <div>
 
 
 
-<br/>
+
+
+<br />
 <label>Add an interest from the interest database:</label>
 <br />
-<br/>
+<br />
+
+
 
 
 
@@ -57,38 +85,49 @@
 <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
 </div>
 </div>
+<br />
 }
 </div>
 
 
 
 
+
+
 }
+
+
 
 </form>
 
 
 
 
-<br/>
+
+
+<br />
 <hr />
 
 
 
+
+
 <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
-<DataAnnotationsValidator/>
+<DataAnnotationsValidator />
 <div>
 <label><strong>Create an interest you want to discuss:</strong></label>
 <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
 </div>
 <br />
 <div>
-<button class="btn btn-primary" type="submit" >Create interest!</button>
+<button class="btn btn-primary" type="submit">Create interest!</button>
 </div>
 
 
 
-<ValidationSummary/>
+
+
+<ValidationSummary />
 </EditForm>
 <br />
 <br />
@@ -96,11 +135,11 @@
 
 
 
-
-
 @if (UserStatus.IsLoggedIn)
 {
 <h3>You only see this because you are logged in</h3>
+}
+
 
 
 
@@ -111,106 +150,88 @@
 
 
 
-}
-
-
-
-
-
-
 
 @code {
+
+
 
 //Sets new userinterest
 public InterestModel InterestToAdd { get; set; } = new();
 public UserStatusDTOModel UserStatus { get; set; } = new();
 public UserModel ActiveUser { get; set; } = new();
-public List<InterestModel> AllInterests { get; set;} = new();
-public UserInterestModel ActiveUserInterest { get; set; } = new();
-
-
-
-
+public List<InterestModel> AllInterests { get; set; } = new();
+public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
+public List<InterestModel> UserInterests { get; set; } = new();
 public bool displayAllInterests = false;
 
 
-    //Sets new userinterest
-    public InterestModel InterestToAdd { get; set; } = new();
-    public UserStatusDTOModel UserStatus { get; set; } = new();
-    public UserModel ActiveUser { get; set; } = new();
-    public List<InterestModel> AllInterests { get; set;} = new();
-
-    public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
-    public UserDTOModel UserWithUpdatedPassword { get; set; } = new();
-    public List<InterestModel> UserInterests { get; set; } = new();
-
-    public bool displayAllInterests = false;
-    private bool showPasswordInfo = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        //*****CHECK USER LOGIN (att användas på alla sidor)
-        //Hämtar token från localstorage
-        var token = await localStorage.GetItemAsync<string>("Token");
-        token = token.Replace("\"", "");
-        //kollar att user finns i databas med token
-        var result = await UserManager.CheckUserLogin(token);
-        UserStatus = result;
-
-        //hämtar den aktiva användaren
-        ActiveUser = await UserManager.GetUserByToken(token);
-        //hämtar alla intressen
-        AllInterests = await Datamanager.GetAllInterests();
-
-        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-      
-      private async Task AddPersonalInterest()
-    {
-        InterestToAdd.Threads = new();
-        //adding user id to interestmodel
-        InterestToAdd.UserId = ActiveUser.Id;
-        //creating intesrest in db
-        await Datamanager.CreateInterest(InterestToAdd);
-        AllInterests = await Datamanager.GetAllInterests();
-
-        ////adding created interest to usermodel, is this neccessary? :/
-        //ActiveUser.Interests.Add(InterestToAdd);
-        //await UserManager.UpdateUserModel(ActiveUser);
-    }
-    //Allinterest button
-
-    private void ShowAllInterests()
-    {
-        displayAllInterests = true;
-    }
-
-    //Hide all interests
-    private void HideAllInterests()
-    {
-        displayAllInterests = false;
-    }
-
-    //ChangePassword button
-    private void DisplayPasswordInfo()
-    {
-        showPasswordInfo = true;
-    }
-
-    //Gets and sets the current userinterest 
-    private async Task GetCurrentUserList()
-    {
-        
-
-    }
-
-        // Hämta token 
-        // Skicka token till API:t
-        // API: Jämför token med tokens i databasen
-        // API: Skickar tillbaka en UserStatusDto med (om token fanns - IsLoggedIn = true / om token inte fanna - IsLoggedIn = false)
-        // Använd denna UserStatusDto på varje sida och rendera delar med if(userStatus.IsLoggedIn) if(userStatus.isAdmin)
 
 
+
+
+
+
+
+protected override async Task OnInitializedAsync()
+{
+//*****CHECK USER LOGIN (att användas på alla sidor)
+//Hämtar token från localstorage
+var token = await localStorage.GetItemAsync<string>("Token");
+token = token.Replace("\"", "");
+//kollar att user finns i databas med token
+var result = await UserManager.CheckUserLogin(token);
+UserStatus = result;
+
+
+
+//hämtar den aktiva användaren
+ActiveUser = await UserManager.GetUserByToken(token);
+//hämtar alla intressen
+AllInterests = await Datamanager.GetAllInterests();
+
+
+
+UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
 }
 
 
 
+private async Task AddPersonalInterest()
+{
+InterestToAdd.Threads = new();
+//adding user id to interestmodel
+InterestToAdd.UserId = ActiveUser.Id;
+//creating intesrest in db
+await Datamanager.CreateInterest(InterestToAdd);
+AllInterests = await Datamanager.GetAllInterests();
+UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+
+
+
+////adding created interest to usermodel, is this neccessary? :/
+//ActiveUser.Interests.Add(InterestToAdd);
+//await UserManager.UpdateUserModel(ActiveUser);
+}
+
+
+
+//Allinterest button
+private void ShowAllInterests()
+{
+displayAllInterests = true;
+}
+
+
+
+//Hide all interests
+private void HideAllInterests()
+{
+displayAllInterests = false;
+}
+
+
+
+
+
+
+}
