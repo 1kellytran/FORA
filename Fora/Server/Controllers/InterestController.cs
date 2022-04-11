@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+
 
 namespace Fora.Server.Controllers
 {
@@ -10,10 +14,14 @@ namespace Fora.Server.Controllers
     {
         private readonly AppDbContext _context;
 
+
+
         public InterestController(AppDbContext context)
         {
             _context = context;
         }
+
+
 
         // GET: api/<InterestController>
         [HttpGet]
@@ -21,7 +29,11 @@ namespace Fora.Server.Controllers
         {
             return _context.Interests.ToList();
 
+
+
         }
+
+
 
         // GET api/<InterestController>/5
         [HttpGet("{id}")]
@@ -30,36 +42,48 @@ namespace Fora.Server.Controllers
             return "value";
         }
 
+
+
         // POST api/<InterestController>
         [HttpPost]
-        public async Task CreateInterest([FromBody]InterestModel interestToAdd)
+        public async Task CreateInterest([FromBody] InterestModel interestToAdd)
         {
             InterestModel interestModel = new();
             UserInterestModel userInterestModel = new();
 
+
+
             await _context.Interests.AddAsync(interestToAdd);
             await _context.SaveChangesAsync();
+
+
 
             interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
             userInterestModel.InterestId = interestToAdd.Id;
             userInterestModel.UserId = (int)interestToAdd.UserId;
-            await _context.UserInterests.AddAsync(userInterestModel);
+            var result = await _context.UserInterests.AddAsync(userInterestModel);
             await _context.SaveChangesAsync();
         }
+
+
 
 
         // PUT api/<InterestController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
-          
+
         }
+
+
 
         // DELETE api/<InterestController>/5
         [HttpDelete("{id}")]
         public async Task<string> DeleteInterest(int id)
         {
             string message = "";
+
+
 
             InterestModel interestToDelete = new();
             interestToDelete = _context.Interests.FirstOrDefault(x => x.Id == id);
