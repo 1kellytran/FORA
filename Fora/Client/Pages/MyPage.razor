@@ -13,14 +13,15 @@
 <h3>Your Current interest:</h3>
 @foreach (var interest in UserInterests)
 {
-<div class="card bg-primary p-2 text-dark bg-opacity-10">
-<div class="card-body">
-<strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Go to interest</button>
-</div>
-</div>
-<br />
+    <div class="card bg-primary p-2 text-dark bg-opacity-10">
+        <div class="card-body">
+            <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Go to interest</button>
+        </div>
+    </div>
+    <br />
 
 }
+<ChangePassword></ChangePassword>
 
 
 
@@ -33,68 +34,68 @@
 
 
 
-@*<div>
-<label>My current interest:</label>
-<br />
-@foreach (var interest in ActiveUser.UserInterests)
-{
-<p>@interest <button>Remove</button></p>
+    @*<div>
+        <label>My current interest:</label>
+        <br />
+        @foreach (var interest in ActiveUser.UserInterests)
+        {
+        <p>@interest <button>Remove</button></p>
 
 
 
-<br>
-}
-</div>
-
-
-
-
-
-<hr />*@
-<buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
-<br />
+        <br>
+        }
+        </div>
 
 
 
 
 
-@if (displayAllInterests)
-{
-<br />
-<buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
-<br />
-<div>
+        <hr />*@
+    <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
+    <br />
 
 
 
 
 
-<br />
-<label>Add an interest from the interest database:</label>
-<br />
-<br />
+    @if (displayAllInterests)
+    {
+        <br />
+        <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
+        <br />
+        <div>
 
 
 
 
 
-@foreach (var interest in AllInterests)
-{
-<div class="card bg-primary p-2 text-dark bg-opacity-10">
-<div class="card-body">
-<strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
-</div>
-</div>
-<br />
-}
-</div>
+            <br />
+            <label>Add an interest from the interest database:</label>
+            <br />
+            <br />
+
+
+
+
+
+            @foreach (var interest in AllInterests)
+            {
+                <div class="card bg-primary p-2 text-dark bg-opacity-10">
+                    <div class="card-body">
+                        <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
+                    </div>
+                </div>
+                <br />
+            }
+        </div>
 
 
 
 
 
 
-}
+    }
 
 
 
@@ -113,21 +114,21 @@
 
 
 <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
-<DataAnnotationsValidator />
-<div>
-<label><strong>Create an interest you want to discuss:</strong></label>
-<InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
-</div>
-<br />
-<div>
-<button class="btn btn-primary" type="submit">Create interest!</button>
-</div>
+    <DataAnnotationsValidator />
+    <div>
+        <label><strong>Create an interest you want to discuss:</strong></label>
+        <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
+    </div>
+    <br />
+    <div>
+        <button class="btn btn-primary" type="submit">Create interest!</button>
+    </div>
 
 
 
 
 
-<ValidationSummary />
+    <ValidationSummary />
 </EditForm>
 <br />
 <br />
@@ -137,7 +138,7 @@
 
 @if (UserStatus.IsLoggedIn)
 {
-<h3>You only see this because you are logged in</h3>
+    <h3>You only see this because you are logged in</h3>
 }
 
 
@@ -145,7 +146,7 @@
 
 @if (UserStatus.IsAdmin)
 {
-<h3>You only see this because you are an admin</h3>
+    <h3>You only see this because you are an admin</h3>
 }
 
 
@@ -155,14 +156,14 @@
 
 
 
-//Sets new userinterest
-public InterestModel InterestToAdd { get; set; } = new();
-public UserStatusDTOModel UserStatus { get; set; } = new();
-public UserModel ActiveUser { get; set; } = new();
-public List<InterestModel> AllInterests { get; set; } = new();
-public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
-public List<InterestModel> UserInterests { get; set; } = new();
-public bool displayAllInterests = false;
+    //Sets new userinterest
+    public InterestModel InterestToAdd { get; set; } = new();
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    public List<InterestModel> AllInterests { get; set; } = new();
+    public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
+    public List<InterestModel> UserInterests { get; set; } = new();
+    public bool displayAllInterests = false;
 
 
 
@@ -172,62 +173,62 @@ public bool displayAllInterests = false;
 
 
 
-protected override async Task OnInitializedAsync()
-{
-//*****CHECK USER LOGIN (att användas på alla sidor)
-//Hämtar token från localstorage
-var token = await localStorage.GetItemAsync<string>("Token");
-token = token.Replace("\"", "");
-//kollar att user finns i databas med token
-var result = await UserManager.CheckUserLogin(token);
-UserStatus = result;
+    protected override async Task OnInitializedAsync()
+    {
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
 
 
 
-//hämtar den aktiva användaren
-ActiveUser = await UserManager.GetUserByToken(token);
-//hämtar alla intressen
-AllInterests = await Datamanager.GetAllInterests();
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+        //hämtar alla intressen
+        AllInterests = await Datamanager.GetAllInterests();
 
 
 
-UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-}
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+    }
 
 
 
-private async Task AddPersonalInterest()
-{
-InterestToAdd.Threads = new();
-//adding user id to interestmodel
-InterestToAdd.UserId = ActiveUser.Id;
-//creating intesrest in db
-await Datamanager.CreateInterest(InterestToAdd);
-AllInterests = await Datamanager.GetAllInterests();
-UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+    private async Task AddPersonalInterest()
+    {
+        InterestToAdd.Threads = new();
+        //adding user id to interestmodel
+        InterestToAdd.UserId = ActiveUser.Id;
+        //creating intesrest in db
+        await Datamanager.CreateInterest(InterestToAdd);
+        AllInterests = await Datamanager.GetAllInterests();
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
 
 
 
-////adding created interest to usermodel, is this neccessary? :/
-//ActiveUser.Interests.Add(InterestToAdd);
-//await UserManager.UpdateUserModel(ActiveUser);
-}
+        ////adding created interest to usermodel, is this neccessary? :/
+        //ActiveUser.Interests.Add(InterestToAdd);
+        //await UserManager.UpdateUserModel(ActiveUser);
+    }
 
 
 
-//Allinterest button
-private void ShowAllInterests()
-{
-displayAllInterests = true;
-}
+    //Allinterest button
+    private void ShowAllInterests()
+    {
+        displayAllInterests = true;
+    }
 
 
 
-//Hide all interests
-private void HideAllInterests()
-{
-displayAllInterests = false;
-}
+    //Hide all interests
+    private void HideAllInterests()
+    {
+        displayAllInterests = false;
+    }
 
 
 
