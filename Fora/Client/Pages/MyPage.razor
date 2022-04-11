@@ -1,170 +1,122 @@
-﻿@page "/mypage"
-@inject IUserManager UserManager
-@inject IDataManager Datamanager
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+﻿    @page "/mypage"
+    @inject IUserManager UserManager
+    @inject IDataManager Datamanager
+    @inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+    <h1>Welcome to your page, @ActiveUser.Username!</h1>
+    <hr />
+
+    <form>
+
+
+    @*<div>
+    <label>My current interest:</label>
+    <br />
+    @foreach (var interest in ActiveUser.UserInterests)
+    {
+    <p>@interest <button>Remove</button></p>
+
+    <br>
+    }
+    </div>
 
 
 
-<h1>Welcome to your page @ActiveUser.Username !</h1>
-<br />
-<br />
- @foreach (var interest in UserInterests)
-        {
+    <hr />*@
+    <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
+    <br />
+
+    @if (displayAllInterests)
+    { 
+        <br />
+        <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
+        <br />
+        <div>
+            <br/>
+            <label>Add an interest from the interest database:</label>
+            <br />
+            <br/>
+            @foreach (var interest in AllInterests)
+            {
                 <div class="card bg-primary p-2 text-dark bg-opacity-10">
                     <div class="card-body">
-                       <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
+                        <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
                     </div>
                 </div>
+            }
+        </div>
+    }
+
+    </form>
+    <br/>
+    <hr />
+
+
+    <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
+    <DataAnnotationsValidator/>
+    <div>
+        <label><strong>Create an interest you want to discuss:</strong></label>
+        <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
+    </div>
+    <br />
+    <div>
+        <button class="btn btn-primary" type="submit" >Create interest!</button>
+    </div>
+
+    <ValidationSummary/>
+    </EditForm>
+    <br />
+    <br />
+    <hr />
+    @*<buton class="btn btn-primary" @onclick="DisplayPasswordInfo">Change Password</buton>*@
+    @* <br />
+    </form>*@
+
+
+
+    @*PASSWORD*@
+
+
+
+    @*<br />
+    <br />
+    @if (showPasswordInfo)
+    {
+    <EditForm Model="UserWithUpdatedPassword" OnValidSubmit="AddPersonalInterest">
+    <DataAnnotationsValidator/>
+    <div>
+    <label></label>
+    <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
+    </div>
+    <br />
+    <div>
+    <button class="btn btn-primary" type="submit" >Create interest!</button>
+    </div>
+    <ValidationSummary/>
+    </EditForm>
+    }*@
+
+
+    @if (UserStatus.IsLoggedIn)
+    {
+        <h3>You only see this because you are logged in</h3>
+        @if (UserStatus.IsAdmin)
+        {
+            <h3>You only see this because you are an admin</h3>
         }
-
-
-
-
-<form>
-
-
-
-@*<div>
-<label>My current interest:</label>
-<br />
-@foreach (var interest in ActiveUser.UserInterests)
-{
-<p>@interest <button>Remove</button></p>
-
-<br>
-}
-</div>
-
-
-
-<hr />*@
-<buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
-<br />
-
-
-
-@if (displayAllInterests)
-{ <br />
-<buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
-<br />
-<div>
-
-
-
-<br/>
-<label>Add an interest from the interest database:</label>
-<br />
-<br/>
-
-
-
-@foreach (var interest in AllInterests)
-{
-<div class="card bg-primary p-2 text-dark bg-opacity-10">
-<div class="card-body">
-<strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
-</div>
-</div>
-}
-</div>
-
-
-
-
-}
-
-</form>
-
-
-
-
-<br/>
-<hr />
-
-
-
-<EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
-<DataAnnotationsValidator/>
-<div>
-<label><strong>Create an interest you want to discuss:</strong></label>
-<InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
-</div>
-<br />
-<div>
-<button class="btn btn-primary" type="submit" >Create interest!</button>
-</div>
-
-
-
-<ValidationSummary/>
-</EditForm>
-<br />
-<br />
-<hr />
-@*<buton class="btn btn-primary" @onclick="DisplayPasswordInfo">Change Password</buton>*@
-@* <br />
-</form>*@
-
-
-
-@*PASSWORD*@
-
-
-
-@*<br />
-<br />
-@if (showPasswordInfo)
-{
-<EditForm Model="UserWithUpdatedPassword" OnValidSubmit="AddPersonalInterest">
-<DataAnnotationsValidator/>
-<div>
-<label></label>
-<InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
-</div>
-<br />
-<div>
-<button class="btn btn-primary" type="submit" >Create interest!</button>
-</div>
-<ValidationSummary/>
-</EditForm>
-}*@
-
-
-
-
-
-@if (UserStatus.IsLoggedIn)
-{
-<h3>You only see this because you are logged in</h3>
-
-
-
-@if (UserStatus.IsAdmin)
-{
-<h3>You only see this because you are an admin</h3>
-}
-
-
-
-}
-
-
-
-
-
+    }
 
 @code {
-
     //Sets new userinterest
     public InterestModel InterestToAdd { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
     public UserModel ActiveUser { get; set; } = new();
     public List<InterestModel> AllInterests { get; set;} = new();
+
     public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
     public UserDTOModel UserWithUpdatedPassword { get; set; } = new();
     public List<InterestModel> UserInterests { get; set; } = new();
-
-
 
     public bool displayAllInterests = false;
     private bool showPasswordInfo = false;
@@ -185,9 +137,8 @@
         AllInterests = await Datamanager.GetAllInterests();
 
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-    }
-
-    private async Task AddPersonalInterest()
+      
+      private async Task AddPersonalInterest()
     {
         InterestToAdd.Threads = new();
         //adding user id to interestmodel
@@ -200,15 +151,15 @@
         //ActiveUser.Interests.Add(InterestToAdd);
         //await UserManager.UpdateUserModel(ActiveUser);
     }
+    //Allinterest button
 
-     //Allinterest button
     private void ShowAllInterests()
     {
         displayAllInterests = true;
     }
 
     //Hide all interests
-     private void HideAllInterests()
+    private void HideAllInterests()
     {
         displayAllInterests = false;
     }

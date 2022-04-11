@@ -1,11 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-
-
 namespace Fora.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -14,25 +8,17 @@ namespace Fora.Server.Controllers
     {
         private readonly AppDbContext _context;
 
-
-
         public InterestController(AppDbContext context)
         {
             _context = context;
         }
-
-
 
         // GET: api/<InterestController>
         [HttpGet]
         public async Task<List<InterestModel>> GetAllInterests()
         {
             return _context.Interests.ToList();
-
-
-
         }
-
 
         [HttpGet]
         [Route("check")]
@@ -41,16 +27,13 @@ namespace Fora.Server.Controllers
             return _context.Interests.Where(x=>x.UserId ==activeUserid).ToList();
 
         }
-
-
+        
         // GET api/<InterestController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
-
-
 
         // POST api/<InterestController>
         [HttpPost]
@@ -59,12 +42,8 @@ namespace Fora.Server.Controllers
             InterestModel interestModel = new();
             UserInterestModel userInterestModel = new();
 
-
-
             await _context.Interests.AddAsync(interestToAdd);
             await _context.SaveChangesAsync();
-
-
 
             interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
             userInterestModel.InterestId = interestToAdd.Id;
@@ -73,9 +52,6 @@ namespace Fora.Server.Controllers
             await _context.SaveChangesAsync();
         }
 
-
-
-
         // PUT api/<InterestController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
@@ -83,15 +59,11 @@ namespace Fora.Server.Controllers
 
         }
 
-
-
         // DELETE api/<InterestController>/5
         [HttpDelete("{id}")]
         public async Task<string> DeleteInterest(int id)
         {
             string message = "";
-
-
 
             InterestModel interestToDelete = new();
             interestToDelete = _context.Interests.FirstOrDefault(x => x.Id == id);
@@ -101,7 +73,7 @@ namespace Fora.Server.Controllers
                 await _context.SaveChangesAsync();
                 return message = "Interest deleted!";
             }
-            else return message = "Something went wrong, cannot delete user!";
+            else return message = "Something went wrong, can not delete user!";
         }
     }
 }
