@@ -48,5 +48,10 @@ namespace Fora.Client.Services
 
             return allThreads;
         }
+
+        public async Task CreateThread(ThreadModel threadToAdd)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/thread", threadToAdd);
+        }
     }
 }
