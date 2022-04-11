@@ -1,3 +1,4 @@
+
 ﻿@page "/mypage"
 @inject IUserManager UserManager
 @inject IDataManager Datamanager
@@ -117,7 +118,9 @@
 
 
 
+
 @code {
+
 //Sets new userinterest
 public InterestModel InterestToAdd { get; set; } = new();
 public UserStatusDTOModel UserStatus { get; set; } = new();
@@ -131,80 +134,83 @@ public UserInterestModel ActiveUserInterest { get; set; } = new();
 public bool displayAllInterests = false;
 
 
+    //Sets new userinterest
+    public InterestModel InterestToAdd { get; set; } = new();
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    public List<InterestModel> AllInterests { get; set;} = new();
+
+    public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
+    public UserDTOModel UserWithUpdatedPassword { get; set; } = new();
+    public List<InterestModel> UserInterests { get; set; } = new();
+
+    public bool displayAllInterests = false;
+    private bool showPasswordInfo = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
+
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+        //hämtar alla intressen
+        AllInterests = await Datamanager.GetAllInterests();
+
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+      
+      private async Task AddPersonalInterest()
+    {
+        InterestToAdd.Threads = new();
+        //adding user id to interestmodel
+        InterestToAdd.UserId = ActiveUser.Id;
+        //creating intesrest in db
+        await Datamanager.CreateInterest(InterestToAdd);
+        AllInterests = await Datamanager.GetAllInterests();
+
+        ////adding created interest to usermodel, is this neccessary? :/
+        //ActiveUser.Interests.Add(InterestToAdd);
+        //await UserManager.UpdateUserModel(ActiveUser);
+    }
+    //Allinterest button
+
+    private void ShowAllInterests()
+    {
+        displayAllInterests = true;
+    }
+
+    //Hide all interests
+    private void HideAllInterests()
+    {
+        displayAllInterests = false;
+    }
+
+    //ChangePassword button
+    private void DisplayPasswordInfo()
+    {
+        showPasswordInfo = true;
+    }
+
+    //Gets and sets the current userinterest 
+    private async Task GetCurrentUserList()
+    {
+        
+
+    }
+
+        // Hämta token 
+        // Skicka token till API:t
+        // API: Jämför token med tokens i databasen
+        // API: Skickar tillbaka en UserStatusDto med (om token fanns - IsLoggedIn = true / om token inte fanna - IsLoggedIn = false)
+        // Använd denna UserStatusDto på varje sida och rendera delar med if(userStatus.IsLoggedIn) if(userStatus.isAdmin)
 
 
-protected override async Task OnInitializedAsync()
-{
-
-
-
-//*****CHECK USER LOGIN (att användas på alla sidor)
-//Hämtar token från localstorage
-var token = await localStorage.GetItemAsync<string>("Token");
-token = token.Replace("\"", "");
-//kollar att user finns i databas med token
-var result = await UserManager.CheckUserLogin(token);
-UserStatus = result;
-
-
-
-//hämtar den aktiva användaren
-ActiveUser = await UserManager.GetUserByToken(token);
-//hämtar alla intressen
-AllInterests = await Datamanager.GetAllInterests();
 }
 
 
 
-private async Task AddPersonalInterest()
-{
-
-
-
-InterestToAdd.Threads = new();
-//adding user id to interestmodel
-InterestToAdd.UserId = ActiveUser.Id;
-//creating intesrest in db
-await Datamanager.CreateInterest(InterestToAdd);
-AllInterests = await Datamanager.GetAllInterests();
-
-
-
-////adding created interest to usermodel, is this neccessary? :/
-
-//ActiveUser.Interests.Add(InterestToAdd);
-//await UserManager.UpdateUserModel(ActiveUser);
-
-
-
-}
-//Allinterest button
-private void ShowAllInterests()
-{
-displayAllInterests = true;
-}
-//Hide all interests
-private void HideAllInterests()
-{
-displayAllInterests = false;
-}
-
-//Gets and sets the current userinterest
-
-
-
-private async Task GetCurrentUserList()
-{
-
-
-
-}
-
-
-
-// Hämta token
-// Skicka token till API:t
-// API: Jämför token med tokens i databasen
-// API: Skickar tillbaka en UserStatusDto med (om token fanns - IsLoggedIn = true / om token inte fanna - IsLoggedIn = false)
-// Använd denna UserStatusDto på varje sida och rendera delar med if(userStatus.IsLoggedIn) if(userStatus.isAdmin)
-}
