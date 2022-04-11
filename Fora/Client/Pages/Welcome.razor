@@ -11,8 +11,7 @@
 </div>
 
 @code {
-    public UserStatusDTOModel UserStatus { get; set; }
-    
+    public UserStatusDTOModel UserStatus { get; set; }    
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,9 +23,6 @@
         var result = await UserManager.CheckUserLogin(token);
         UserStatus = result;
 
-        // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna
-
-       
-        
+        // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna             
     }    
 }
