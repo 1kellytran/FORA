@@ -23,7 +23,7 @@ namespace Fora.Server.Controllers
             List<ThreadModel> threads = new();
 
             threads = _context.Threads.Where(t => t.InterestId == interestID).ToList();
-
+            
             return threads;
         }
 
@@ -38,14 +38,8 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async Task CreateThread([FromBody]ThreadModel threadToAdd)
         {
-            // Get InterestID 
-
-            // Set InterestID for ThreadModel while creating Thread
-            InterestModel interest = new();
-            ThreadModel thread = new();
-
-            interest = _context.Interests.FirstOrDefault(i => i.Id == threadToAdd.InterestId);
-
+            await _context.Threads.AddAsync(threadToAdd);
+            await _context.SaveChangesAsync();
         }
 
         // PUT api/<ThreadController>/5

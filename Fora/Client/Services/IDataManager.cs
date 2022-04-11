@@ -1,4 +1,3 @@
-
 using Fora.Shared;
 
 namespace Fora.Client.Services
@@ -13,5 +12,6 @@ namespace Fora.Client.Services
 
         // ***** THREADS *****
         Task<List<ThreadModel>> GetAllThreads(int interestID);
+        Task CreateThread(ThreadModel threadToAdd);
     }
 }

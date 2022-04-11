@@ -4,17 +4,31 @@
 <h3>What are you curious about?</h3>
 @foreach(var thread in allThreads)
 {
-    <a href="/Message">@thread.Name</a><br />
+    <div>
+        <a href="/Message">@thread.Name</a><em>@thread.Messages.Count messages</em><br />
+    </div>    
 }
+<br />
 
+<h5>Can't find what you're looking for? Create one here!</h5>
+<EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
+        <label>New thread:</label>
+        <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
+        <button>Create thread!</button>
+</EditForm>
 
 @code {
     public List<ThreadModel> allThreads { get; set; } = new();
+    public ThreadModel ThreadToAdd { get; set; } = new();
     int id = 13;
 
     protected override async Task OnInitializedAsync()
     {        
         allThreads = await DataManager.GetAllThreads(id);
     }
-    
+
+    private void CreateThread()
+    {
+        
+    }
 }
