@@ -23,6 +23,14 @@ namespace Fora.Server.Controllers
 
         }
 
+        [HttpGet]
+        [Route("check")]
+        public async Task<List<InterestModel>> GetUserInterests([FromQuery] int activeUserid)
+        {
+            return _context.Interests.Where(x=>x.UserId ==activeUserid).ToList();
+
+        }
+
         // GET api/<InterestController>/5
         [HttpGet("{id}")]
         public string Get(int id)

@@ -4,7 +4,16 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <h1>Welcome to your page @ActiveUser.Username !</h1>
-<hr />
+<br />
+<br />
+ @foreach (var interest in UserInterests)
+        {
+                <div class="card bg-primary p-2 text-dark bg-opacity-10">
+                    <div class="card-body">
+                       <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
+                    </div>
+                </div>
+        }
 
 
 <form>
@@ -118,6 +127,9 @@
     public List<InterestModel> AllInterests { get; set;} = new();
     public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
     public UserDTOModel UserWithUpdatedPassword { get; set; } = new();
+    public List<InterestModel> UserInterests { get; set; } = new();
+
+
 
     public bool displayAllInterests = false;
     private bool showPasswordInfo = false;
@@ -136,6 +148,8 @@
         ActiveUser = await UserManager.GetUserByToken(token);
         //hämtar alla intressen
         AllInterests = await Datamanager.GetAllInterests();
+
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
     }
 
     private async Task AddPersonalInterest()
