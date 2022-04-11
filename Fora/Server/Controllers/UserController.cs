@@ -127,23 +127,23 @@ namespace Fora.Server.Controllers
             }
         }
 
-        // PUT api/<UserController>/5 test alex
-        [HttpPut]
-        public async Task UpdateUser([FromBody] UserModel updatedUser)
-        {
-            UserModel userToUpdate = new();
-            userToUpdate.Id = updatedUser.Id;
-            userToUpdate.Username = updatedUser.Username;
-            userToUpdate.UserInterests = updatedUser.UserInterests;
-            userToUpdate.Interests = updatedUser.Interests;
-            userToUpdate.Messages = updatedUser.Messages;
-            userToUpdate.Banned = updatedUser.Banned;
-            userToUpdate.Deleted = updatedUser.Deleted;
-            userToUpdate.Threads = updatedUser.Threads;
+        //// PUT api/<UserController>/5 test alex
+        //[HttpPut]
+        //public async Task UpdateUser([FromBody] UserModel updatedUser)
+        //{
+        //    UserModel userToUpdate = new();
+        //    userToUpdate.Id = updatedUser.Id;
+        //    userToUpdate.Username = updatedUser.Username;
+        //    userToUpdate.UserInterests = updatedUser.UserInterests;
+        //    userToUpdate.Interests = updatedUser.Interests;
+        //    userToUpdate.Messages = updatedUser.Messages;
+        //    userToUpdate.Banned = updatedUser.Banned;
+        //    userToUpdate.Deleted = updatedUser.Deleted;
+        //    userToUpdate.Threads = updatedUser.Threads;
 
-            _context.Users.Update(userToUpdate);
-            _context.SaveChanges();
-        }
+        //    _context.Users.Update(userToUpdate);
+        //    _context.SaveChanges();
+        //}
 
         // DELETE api/<UserController>/5 test alex
         [HttpDelete("{id}")]
@@ -156,6 +156,23 @@ namespace Fora.Server.Controllers
                 _context.Users.Remove(user);
                 //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
             }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdatePassword([FromBody] PasswordDTOModel userToUpdate)
+        {
+            
+            var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToUpdate.Username);
+            if (applicationUser != null)
+            {
+                var signInResult = await _signInManager.CheckPasswordSignInAsync(applicationUser, userToUpdate.OldPassword, false);
+                if (signInResult.Succeeded)
+                {
+                    await _accountManager.ChangePassword(applicationUser, userToUpdate);
+                    return Ok();
+                }
+            }
+            return BadRequest();
         }
     }
 }

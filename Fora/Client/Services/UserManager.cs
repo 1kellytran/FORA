@@ -74,10 +74,15 @@ namespace Fora.Client.Services
             }
             return null;
         }
-        //test alex
-        public async Task UpdateUserModel(UserModel updatedUser)
+        ////test alex
+        //public async Task UpdateUserModel(UserModel updatedUser)
+        //{
+        //    await _httpClient.PutAsJsonAsync<UserModel>("api/user", updatedUser);
+        //}
+
+        public async Task UpdatePassword(PasswordDTOModel UserToUpdate)
         {
-            await _httpClient.PutAsJsonAsync<UserModel>("api/user", updatedUser);
+            await _httpClient.PutAsJsonAsync<PasswordDTOModel>("api/user", UserToUpdate);
         }
     }
 }

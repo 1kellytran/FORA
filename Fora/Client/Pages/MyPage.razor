@@ -92,33 +92,6 @@
 <br />
 <br />
 <hr />
-@*<buton class="btn btn-primary" @onclick="DisplayPasswordInfo">Change Password</buton>*@
-@* <br />
-</form>*@
-
-
-
-@*PASSWORD*@
-
-
-
-@*<br />
-<br />
-@if (showPasswordInfo)
-{
-<EditForm Model="UserWithUpdatedPassword" OnValidSubmit="AddPersonalInterest">
-<DataAnnotationsValidator/>
-<div>
-<label></label>
-<InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
-</div>
-<br />
-<div>
-<button class="btn btn-primary" type="submit" >Create interest!</button>
-</div>
-<ValidationSummary/>
-</EditForm>
-}*@
 
 
 
@@ -151,12 +124,12 @@ public UserStatusDTOModel UserStatus { get; set; } = new();
 public UserModel ActiveUser { get; set; } = new();
 public List<InterestModel> AllInterests { get; set;} = new();
 public UserInterestModel ActiveUserInterest { get; set; } = new();
-public UserDTOModel UserWithUpdatedPassword { get; set; } = new();
+
 
 
 
 public bool displayAllInterests = false;
-private bool showPasswordInfo = false;
+
 
 
 
@@ -215,11 +188,7 @@ private void HideAllInterests()
 {
 displayAllInterests = false;
 }
-//ChangePassword button
-private void DisplayPasswordInfo()
-{
-showPasswordInfo = true;
-}
+
 //Gets and sets the current userinterest
 
 
