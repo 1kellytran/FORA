@@ -1,0 +1,21 @@
+﻿@page "/Messages"
+<h3>Messages</h3>
+@foreach (var mess in AllMessages)
+{
+    <div class="card-body">
+        <p>@mess.Message</p>
+    </div>
+        
+}
+
+@code {
+    public List<MessageModel> AllMessages { get; set; } = new List<MessageModel>
+    {
+        new MessageModel{ Id =1, Message = "Jag tycker allt är bra"},
+    };
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+}
