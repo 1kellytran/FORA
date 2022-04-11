@@ -25,15 +25,14 @@ namespace Fora.Server.App
         }
 
         //in prgress, dont know if it works
-        public async void ChangePassword(ApplicationUser userToChange, string password)
+        public async Task ChangePassword(ApplicationUser user, PasswordDTOModel userToUpdate)
         {
-            //await _signInManager.UserManager.ChangePasswordAsync()
-            //removes password?
-            await _signInManager.UserManager.RemovePasswordAsync(userToChange);
-            //adds new password? requirements, add in page?? 
-            await _signInManager.UserManager.AddPasswordAsync(userToChange, password);
+            //string oldpassword = userToUpdate.OldPassword;
+            //string newpassword = userToUpdate.NewPassword;
+            await _signInManager.UserManager.ChangePasswordAsync(user, userToUpdate.OldPassword, userToUpdate.NewPassword);
+            
         }
-       
+
         public async Task AddUserToForaDb(UserDTOModel dtoModel)
         {
             UserModel userToAdd = new();

@@ -5,7 +5,7 @@ namespace Fora.Server.App
     {
         Task UpdateUserInAuthDb(ApplicationUser newUser);
         string GenerateToken();
-        void ChangePassword(ApplicationUser userToChange, string password);
+        Task ChangePassword(ApplicationUser user, PasswordDTOModel userToUpdate);
         Task AddUserToForaDb(UserDTOModel dtoModel);
     }
 }

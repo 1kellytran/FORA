@@ -1,113 +1,139 @@
 
-﻿    @page "/mypage"
-    @inject IUserManager UserManager
-    @inject IDataManager Datamanager
-    @inject Blazored.LocalStorage.ILocalStorageService localStorage
-
-    <h1>Welcome to your page, @ActiveUser.Username!</h1>
-    <hr />
-
-    <form>
-
-
-    @*<div>
-    <label>My current interest:</label>
-    <br />
-    @foreach (var interest in ActiveUser.UserInterests)
-    {
-    <p>@interest <button>Remove</button></p>
-
-    <br>
-    }
-    </div>
+﻿@page "/mypage"
+@inject IUserManager UserManager
+@inject IDataManager Datamanager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
 
-    <hr />*@
-    <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
-    <br />
-
-    @if (displayAllInterests)
-    { 
-        <br />
-        <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
-        <br />
-        <div>
-            <br/>
-            <label>Add an interest from the interest database:</label>
-            <br />
-            <br/>
-            @foreach (var interest in AllInterests)
-            {
-                <div class="card bg-primary p-2 text-dark bg-opacity-10">
-                    <div class="card-body">
-                        <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
-                    </div>
-                </div>
-            }
-        </div>
-    }
-
-    </form>
-    <br/>
-    <hr />
-
-
-    <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
-    <DataAnnotationsValidator/>
-    <div>
-        <label><strong>Create an interest you want to discuss:</strong></label>
-        <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
-    </div>
-    <br />
-    <div>
-        <button class="btn btn-primary" type="submit" >Create interest!</button>
-    </div>
-
-    <ValidationSummary/>
-    </EditForm>
-    <br />
-    <br />
-    <hr />
-    @*<buton class="btn btn-primary" @onclick="DisplayPasswordInfo">Change Password</buton>*@
-    @* <br />
-    </form>*@
+<h1>Welcome to your page @ActiveUser.Username !</h1>
+<hr />
 
 
 
-    @*PASSWORD*@
+
+<form>
 
 
 
-    @*<br />
-    <br />
-    @if (showPasswordInfo)
-    {
-    <EditForm Model="UserWithUpdatedPassword" OnValidSubmit="AddPersonalInterest">
-    <DataAnnotationsValidator/>
-    <div>
-    <label></label>
-    <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
-    </div>
-    <br />
-    <div>
-    <button class="btn btn-primary" type="submit" >Create interest!</button>
-    </div>
-    <ValidationSummary/>
-    </EditForm>
-    }*@
+@*<div>
+<label>My current interest:</label>
+<br />
+@foreach (var interest in ActiveUser.UserInterests)
+{
+<p>@interest <button>Remove</button></p>
+
+<br>
+}
+</div>
 
 
-    @if (UserStatus.IsLoggedIn)
-    {
-        <h3>You only see this because you are logged in</h3>
-        @if (UserStatus.IsAdmin)
-        {
-            <h3>You only see this because you are an admin</h3>
-        }
-    }
+
+<hr />*@
+<buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
+<br />
+
+
+
+@if (displayAllInterests)
+{ <br />
+<buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
+<br />
+<div>
+
+
+
+<br/>
+<label>Add an interest from the interest database:</label>
+<br />
+<br/>
+
+
+
+@foreach (var interest in AllInterests)
+{
+<div class="card bg-primary p-2 text-dark bg-opacity-10">
+<div class="card-body">
+<strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
+</div>
+</div>
+}
+</div>
+
+
+
+
+}
+
+</form>
+
+
+
+
+<br/>
+<hr />
+
+
+
+<EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
+<DataAnnotationsValidator/>
+<div>
+<label><strong>Create an interest you want to discuss:</strong></label>
+<InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
+</div>
+<br />
+<div>
+<button class="btn btn-primary" type="submit" >Create interest!</button>
+</div>
+
+
+
+<ValidationSummary/>
+</EditForm>
+<br />
+<br />
+<hr />
+
+
+
+
+
+@if (UserStatus.IsLoggedIn)
+{
+<h3>You only see this because you are logged in</h3>
+
+
+
+@if (UserStatus.IsAdmin)
+{
+<h3>You only see this because you are an admin</h3>
+}
+
+
+
+}
+
+
+
+
+
+
 
 @code {
+
+//Sets new userinterest
+public InterestModel InterestToAdd { get; set; } = new();
+public UserStatusDTOModel UserStatus { get; set; } = new();
+public UserModel ActiveUser { get; set; } = new();
+public List<InterestModel> AllInterests { get; set;} = new();
+public UserInterestModel ActiveUserInterest { get; set; } = new();
+
+
+
+
+public bool displayAllInterests = false;
+
+
     //Sets new userinterest
     public InterestModel InterestToAdd { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
@@ -183,63 +209,8 @@
         // API: Skickar tillbaka en UserStatusDto med (om token fanns - IsLoggedIn = true / om token inte fanna - IsLoggedIn = false)
         // Använd denna UserStatusDto på varje sida och rendera delar med if(userStatus.IsLoggedIn) if(userStatus.isAdmin)
 
-}
-
-
-
-private async Task AddPersonalInterest()
-{
-
-
-
-InterestToAdd.Threads = new();
-//adding user id to interestmodel
-InterestToAdd.UserId = ActiveUser.Id;
-//creating intesrest in db
-await Datamanager.CreateInterest(InterestToAdd);
-AllInterests = await Datamanager.GetAllInterests();
-
-
-
-////adding created interest to usermodel, is this neccessary? :/
-
-//ActiveUser.Interests.Add(InterestToAdd);
-//await UserManager.UpdateUserModel(ActiveUser);
-
-
-
-}
-//Allinterest button
-private void ShowAllInterests()
-{
-displayAllInterests = true;
-}
-//Hide all interests
-private void HideAllInterests()
-{
-displayAllInterests = false;
-}
-//ChangePassword button
-private void DisplayPasswordInfo()
-{
-showPasswordInfo = true;
-}
-//Gets and sets the current userinterest
-
-
-
-private async Task GetCurrentUserList()
-{
-
-
 
 }
 
 
 
-// Hämta token
-// Skicka token till API:t
-// API: Jämför token med tokens i databasen
-// API: Skickar tillbaka en UserStatusDto med (om token fanns - IsLoggedIn = true / om token inte fanna - IsLoggedIn = false)
-// Använd denna UserStatusDto på varje sida och rendera delar med if(userStatus.IsLoggedIn) if(userStatus.isAdmin)
-}
