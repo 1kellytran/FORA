@@ -37,6 +37,14 @@ namespace Fora.Client.Services
         }
 
 
+        public async Task<List<InterestModel>> GetUserInterests(int activeUserId)
+        {
+            List<InterestModel> userInterest = new();
+            userInterest= await _httpClient.GetFromJsonAsync<List<InterestModel>>($"api/interest/check?activeUserId={activeUserId}");
+
+            return userInterest;
+        }
+
 
         public async Task<string> DeleteInterest(int id)
         {
