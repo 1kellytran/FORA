@@ -8,7 +8,7 @@ namespace Fora.Shared
         [Key]
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
-        public List<MessageModel> Messages { get; set; }
+        public List<MessageModel>? Messages { get; set; } = new();
 
         // Relations
         [ForeignKey(nameof(Interest))]
@@ -16,7 +16,7 @@ namespace Fora.Shared
         public InterestModel Interest { get; set; }
         [ForeignKey(nameof(User))]
         public int? UserId { get; set; }
-        public UserModel? User { get; set; }
+        public UserModel? User { get; set; } 
 
     }
 }
