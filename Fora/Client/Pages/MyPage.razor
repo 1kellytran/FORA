@@ -182,21 +182,15 @@
     public async Task AddToFav(int interestid)
     {
 
-
         UserInterestModel modelToAdd = new();
-
-        
-
-       
-
         modelToAdd.Interest = AllInterests.FirstOrDefault(x => x.Id == interestid);
-
         modelToAdd.User = ActiveUser;
 
-        Datamanager.CreateNewUserInterest(modelToAdd);
+        await Datamanager.CreateNewUserInterest(modelToAdd);
 
-        
-        
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+       
+
     }
 
 

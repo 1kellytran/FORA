@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fora.Server.Controllers
 {
@@ -22,10 +23,16 @@ namespace Fora.Server.Controllers
 
         [HttpPost]
         [Route("uta")]
-        public async Task AddUserInterest([FromBody]UserInterestModel userInterestToAdd)
+        public async Task AddExistingUserInterest([FromBody]UserInterestModel userInterestToAdd)
         {
-             _context.UserInterests.AddAsync(userInterestToAdd);
-             _context.SaveChanges();
+            var activeUser= _context.Users.FirstOrDefault(x => x.Id == userInterestToAdd.User.Id);
+            var currentInterest= _context.Interests.FirstOrDefault(x => x.Id == userInterestToAdd.Interest.Id);
+
+            userInterestToAdd.User = activeUser;
+            userInterestToAdd.Interest = currentInterest;
+           
+             await _context.UserInterests.AddAsync(userInterestToAdd);
+             await _context.SaveChangesAsync();
 
         }
 
@@ -33,9 +40,8 @@ namespace Fora.Server.Controllers
         [Route("check")]
         public async Task<List<InterestModel>> GetUserInterests([FromQuery] int activeUserid)
         {
-            return _context.Interests.Where(x => x.UserId == activeUserid).ToList();
-            // Get user interests
-            //_context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == user.Id)).ToList();
+     
+            return _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == activeUserid)).ToList();
 
         }
 
