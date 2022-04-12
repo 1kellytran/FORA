@@ -20,6 +20,15 @@ namespace Fora.Server.Controllers
             return _context.Interests.ToList();
         }
 
+        [HttpPost]
+        [Route("uta")]
+        public async Task AddUserInterest([FromBody]UserInterestModel userInterestToAdd)
+        {
+             _context.UserInterests.AddAsync(userInterestToAdd);
+             _context.SaveChanges();
+
+        }
+
         [HttpGet]
         [Route("check")]
         public async Task<List<InterestModel>> GetUserInterests([FromQuery] int activeUserid)
@@ -37,21 +46,47 @@ namespace Fora.Server.Controllers
             return "value";
         }
 
-        // POST api/<InterestController>
+         //POST api/<InterestController>
+        //[HttpPost]
+        //public async Task CreateInterest([FromBody] InterestModel interestToAdd)
+        //{
+        //    InterestModel interestModel = new();
+        //    UserInterestModel userInterestModel = new();
+
+        //    await _context.Interests.AddAsync(interestToAdd);
+        //    await _context.SaveChangesAsync();
+
+        //    interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
+        //    userInterestModel.InterestId = interestToAdd.Id;
+        //    userInterestModel.UserId = (int)interestToAdd.UserId;
+        //    var result = await _context.UserInterests.AddAsync(userInterestModel);
+        //    await _context.SaveChangesAsync();
+        //}
+
         [HttpPost]
         public async Task CreateInterest([FromBody] InterestModel interestToAdd)
         {
             //InterestModel interestModel = new();
             UserInterestModel userInterestModel = new();
+            UserModel activeUser = new();    
 
             //await _context.Interests.AddAsync(interestToAdd);
             //await _context.SaveChangesAsync();
 
-            //interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
-            //userInterestModel.InterestId = interestToAdd.Id;
-            //userInterestModel.UserId = (int)interestToAdd.UserId;
-            userInterestModel.InterestId = 1009;
-            userInterestModel.UserId = 1;
+
+            
+            interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
+            activeUser = _context.Users.FirstOrDefault(x => x.Id == interestModel.UserId);
+
+            userInterestModel.Interest= interestToAdd;
+
+            userInterestModel.User = activeUser;
+
+            interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
+            userInterestModel.InterestId = interestToAdd.Id;
+            userInterestModel.UserId = (int)interestToAdd.UserId;
+           
+
             var result = await _context.UserInterests.AddAsync(userInterestModel);
             await _context.SaveChangesAsync();
         }
