@@ -33,10 +33,12 @@ namespace Fora.Server.Controllers
         [Route("check")]
         public async Task<List<InterestModel>> GetUserInterests([FromQuery] int activeUserid)
         {
-            return _context.Interests.Where(x=>x.UserId ==activeUserid).ToList();
+            return _context.Interests.Where(x => x.UserId == activeUserid).ToList();
+            // Get user interests
+            //_context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == user.Id)).ToList();
 
         }
-        
+
         // GET api/<InterestController>/5
         [HttpGet("{id}")]
         public string Get(int id)
@@ -64,12 +66,13 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async Task CreateInterest([FromBody] InterestModel interestToAdd)
         {
-            InterestModel interestModel = new();
+            //InterestModel interestModel = new();
             UserInterestModel userInterestModel = new();
             UserModel activeUser = new();    
 
-            await _context.Interests.AddAsync(interestToAdd);
-            await _context.SaveChangesAsync();
+            //await _context.Interests.AddAsync(interestToAdd);
+            //await _context.SaveChangesAsync();
+
 
             
             interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
@@ -78,6 +81,12 @@ namespace Fora.Server.Controllers
             userInterestModel.Interest= interestToAdd;
 
             userInterestModel.User = activeUser;
+
+            interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
+            userInterestModel.InterestId = interestToAdd.Id;
+            userInterestModel.UserId = (int)interestToAdd.UserId;
+           
+
             var result = await _context.UserInterests.AddAsync(userInterestModel);
             await _context.SaveChangesAsync();
         }

@@ -1,4 +1,3 @@
-
 using Fora.Shared;
 
 namespace Fora.Client.Services
@@ -10,6 +9,13 @@ namespace Fora.Client.Services
         Task<string> DeleteInterest(int id);
 
         Task<List<InterestModel>> GetUserInterests(int activeUserId);
+
         Task CreateNewUserInterest(UserInterestModel UserInterestToAdd);
+
+
+        // ***** THREADS *****
+        Task<List<ThreadModel>> GetAllThreads(int interestID);
+        Task CreateThread(ThreadModel threadToAdd);
+
     }
 }

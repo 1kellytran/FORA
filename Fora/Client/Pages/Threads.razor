@@ -1,5 +1,63 @@
-﻿<h3>Threads</h3>
+﻿@page "/threads"
+@inject IDataManager DataManager
+@inject IUserManager UserManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<h3>What are you curious about?</h3>
+@foreach(var thread in AllThreads)
+{
+    <div>
+        <a href="/Message">@thread.Name</a><em>@thread.Messages.Count messages</em><br />
+    </div>    
+}
+<br />
+
+<h5>Can't find what you're looking for? Create one here!</h5>
+<EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
+        <label>New thread:</label>
+        <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
+        <button>Create thread!</button>
+</EditForm>
 
 @code {
+    public List<ThreadModel> AllThreads { get; set; } = new();
+    public ThreadModel ThreadToAdd { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    int fakeInterestId = 1017; //ta bort när riktigt id är fixat
+    public List<InterestModel> AllInterests = new(); //för att hämta all interests
+    InterestModel ActiveInterest = new();
 
+    protected override async Task OnInitializedAsync()
+    {    
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+
+        AllThreads = await DataManager.GetAllThreads(1017);
+    }
+
+    private async void CreateThread()
+    {
+        //lägger till user till thread
+        ThreadToAdd.User = ActiveUser;
+        //hämta alla interests
+        AllInterests = await DataManager.GetAllInterests();
+        ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == fakeInterestId);
+
+        ThreadToAdd.Interest = ActiveInterest; // måste vara ett interest som finns? annars läggs det dubbel i db :(
+        await DataManager.CreateThread(ThreadToAdd);
+
+        // Get user interests
+        // _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == user.Id)).ToList();
+    }
 }
+
+
+

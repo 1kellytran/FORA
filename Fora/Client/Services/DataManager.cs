@@ -44,5 +44,20 @@ namespace Fora.Client.Services
             var result = await _httpClient.DeleteAsync("api/intesrest");
             return result.ToString(); //är detta strängen message?
         }
+        // ***** THREAD *****
+
+        public async Task<List<ThreadModel>> GetAllThreads(int interestID)
+        {
+            List<ThreadModel> allThreads = new();
+
+            allThreads = await _httpClient.GetFromJsonAsync<List<ThreadModel>>($"api/thread/allThreads?interestID={interestID}");
+
+            return allThreads;
+        }
+
+        public async Task CreateThread(ThreadModel threadToAdd)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/thread", threadToAdd);
+        }
     }
 }

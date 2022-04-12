@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@*@inject UserManager UserManager*@
 
 <div class="page">
     <div class="sidebar">
@@ -30,10 +31,10 @@
 
     //protected override async Task OnInitializedAsync()
     //{
-    //    var username = localStorage.GetItemAsync<string>("Name");
-    //    username = username.Replace("\"", "");
+    //    var token = await localStorage.GetItemAsync<string>("Token");
+    //    token = token.Replace("\"", "");
 
-    //    UserStatus = await UserManager.CheckUserLogin(username);
+    //    UserStatus = await UserManager.CheckUserLogin(token);
 
     //    if (UserStatus.IsLoggedIn == true)
     //    {
