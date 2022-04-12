@@ -59,5 +59,20 @@ namespace Fora.Client.Services
         {
             var response = await _httpClient.PostAsJsonAsync("api/thread", threadToAdd);
         }
+
+        // ***** MESSAGES *****
+
+        public async Task<List<MessageModel>> GetAllMessages(int threadID)
+        {
+            List<MessageModel> allMessages = new();
+
+            allMessages = await _httpClient.GetFromJsonAsync<List<MessageModel>>($"api/message/allMessages?threadID={threadID}");
+            return allMessages;
+        }
+
+        public async Task CreateMessage(MessageModel messageToAdd)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/messages", messageToAdd);
+        }
     }
 }

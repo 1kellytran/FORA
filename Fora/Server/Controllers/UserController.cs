@@ -161,7 +161,7 @@ namespace Fora.Server.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdatePassword([FromBody] PasswordDTOModel userToUpdate)
         {
-            
+
             var applicationUser = await _signInManager.UserManager.FindByNameAsync(userToUpdate.Username);
             if (applicationUser != null)
             {
