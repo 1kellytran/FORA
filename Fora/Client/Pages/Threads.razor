@@ -3,39 +3,58 @@
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-<h3>What are you curious about?</h3>
-@foreach(var thread in AllThreads)
-{
-    <div>
-        <a href="/Message">@thread.Name</a><br />
-        @if (thread.Messages != null)
-        {
-            <em>@thread.Messages.Count messages</em>
-        }
 
-    </div>    
+<EditForm Model="Search" OnSubmit="SearchThread">
+        <InputText @bind-Value="Search.SearchWord" placeholder="Search"></InputText>
+        <button class="btn btn-light">Search</button>
+</EditForm>
+<br />
+<br />
+@if (showThreadInfo)
+{
+    <h3>What are you curious about?</h3> <br/> 
+    @foreach(var thread in AllThreads)
+    {
+        <div>
+            <a href="/Message">@thread.Name</a><br />
+        
+            @if (thread.Messages != null)
+            {
+                <em>@thread.Messages.Count messages</em>
+            }
+
+        </div>    
+    }
+
 }
+<buton class="btn btn-light" @onclick="DisplayThreadInfo">@threadButtonName</buton> <button class="btn btn-light" @onclick="SortThreads">Sort Threads</button>
+<br />
 <br />
 
 <h5>Can't find what you're looking for? Create one here!</h5>
 <EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
         <label>New thread:</label>
         <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
-        <button>Create thread!</button>
+        <button class="btn btn-light">Create thread!</button>
 </EditForm>
+
+
 
 
 
 @code {
     [Parameter]
     public int Id { get; set; }
+    public SearchModel Search { get; set; } = new();
+    public List<ThreadModel> SearchList { get; set; } = new();
     public List<ThreadModel> AllThreads { get; set; } = new();
     public ThreadModel ThreadToAdd { get; set; } = new();
     public UserModel ActiveUser { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
-    /*int fakeInterestId = 1031;*/ //ta bort när riktigt id är fixat
     public List<InterestModel> AllInterests = new(); //för att hämta all interests
     InterestModel ActiveInterest = new();
+    private string threadButtonName = "Hide";
+    private bool showThreadInfo = true;
 
     protected override async Task OnInitializedAsync()
     {    
@@ -62,9 +81,40 @@
 
         ThreadToAdd.Interest = ActiveInterest; // måste vara ett interest som finns? annars läggs det dubbel i db :(
         await DataManager.CreateThread(ThreadToAdd);
+        AllThreads = await DataManager.GetAllThreads(Id);
+        StateHasChanged();
 
         // Get user interests
         // _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == user.Id)).ToList();
+    }
+
+    private void SortThreads()
+    {
+        AllThreads = AllThreads.OrderBy(o=>o.Name).ToList();
+    }
+
+    private void SearchThread()
+    {
+        SearchList = AllThreads.Where(t => t.Name.Contains(Search.SearchWord)).ToList();
+        AllThreads = SearchList;
+        StateHasChanged();
+    }
+
+    private async Task DisplayThreadInfo()
+    {
+        if(!showThreadInfo)
+        {
+            showThreadInfo = true;
+            threadButtonName = "Hide";
+            AllThreads = await DataManager.GetAllThreads(Id);
+
+        }
+        else if(showThreadInfo)
+        {
+            showThreadInfo = false;
+            threadButtonName = "Show threads";
+        }
+
     }
 }
 
