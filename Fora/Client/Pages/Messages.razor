@@ -66,5 +66,6 @@
         ActiveThread = AllThreads.FirstOrDefault(at => at.InterestId == ThreadId); // FAKE ID för tillfället
 
         MessageToAdd.Thread = ActiveThread;
+        await DataManager.CreateMessage(MessageToAdd);
     }
 }
