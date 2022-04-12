@@ -66,15 +66,15 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async Task CreateInterest([FromBody] InterestModel interestToAdd)
         {
-            //InterestModel interestModel = new();
+            InterestModel interestModel = new();
             UserInterestModel userInterestModel = new();
-            UserModel activeUser = new();    
+            UserModel activeUser = new();
 
-            //await _context.Interests.AddAsync(interestToAdd);
-            //await _context.SaveChangesAsync();
+            await _context.Interests.AddAsync(interestToAdd);
+            await _context.SaveChangesAsync();
 
 
-            
+
             interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
             activeUser = _context.Users.FirstOrDefault(x => x.Id == interestModel.UserId);
 
@@ -82,9 +82,7 @@ namespace Fora.Server.Controllers
 
             userInterestModel.User = activeUser;
 
-            interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
-            userInterestModel.InterestId = interestToAdd.Id;
-            userInterestModel.UserId = (int)interestToAdd.UserId;
+            
            
 
             var result = await _context.UserInterests.AddAsync(userInterestModel);
