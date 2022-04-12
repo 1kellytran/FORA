@@ -13,7 +13,7 @@ namespace Fora.Shared
         // Relations
         [ForeignKey(nameof(Interest))]
         public int InterestId { get; set; }
-        public InterestModel Interest { get; set; }
+        public InterestModel? Interest { get; set; }
         [ForeignKey(nameof(User))]
         public int? UserId { get; set; }
         public UserModel? User { get; set; } 

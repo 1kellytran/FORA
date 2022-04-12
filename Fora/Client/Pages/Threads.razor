@@ -24,7 +24,7 @@
     public ThreadModel ThreadToAdd { get; set; } = new();
     public UserModel ActiveUser { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
-    int fakeInterestId = 1017; //ta bort när riktigt id är fixat
+    int fakeInterestId = 15; //ta bort när riktigt id är fixat
     public List<InterestModel> AllInterests = new(); //för att hämta all interests
     InterestModel ActiveInterest = new();
 
@@ -40,7 +40,7 @@
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
 
-        AllThreads = await DataManager.GetAllThreads(1017);
+        AllThreads = await DataManager.GetAllThreads(fakeInterestId);
     }
 
     private async void CreateThread()

@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IUserManager UserManager
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Fora</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -32,4 +35,22 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+    //private bool SignedIn;
+    //public UserStatusDTOModel UserStatus { get; set; }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var token = await localStorage.GetItemAsync<string>("Token");
+    //    token = token.Replace("\"", "");
+
+    //    UserStatus = await UserManager.CheckUserLogin(token);
+
+    //    if (UserStatus.IsLoggedIn == true)
+    //    {
+    //        SignedIn = true;
+    //    }
+    //    else
+    //    {
+    //        SignedIn = false;
+    //    }
+    //}
 }

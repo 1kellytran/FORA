@@ -1,4 +1,6 @@
 ﻿@page "/Messages"
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IUserManager UserManager
 @inject IDataManager DataManager
 
 <h3>Read what others feel about the subject!</h3>
@@ -10,30 +12,59 @@
 }
 <br />
 
-<h5>Have something to say about the subject? Let us hear!</h5>
 <EditForm Model="MessageToAdd" OnSubmit="CreateMessage">
-        <label>What is your thought?</label>
+        <label>Have something to say about the subject? Let us hear!</label><br />
         <InputText @bind-Value="MessageToAdd.Message" placeholder="Write something..."></InputText>
-        <button>Post message!</button>
+        <button class="btn btn-outline-success">Post message</button>
 </EditForm>
 
 @code {
-    public List<MessageModel> AllMessages { get; set; } = new List<MessageModel>
-    {
-        new MessageModel{ Id =1, Message = "Jag tycker allt är bra"},
-    };
+    //public List<MessageModel> AllMessages { get; set; } = new List<MessageModel>
+    //{
+    //    new MessageModel{ Id =1, Message = "Jag tycker allt är bra"},
+    //};
 
-    //public List<MessageModel> allMessages { get; set; }
-    public MessageModel MessageToAdd { get; set; }
-    public int id = 1;
+    public List<MessageModel> AllMessages { get; set; } = new();
+    // För att hämta alla threads/kolla threadID?
+    public List<ThreadModel> AllThreads { get; set; } = new();
+    // För att hämta alla intressen/kolla interestID?
+    public List<InterestModel> AllInterests { get; set; } = new();
+
+    public MessageModel MessageToAdd { get; set; } = new();
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    InterestModel ActiveInterest = new();
+    ThreadModel ActiveThread = new();
+    public int InterestId = 5;
+    public int ThreadId = 1;    
 
     protected override async Task OnInitializedAsync()
     {
-        AllMessages = await DataManager.GetAllMessages(id);
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+
+        AllMessages = await DataManager.GetAllMessages(ThreadId);
     }
 
-    private void CreateMessage()
+    private async void CreateMessage()
     {
-        
+        // Sätter vem som skapade meddelandet
+        MessageToAdd.User = ActiveUser;
+
+        // Hämtar alla interessen & trådar
+        AllInterests = await DataManager.GetAllInterests();
+        ActiveInterest = AllInterests.FirstOrDefault(ai => ai.Id == InterestId); // FAKE ID för tillfället
+
+        AllThreads = await DataManager.GetAllThreads(InterestId);
+        ActiveThread = AllThreads.FirstOrDefault(at => at.InterestId == ThreadId); // FAKE ID för tillfället
+
+        MessageToAdd.Thread = ActiveThread;
     }
 }
