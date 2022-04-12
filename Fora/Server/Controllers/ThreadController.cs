@@ -38,6 +38,13 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async Task CreateThread([FromBody]ThreadModel threadToAdd)
         {
+            var interest = _context.Interests.FirstOrDefault(i => i.Id == threadToAdd.Interest.Id);
+            var user = _context.Users.FirstOrDefault(u => u.Id == threadToAdd.User.Id);
+
+            threadToAdd.Interest = interest;
+            threadToAdd.User = user;
+
+
             await _context.Threads.AddAsync(threadToAdd);
             await _context.SaveChangesAsync();
         }
