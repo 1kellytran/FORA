@@ -1,4 +1,4 @@
-﻿@page "/threads"
+﻿@page "/threads/{Id:int}"
 @inject IDataManager DataManager
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
@@ -7,7 +7,12 @@
 @foreach(var thread in AllThreads)
 {
     <div>
-        <a href="/Message">@thread.Name</a><em>@thread.Messages.Count messages</em><br />
+        <a href="/Message">@thread.Name</a><br />
+        @if (thread.Messages != null)
+        {
+            <em>@thread.Messages.Count messages</em>
+        }
+
     </div>    
 }
 <br />
@@ -19,12 +24,16 @@
         <button>Create thread!</button>
 </EditForm>
 
+
+
 @code {
+    [Parameter]
+    public int Id { get; set; }
     public List<ThreadModel> AllThreads { get; set; } = new();
     public ThreadModel ThreadToAdd { get; set; } = new();
     public UserModel ActiveUser { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
-    int fakeInterestId = 15; //ta bort när riktigt id är fixat
+    /*int fakeInterestId = 1031;*/ //ta bort när riktigt id är fixat
     public List<InterestModel> AllInterests = new(); //för att hämta all interests
     InterestModel ActiveInterest = new();
 
@@ -40,7 +49,7 @@
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
 
-        AllThreads = await DataManager.GetAllThreads(fakeInterestId);
+        AllThreads = await DataManager.GetAllThreads(Id);
     }
 
     private async void CreateThread()
@@ -49,7 +58,7 @@
         ThreadToAdd.User = ActiveUser;
         //hämta alla interests
         AllInterests = await DataManager.GetAllInterests();
-        ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == fakeInterestId);
+        ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == Id);
 
         ThreadToAdd.Interest = ActiveInterest; // måste vara ett interest som finns? annars läggs det dubbel i db :(
         await DataManager.CreateThread(ThreadToAdd);
