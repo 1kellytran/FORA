@@ -8,11 +8,22 @@ namespace Fora.Server.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
+        private readonly AppDbContext _context;
+
+        public MessageController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/<MessageController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("allMessages")]
+        public async Task<List<MessageModel>> GetAllMessages([FromQuery]int threadID)
         {
-            return new string[] { "value1", "value2" };
+            List<MessageModel> messages = new();
+
+            messages = _context.Messages.Where(m => m.ThreadId == threadID).ToList();
+            return messages;
         }
 
         // GET api/<MessageController>/5
@@ -24,8 +35,10 @@ namespace Fora.Server.Controllers
 
         // POST api/<MessageController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async void CreateMessage([FromBody]MessageModel messageToAdd)
         {
+            await _context.Messages.AddAsync(messageToAdd);
+            await _context.SaveChangesAsync();
         }
 
         // PUT api/<MessageController>/5

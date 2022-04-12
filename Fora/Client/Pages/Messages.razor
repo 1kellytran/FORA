@@ -1,12 +1,21 @@
 ﻿@page "/Messages"
-<h3>Messages</h3>
+@inject IDataManager DataManager
+
+<h3>Read what others feel about the subject!</h3>
 @foreach (var mess in AllMessages)
 {
     <div class="card-body">
         <p>@mess.Message</p>
     </div>
-        
 }
+<br />
+
+<h5>Have something to say about the subject? Let us hear!</h5>
+<EditForm Model="MessageToAdd" OnSubmit="CreateMessage">
+        <label>What is your thought?</label>
+        <InputText @bind-Value="MessageToAdd.Message" placeholder="Write something..."></InputText>
+        <button>Post message!</button>
+</EditForm>
 
 @code {
     public List<MessageModel> AllMessages { get; set; } = new List<MessageModel>
@@ -14,8 +23,17 @@
         new MessageModel{ Id =1, Message = "Jag tycker allt är bra"},
     };
 
-    protected override Task OnInitializedAsync()
+    //public List<MessageModel> allMessages { get; set; }
+    public MessageModel MessageToAdd { get; set; }
+    public int id = 1;
+
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        AllMessages = await DataManager.GetAllMessages(id);
+    }
+
+    private void CreateMessage()
+    {
+        
     }
 }
