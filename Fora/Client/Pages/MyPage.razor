@@ -15,13 +15,15 @@
 {
     <div class="card bg-primary p-2 text-dark bg-opacity-10">
         <div class="card-body">
-            <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Go to interest</button>
+            <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Remove from fav</button><button href="Threads/@interest.Id"class="btn btn-light" style="float: right">Go to interest</button>
         </div>
     </div>
     <br />
 
 }
+<hr />
 <ChangePassword></ChangePassword>
+<hr>
 
 
 
@@ -34,26 +36,10 @@
 
 
 
-    @*<div>
-        <label>My current interest:</label>
-        <br />
-        @foreach (var interest in ActiveUser.UserInterests)
-        {
-        <p>@interest <button>Remove</button></p>
-
-
-
-        <br>
-        }
-        </div>
-
-
-
-
-
-        <hr />*@
+  
     <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
     <br />
+    <br /> 
 
 
 
@@ -61,20 +47,14 @@
 
     @if (displayAllInterests)
     {
-        <br />
-        <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
-        <br />
+       
         <div>
 
 
 
 
 
-            <br />
-            <label>Add an interest from the interest database:</label>
-            <br />
-            <br />
-
+          
 
 
 
@@ -83,11 +63,15 @@
             {
                 <div class="card bg-primary p-2 text-dark bg-opacity-10">
                     <div class="card-body">
-                        <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Add!</button>
+                        <strong>@interest.Name </strong><button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-light" style="float: right">Add to fav!</button><button class="btn btn-light" style="float: right">Go to threads!</button>
                     </div>
                 </div>
                 <br />
             }
+
+            
+            <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
+            <br />
         </div>
 
 
@@ -193,6 +177,26 @@
 
 
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+    }
+
+    public async Task AddToFav(int interestid)
+    {
+
+
+        UserInterestModel modelToAdd = new();
+
+        
+
+       
+
+        modelToAdd.Interest = AllInterests.FirstOrDefault(x => x.Id == interestid);
+
+        modelToAdd.User = ActiveUser;
+
+        Datamanager.CreateNewUserInterest(modelToAdd);
+
+        
+        
     }
 
 

@@ -10,5 +10,6 @@ namespace Fora.Client.Services
         Task<string> DeleteInterest(int id);
 
         Task<List<InterestModel>> GetUserInterests(int activeUserId);
+        Task CreateNewUserInterest(UserInterestModel UserInterestToAdd);
     }
 }
