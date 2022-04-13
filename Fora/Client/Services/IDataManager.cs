@@ -27,5 +27,6 @@ namespace Fora.Client.Services
         Task<List<MessageModel>> GetAllMessages(int threadID);
         Task CreateMessage(MessageModel messageToAdd);
         Task DeleteMessage(int messageID);
+        Task EditMessage(int messageID, MessageModel messageToEdit);
     }
 }

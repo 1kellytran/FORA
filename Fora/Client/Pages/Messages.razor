@@ -28,7 +28,8 @@
                 }                
                 @if(mess.Message != "Message has been deleted")
                 {
-                    <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
+                    <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button> 
+                    @*<button style="float: right" class="btn btn-warning" @onclick="() => EditMessage(mess.Id, mess)">Edit</button>*@                    
                 }
             </div>
         }
@@ -104,6 +105,12 @@
     private async Task DeleteMessage(int messageID)
     {
         await DataManager.DeleteMessage(messageID);
+        AllMessages = await DataManager.GetAllMessages(Id);
+    }
+
+    private async Task EditMessage(int messageID, MessageModel messageToEdit)
+    {
+        await DataManager.EditMessage(messageID, messageToEdit);
         AllMessages = await DataManager.GetAllMessages(Id);
     }
 }

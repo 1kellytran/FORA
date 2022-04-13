@@ -67,8 +67,21 @@ namespace Fora.Server.Controllers
 
         // PUT api/<MessageController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Route("editMessage")]
+        public async Task EditMessage(int messageId, [FromBody]MessageModel messageToEdit)
         {
+            MessageModel message = new();
+
+            message = _context.Messages.FirstOrDefault(m => m.Id == messageId);
+
+            message.Id = messageToEdit.Id;
+            message.UserId = messageToEdit.UserId;
+            message.Message = messageToEdit.Message;
+            message.ThreadId = messageToEdit.ThreadId;
+            message.Edited = true;
+
+            await _context.Messages.AddAsync(message);
+            await _context.SaveChangesAsync();
         }
 
         // DELETE api/<MessageController>/5
