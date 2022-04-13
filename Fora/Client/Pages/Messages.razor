@@ -11,8 +11,18 @@
         {
             <div class="alert alert-primary" role="alert">
                 <h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>
-                <p>@mess.Message</p>
-                <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
+                @if(@mess.Message == "Message has been deleted")
+                {
+                    <em>@mess.Message</em>
+                }
+                else
+                {
+                    <p>@mess.Message</p>
+                }                
+                @if(mess.Message != "Message has been deleted")
+                {
+                    <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
+                }
             </div>
         }
         else
@@ -77,6 +87,7 @@
         MessageToAdd.Thread = ActiveThread;
         await DataManager.CreateMessage(MessageToAdd);
 
+        MessageToAdd = new();
         // Re-renders the page with all messages
         AllMessages = await DataManager.GetAllMessages(Id);
         StateHasChanged();
