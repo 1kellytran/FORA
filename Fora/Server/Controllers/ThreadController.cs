@@ -28,10 +28,13 @@ namespace Fora.Server.Controllers
         }
 
         // GET api/<ThreadController>/5
-        [HttpGet("{id}")]
-        public async Task<List<ThreadModel>> GetThreadByID(int id)
+        [HttpGet]
+        [Route("getById")]
+        public async Task<ThreadModel> GetThreadByID(int threadId)
         {
-            return null;
+            ThreadModel thread = new();
+            thread = _context.Threads.FirstOrDefault(t => t.Id == threadId);
+            return thread;
         }
 
         // POST api/<ThreadController>

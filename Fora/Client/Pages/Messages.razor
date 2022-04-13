@@ -19,11 +19,7 @@
 </EditForm>
 
 @code {
-    //public List<MessageModel> AllMessages { get; set; } = new List<MessageModel>
-    //{
-    //    new MessageModel{ Id =1, Message = "Jag tycker allt är bra"},
-    //};
-
+   
     public List<MessageModel> AllMessages { get; set; } = new();
     // För att hämta alla threads/kolla threadID?
     public List<ThreadModel> AllThreads { get; set; } = new();
@@ -33,10 +29,10 @@
     public MessageModel MessageToAdd { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
     public UserModel ActiveUser { get; set; } = new();
-    InterestModel ActiveInterest = new();
+    List<InterestModel> ActiveUsersInterests = new();
     ThreadModel ActiveThread = new();
-    public int InterestId = 5;
-    public int ThreadId = 1;    
+    public int InterestId = 1031;
+    public int ThreadId = 11;    
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,13 +54,17 @@
         // Sätter vem som skapade meddelandet
         MessageToAdd.User = ActiveUser;
 
-        // Hämtar alla interessen & trådar
+        //// Hämtar alla interessen & trådar
         AllInterests = await DataManager.GetAllInterests();
-        ActiveInterest = AllInterests.FirstOrDefault(ai => ai.Id == InterestId); // FAKE ID för tillfället
+        ActiveUsersInterests = AllInterests.Where(i => i.UserId == ActiveUser.Id).ToList(); 
 
-        AllThreads = await DataManager.GetAllThreads(InterestId);
-        ActiveThread = AllThreads.FirstOrDefault(at => at.InterestId == ThreadId); // FAKE ID för tillfället
 
+        //AllThreads = await DataManager.GetAllThreads(InterestId);
+        //ActiveThread = AllThreads.FirstOrDefault(at => at.InterestId == ThreadId); // FAKE ID för tillfället
+        ActiveThread = await DataManager.GetThreadById(ThreadId);
+
+        MessageToAdd.User.Interests = ActiveUsersInterests;
+        
         MessageToAdd.Thread = ActiveThread;
         await DataManager.CreateMessage(MessageToAdd);
     }

@@ -118,8 +118,8 @@ namespace Fora.Server.Controllers
             var userFromAuthDb = _signInManager.UserManager.Users.FirstOrDefault(x => x.Token == accessToken);
             if (userFromAuthDb.Token == accessToken)
             {
-                var userFromForaDb = _context.Users.FirstOrDefault(x => x.Username == userFromAuthDb.UserName);
-                return userFromForaDb;
+                var userFromForaDb = _context.Users.FirstOrDefault(x => x.Username == userFromAuthDb.UserName); 
+                return userFromForaDb; //är det här det blir fel? att vi inte får med interests??
             }
             else
             {
