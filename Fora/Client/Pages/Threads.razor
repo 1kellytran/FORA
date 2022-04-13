@@ -2,12 +2,7 @@
 @inject IDataManager DataManager
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
-@if(ActiveInterest.Threads.Count == 0)
-{
-    <h3>This interest have no threads :(</h3>
-}
-else
-{
+
 <EditForm Model="Search" OnSubmit="SearchThread">
     <InputText @bind-Value="Search.SearchWord" placeholder="Search"></InputText>
     <button class="btn btn-light">Search</button>
@@ -47,7 +42,7 @@ else
 <br />
 <br />
 <br />
-}
+
 <h5>Create a thread here!</h5>
 <EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
     <label>New thread:</label>
@@ -101,6 +96,7 @@ else
         //hämta alla active interest för att visa eventuell NO THREADS - lös efter frdriks updatering
         AllInterests = await DataManager.GetAllInterests();
         ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == Id);
+        
     }
 
     private async void CreateThread()
