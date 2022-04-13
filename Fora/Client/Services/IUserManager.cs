@@ -13,5 +13,6 @@ namespace Fora.Client.Services
         //Task UpdateUserModel(UserModel updatedUser);
         Task SignOutUser();
         Task UpdatePassword(PasswordDTOModel UserToUpdate);
+        
     }
 }

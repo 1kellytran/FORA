@@ -118,5 +118,28 @@ namespace Fora.Server.Controllers
             }
             else return message = "Something went wrong, can not delete user!";
         }
+
+        [HttpDelete]
+        [Route("removefromfav")]
+        public async Task RemoveInterestFromFav([FromQuery] int interestID, int userID)
+        {
+            var interestList = _context.UserInterests.Where(x => x.InterestId == interestID).ToList(); 
+            var getInterestForUser= interestList.FirstOrDefault(x =>x.UserId == userID);
+             _context.UserInterests.Remove(getInterestForUser);
+            await _context.SaveChangesAsync();
+
+        }
+
+        [HttpDelete]
+        [Route("deletefrominterest")]
+        public async Task RemoveInterestFromFav([FromQuery] int interestId )
+        {
+            var interestList = _context.Interests.FirstOrDefault(x => x.Id == interestId);
+           
+            _context.Interests.Remove(interestList);
+            await _context.SaveChangesAsync();
+
+        }
+
     }
 }
