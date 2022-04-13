@@ -102,12 +102,17 @@ namespace Fora.Client.Services
 
         public async Task CreateMessage(MessageModel messageToAdd)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/message", messageToAdd);
+            await _httpClient.PostAsJsonAsync("api/message", messageToAdd);
         }
 
         public async Task DeleteMessage(int messageID)
         {
             await _httpClient.DeleteAsync($"api/message/deleteMessage?messageID={messageID}");
+        }
+
+        public async Task EditMessage(int messageID, MessageModel messageToEdit)
+        {
+            //await _httpClient.PutAsync($"api/message/editMessage?messageID={messageID}/messageToEdit={messageToEdit}");
         }
     }
 }
