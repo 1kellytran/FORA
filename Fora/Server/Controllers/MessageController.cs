@@ -26,6 +26,7 @@ namespace Fora.Server.Controllers
             messages = _context.Messages.Include(m => m.User).Where(m => m.ThreadId == threadID)
                 .Select(m => new MessageModel()
                 {
+                    Id = m.Id,
                     Message = m.Message,
                     Created = m.Created,
                     UserId = m.UserId,

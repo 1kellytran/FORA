@@ -4,7 +4,6 @@
 @inject NavigationManager navigation
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-
 <h1>Welcome to your page, @ActiveUser.Username!</h1>
 <br />
 <br />
@@ -24,19 +23,14 @@
                 @if (interest.Threads != null)
                 {
                     <p>@interest.Threads.Count threads </p>
-                }
-                
-                
-
+                }                
             </div>
         </div>
         <br />
     }
 </form>
 
-
 <hr />
-
 
 <form>
 
@@ -116,11 +110,8 @@
     <h3>You only see this because you are an admin</h3>
 }
 
-
-
 @code {
-
-
+    private bool SignedIn;
 
     //Sets new userinterest
     public InterestModel InterestToAdd { get; set; } = new();
@@ -130,14 +121,6 @@
     public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
     public List<InterestModel> UserInterests { get; set; } = new();
     public bool displayAllInterests = false;
-
-
-
-
-
-
-
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -149,21 +132,16 @@
         var result = await UserManager.CheckUserLogin(token);
         UserStatus = result;
 
-
-
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
         //hämtar alla intressen
         AllInterests = await Datamanager.GetAllInterests();
-
-
 
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
     }
 
     public async Task AddToFav(int interestid)
     {
-
         UserInterestModel modelToAdd = new();
         modelToAdd.Interest = AllInterests.FirstOrDefault(x => x.Id == interestid);
         modelToAdd.User = ActiveUser;
@@ -171,7 +149,6 @@
         await Datamanager.CreateNewUserInterest(modelToAdd);
 
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-
     }
 
     public async Task RemoveFromFav(int interestId)
@@ -179,7 +156,6 @@
         var userId = ActiveUser.Id;
         await Datamanager.RemoveInterestFromFav(interestId, userId);
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-
     }
 
     public async Task DeleteFromInterest(int interestId)
@@ -187,7 +163,6 @@
         await Datamanager.DeleteFromInterest(interestId);
         AllInterests = await Datamanager.GetAllInterests();
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-
     }
 
     public async Task DeleteUser(int activeUser)
@@ -195,7 +170,6 @@
         var token = await localStorage.GetItemAsync<string>("Token");
         UserManager.DeleteUser(activeUser, token);
         navigation.NavigateTo("");
-
     }
 
     private async Task AddPersonalInterest()
@@ -208,14 +182,10 @@
         AllInterests = await Datamanager.GetAllInterests();
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
 
-
-
         ////adding created interest to usermodel, is this neccessary? :/
         //ActiveUser.Interests.Add(InterestToAdd);
         //await UserManager.UpdateUserModel(ActiveUser);
     }
-
-
 
     //Allinterest button
     private void ShowAllInterests()
@@ -223,17 +193,9 @@
         displayAllInterests = true;
     }
 
-
-
     //Hide all interests
     private void HideAllInterests()
     {
         displayAllInterests = false;
     }
-
-
-
-
-
-
 }

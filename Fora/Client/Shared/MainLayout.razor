@@ -3,17 +3,6 @@
 @inject IUserManager UserManager
 
 <div class="page">
-    <div class="sidebar">
-        @if(SignedIn == true)
-        {            
-            <SignedInNavMenu />
-        }
-        else
-        {
-            <NavMenu />
-        }
-    </div>
-
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -26,23 +15,5 @@
 </div>
 
 @code{
-    private bool SignedIn = true;
-    //public UserStatusDTOModel UserStatus { get; set; }
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    var token = await localStorage.GetItemAsync<string>("Token");
-    //    token = token.Replace("\"", "");
-
-    //    UserStatus = await UserManager.CheckUserLogin(token);
-
-    //    if (UserStatus.IsLoggedIn == true)
-    //    {
-    //        SignedIn = true;
-    //    }
-    //    else
-    //    {
-    //        SignedIn = false;
-    //    }
-    //}
+  
 }
