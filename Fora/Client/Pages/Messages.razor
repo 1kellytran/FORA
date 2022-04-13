@@ -9,13 +9,8 @@
     <div class="card-body">
         @if(mess.UserId == ActiveUser.Id)
         {
-            @*<div>
-                <p>@mess.Message</p>
-                <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
-            </div>*@
-
             <div class="alert alert-primary" role="alert">
-                @*<h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>*@
+                <h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>
                 <p>@mess.Message</p>
                 <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
             </div>
@@ -23,7 +18,7 @@
         else
         {
             <div class="alert alert-success" role="alert">    
-                @*<h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>*@  
+                <h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>  
                 <p>@mess.Message</p>
             </div>
         }
