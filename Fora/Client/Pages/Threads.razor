@@ -16,7 +16,7 @@
         @foreach(var thread in AllThreads)
         {
             <div>
-            <h3><a href="/Messages/@thread.Id">@thread.Name</a></h3>@if (thread.UserId == ActiveUser.Id){<Button class="btn btn-danger">Delete thread</Button>}
+            <h3><a href="/Messages/@thread.Id">@thread.Name</a></h3>@if (thread.UserId == ActiveUser.Id){<Button type="button" @onclick="(() => DeleteThread(thread.Id))" class="btn btn-danger">Delete thread</Button>}
             
             
 
@@ -89,6 +89,11 @@
         // _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == user.Id)).ToList();
 
 
+    }
+
+    private async void DeleteThread(int id)
+    {
+        await DataManager.DeleteThread(id);
     }
 
     private void SortThreads()
