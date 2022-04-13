@@ -15,8 +15,9 @@
     {
         <div class="card bg-primary p-2 text-dark bg-opacity-10">
             <div class="card-body">
-                <strong>@interest.Name </strong><button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-outline-light" style="float: right">Remove from fav</button>
-                <a type="button" href="Threads/@interest.Id" class="btn btn-outline-success" style="float: right">Go to threads!</a>
+                <strong>@interest.Name </strong><a type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
+                <button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-outline-success" style="float: right">Remove from fav</button>
+                
                 @if (interest.UserId == null)
                 {
                     <a style="float:right">Thread created by a deleted user</a>
