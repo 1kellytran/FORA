@@ -208,6 +208,7 @@
         await Datamanager.CreateInterest(InterestToAdd);
         AllInterests = await Datamanager.GetAllInterests();
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+        InterestToAdd = new();
 
 
 
