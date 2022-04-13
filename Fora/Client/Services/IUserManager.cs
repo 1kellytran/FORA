@@ -7,7 +7,7 @@ namespace Fora.Client.Services
         Task<UserModel> GetUserByToken(string accessToken);
         Task<List<string>> SignUpUser(UserDTOModel user);
         Task<List<string>> SignInUser(SignInModel user);
-        Task DeleteUser(int id);
+        Task DeleteUser(int userId, string userToken);
         Task<UserStatusDTOModel> CheckUserLogin(string token);
 
         //Task UpdateUserModel(UserModel updatedUser);

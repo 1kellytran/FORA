@@ -1,6 +1,7 @@
 @page "/mypage"
 @inject IUserManager UserManager
 @inject IDataManager Datamanager
+@inject NavigationManager navigation
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
@@ -32,6 +33,7 @@
     <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
     <br />
     <br /> 
+
     @if (displayAllInterests)
     {
         <div>
@@ -47,7 +49,11 @@
 
                             <button @onclick="(()=>DeleteFromInterest(interest.Id))" class="btn btn-danger" type="button" style="float: right">Delete interest </button>
                         }
-                
+                        @if(interest.UserId == null)
+                        {
+                            <a style="float:right">Thread created by a deleted user</a>
+                        }
+
                     </div>
                 </div>
                 <br />
@@ -79,7 +85,13 @@
 <hr />
 <ChangePassword></ChangePassword>
 <hr>
-
+<form>
+    <div>
+        <button  class="btn btn-danger" type="button">Inactivate user</button>
+        <button @onclick="(()=>DeleteUser(ActiveUser.Id))" class="btn btn-danger" type="button">Remove user</button>
+    </div>
+</form>
+<hr />
 @if (UserStatus.IsLoggedIn)
 {
     <h3>You only see this because you are logged in</h3>
@@ -158,10 +170,18 @@
 
     public async Task DeleteFromInterest(int interestId)
     {
-       await Datamanager.DeleteFromInterest(interestId);
+        await Datamanager.DeleteFromInterest(interestId);
         AllInterests = await Datamanager.GetAllInterests();
-         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-      
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+
+    }
+
+    public async Task DeleteUser(int activeUser)
+    {
+        var token = await localStorage.GetItemAsync<string>("Token");
+        UserManager.DeleteUser(activeUser, token);
+        navigation.NavigateTo("");
+
     }
 
     private async Task AddPersonalInterest()
