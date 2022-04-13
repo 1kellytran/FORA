@@ -18,7 +18,47 @@ namespace Fora.Server.Controllers
         [HttpGet]
         public async Task<List<InterestModel>> GetAllInterests()
         {
-            return _context.Interests.ToList();
+            //return _context.Interests.ToList();
+            List<InterestModel> interests = _context.Interests.Include(i => i.Threads).Select(i => new InterestModel()
+            {
+                Id = i.Id,
+                Name = i.Name,
+                UserId = i.UserId,
+                Threads = i.Threads.Select(i => new ThreadModel()
+                {
+                    Id = i.Id,
+                    InterestId = i.InterestId,
+                    Name = i.Name,
+                    UserId = i.UserId
+
+
+                }).ToList()
+
+            }).ToList();
+            return interests;
+        }
+        [HttpGet]
+        [Route("check")]
+        public async Task<List<InterestModel>> GetUserInterests([FromQuery] int activeUserid)
+        {
+
+            return _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == activeUserid)).Include(i => i.Threads).Select(i => new InterestModel()
+            {
+                Id = i.Id,
+                Name = i.Name,
+                UserId = i.UserId,
+                Threads = i.Threads.Select(i => new ThreadModel()
+                {
+                    Id = i.Id,
+                    InterestId = i.InterestId,
+                    Name = i.Name,
+                    UserId = i.UserId
+
+
+                }).ToList()
+
+            }).ToList();
+
         }
 
         [HttpPost]
@@ -36,14 +76,7 @@ namespace Fora.Server.Controllers
 
         }
 
-        [HttpGet]
-        [Route("check")]
-        public async Task<List<InterestModel>> GetUserInterests([FromQuery] int activeUserid)
-        {
-     
-            return _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == activeUserid)).ToList();
-
-        }
+        
 
         // GET api/<InterestController>/5
         [HttpGet("{id}")]
