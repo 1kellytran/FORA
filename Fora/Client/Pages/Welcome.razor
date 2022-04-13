@@ -4,9 +4,24 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject IUserManager UserManager
 
-<div class="nav-tabs">
-    <a href="/MyPage">My Page</a>
+@*@if (SignedIn)
+{*@
+    <div class="form-control">
+        <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+        <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
+        <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
+    </div>
+    <br />
+@*}*@
+@*else
+{
+    <div class="form-control">
+    <a class="btn btn-group" href="/"><b>Sign In</b></a>
+    <a class="btn btn-group" href="/SignUp"><b>Sign Up</b></a>
 </div>
+<br />
+}*@
+
 
 <div class="row">
     <img src="/images/Fora - Logo.png" width="500" height="400"/>

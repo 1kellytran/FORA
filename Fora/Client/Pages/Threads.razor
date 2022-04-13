@@ -3,6 +3,13 @@
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
+<div class="form-control">
+    <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+    <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
+    <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
+</div>
+<br />
+
 <EditForm Model="Search" OnSubmit="SearchThread">
     <InputText @bind-Value="Search.SearchWord" placeholder="Search"></InputText>
     <button class="btn btn-light">Search</button>

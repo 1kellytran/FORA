@@ -3,6 +3,24 @@
 @inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
+@*@if(SignedIn)
+{
+    <div class="form-control">
+    <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+    <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
+    <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
+</div>
+    <br />
+}
+else
+{
+    <div class="form-control">
+    <a class="btn btn-group" href="/"><b>Sign In</b></a>
+    <a class="btn btn-group" href="/SignUp"><b>Sign Up</b></a>
+</div>
+<br />
+}*@
+
 <PageTitle>Sign In</PageTitle>
 
 <h1>WELCOME TO <img src="/images/Fora - Logo.png" width="150" height="75"/></h1>
@@ -27,24 +45,24 @@
 
 @code{
     public SignInModel User { get; set; } = new();
-    public UserStatusDTOModel UserStatus { get; set; }
-    private bool SignedIn;
+    public UserStatusDTOModel? UserStatus { get; set; }
+    private bool SignedIn; 
 
     protected override async Task OnInitializedAsync()
     {
-        var token = await localStorage.GetItemAsync<string>("Token");
-        token = token.Replace("\"", "");
+        //var token = await localStorage.GetItemAsync<string>("Token");
+        //token = token.Replace("\"", "");
 
-        UserStatus = await UserManager.CheckUserLogin(token);
+        //UserStatus = await UserManager.CheckUserLogin(token);
 
-        if(UserStatus.IsLoggedIn == true)
-        {
-            SignedIn = true;
-        }
-        else
-        {
-            SignedIn = false;
-        }
+        //if(UserStatus.IsLoggedIn == true)
+        //{
+        //    SignedIn = true;
+        //}
+        //else
+        //{
+        //    SignedIn = false;
+        //}
     }
 
     private async Task SignInUser()
