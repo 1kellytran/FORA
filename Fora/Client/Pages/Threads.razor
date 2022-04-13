@@ -10,7 +10,7 @@ else
 {
 <EditForm Model="Search" OnSubmit="SearchThread">
     <InputText @bind-Value="Search.SearchWord" placeholder="Search"></InputText>
-    <button class="btn btn-outline-light">Search</button>
+    <button class="btn btn-light">Search</button>
 </EditForm>
 
 <br />
@@ -47,8 +47,8 @@ else
 <br />
 <br />
 <br />
-
-<h5>Can't find what you're looking for? Create a thread here!</h5>
+}
+<h5>Create a thread here!</h5>
 <EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
     <label>New thread:</label>
     <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"  class="form-control"></InputText>
@@ -64,7 +64,7 @@ else
 <br />
 
 
-}
+
 
 
 @code {
@@ -114,6 +114,7 @@ else
         await DataManager.CreateThread(ThreadToAdd);
         AllThreads = await DataManager.GetAllThreads(Id);
         StateHasChanged();
+        
 
         // Get user interests
         // _context.Interests.Where(i => i.UserInterests.Any(ui => ui.UserId == user.Id)).ToList();
