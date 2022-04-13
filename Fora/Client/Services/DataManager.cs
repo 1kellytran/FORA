@@ -105,6 +105,9 @@ namespace Fora.Client.Services
             var response = await _httpClient.PostAsJsonAsync("api/message", messageToAdd);
         }
 
-        
+        public async Task DeleteMessage(int messageID)
+        {
+            await _httpClient.DeleteAsync($"api/message/deleteMessage?messageID={messageID}");
+        }
     }
 }

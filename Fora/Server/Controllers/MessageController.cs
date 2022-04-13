@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +23,9 @@ namespace Fora.Server.Controllers
         {
             List<MessageModel> messages = new();
 
-            messages = _context.Messages.Where(m => m.ThreadId == threadID).ToList();
+            //messages = _context.Messages.Where(m => m.ThreadId == threadID).ToList();
+            //messages = _context.Messages.Include(m => m.User)
+
             return messages;
         }
 
@@ -42,9 +45,12 @@ namespace Fora.Server.Controllers
 
             messageToAdd.Thread = thread;
             messageToAdd.User = user;
+            messageToAdd.Created = DateTime.Now;
+            messageToAdd.Deleted = false;
+            messageToAdd.Edited = false;
 
-             await _context.Messages.AddAsync(messageToAdd);
-             _context.SaveChanges();
+            await _context.Messages.AddAsync(messageToAdd);
+            _context.SaveChanges();
         }
 
         // PUT api/<MessageController>/5
@@ -55,8 +61,40 @@ namespace Fora.Server.Controllers
 
         // DELETE api/<MessageController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Route("deleteMessage")]
+        public async Task<string> Delete(int messageID)
         {
+            string message = "";
+
+            //MessageModel messageToDelete = new();
+            //messageToDelete = _context.Messages.FirstOrDefault(m => m.Id == messageID);
+
+            //if (messageToDelete != null)
+            //{
+            //    _context.Messages.Remove(messageToDelete);
+            //    await _context.SaveChangesAsync();
+            //    return message = "Message deleted";
+            //}
+            //else
+            //{
+            //    return message = "Something went wrong, unable to delete message";
+            //}
+
+            MessageModel messageToDelete = new();
+            messageToDelete = _context.Messages.FirstOrDefault(m => m.Id == messageID);
+
+            if(messageToDelete != null)
+            {
+                messageToDelete.Deleted = true;
+                messageToDelete.Message = "Message has been deleted";
+
+                await _context.SaveChangesAsync();
+                return message = "Message has been deleted";
+            }
+            else
+            {
+                return message = "Something went wrong, unable to delete message";
+            }
         }
     }
 }

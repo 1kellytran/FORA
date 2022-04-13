@@ -19,14 +19,13 @@ namespace Fora.Client.Services
         // ***** THREADS *****
         Task<List<ThreadModel>> GetAllThreads(int interestID);
         Task CreateThread(ThreadModel threadToAdd);
+        Task<ThreadModel> GetThreadById(int id);
         Task DeleteThread(int threadToDeleteId);
-
-
 
 
         // ***** MESSAGES *****
         Task<List<MessageModel>> GetAllMessages(int threadID);
         Task CreateMessage(MessageModel messageToAdd);
-        Task<ThreadModel> GetThreadById(int id);
+        Task DeleteMessage(int messageID);
     }
 }
