@@ -4,22 +4,9 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject IUserManager UserManager
 
-@if (SignedIn == true)
-{
-    <div class="navbar">
-        <a href="#MyPage">My Page</a>
-        <a href="#AllInterests">All Interests</a>
-        <a href="#Settings">Settings</a>
-        <a href="#SignOut">Sign Out</a>
-    </div>
-}
-else
-{
-    <div class="navbar">
-        <a href="#SignIn">Sign In</a>
-        <a href="#SignUp">Sign Up</a>
-    </div>    
-}
+<div class="nav-tabs">
+    <a href="/MyPage">My Page</a>
+</div>
 
 <div class="row">
     <img src="/images/Fora - Logo.png" width="500" height="400"/>
