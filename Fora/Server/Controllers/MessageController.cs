@@ -18,7 +18,7 @@ namespace Fora.Server.Controllers
         // GET: api/<MessageController>
         [HttpGet]
         [Route("allMessages")]
-        public async Task<List<MessageModel>> GetAllMessages([FromQuery]int threadID)
+        public async Task<List<MessageModel>> GetAllMessages([FromQuery] int threadID)
         {
             List<MessageModel> messages = new();
 
@@ -35,7 +35,7 @@ namespace Fora.Server.Controllers
 
         // POST api/<MessageController>
         [HttpPost]
-        public async void CreateMessage([FromBody]MessageModel messageToAdd)
+        public async void CreateMessage([FromBody] MessageModel messageToAdd)
         {
             var interest = _context.Threads.FirstOrDefault(i => i.Id == messageToAdd.Thread.Id);
             var user = _context.Users.FirstOrDefault(u => u.Id == messageToAdd.User.Id);
