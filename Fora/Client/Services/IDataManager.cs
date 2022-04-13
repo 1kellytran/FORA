@@ -20,6 +20,7 @@ namespace Fora.Client.Services
         Task<List<ThreadModel>> GetAllThreads(int interestID);
         Task CreateThread(ThreadModel threadToAdd);
         Task<ThreadModel> GetThreadById(int id);
+        Task DeleteThread(int threadToDeleteId);
 
 
         // ***** MESSAGES *****

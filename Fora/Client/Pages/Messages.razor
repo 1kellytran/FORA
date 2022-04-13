@@ -74,6 +74,7 @@
         AllInterests = await DataManager.GetAllInterests();
         ActiveUsersInterests = AllInterests.Where(i => i.UserId == ActiveUser.Id).ToList(); 
 
+
         ActiveThread = await DataManager.GetThreadById(Id);
 
         MessageToAdd.User.Interests = ActiveUsersInterests;

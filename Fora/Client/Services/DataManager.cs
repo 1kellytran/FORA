@@ -84,6 +84,11 @@ namespace Fora.Client.Services
 
         }
 
+        public async Task DeleteThread(int id)
+        {
+            await _httpClient.DeleteAsync($"api/thread/{id}");
+        }
+
 
         // ***** MESSAGES *****
 

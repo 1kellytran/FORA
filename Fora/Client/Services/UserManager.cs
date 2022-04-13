@@ -57,9 +57,9 @@ namespace Fora.Client.Services
             await _localStorage.RemoveItemAsync("Name");
         }
 
-        public async Task DeleteUser(int id)
+        public async Task DeleteUser(int userId, string userToken)
         {
-            await _httpClient.DeleteAsync($"api/user/{id}");
+            await _httpClient.DeleteAsync($"api/user/deleteuser?userId={userId}&&token={userToken}");
         }
 
         public async Task<UserStatusDTOModel> CheckUserLogin(string token)
