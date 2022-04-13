@@ -3,6 +3,13 @@
 @inject IUserManager UserManager
 @inject IDataManager DataManager
 
+<div class="form-control">
+    <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+    <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
+    <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
+</div>
+<br />
+
 <h3>Read what others feel about the subject!</h3>
 @foreach (var mess in AllMessages)
 {
@@ -38,9 +45,10 @@
 
 <EditForm Model="MessageToAdd" OnSubmit="CreateMessage">
         <label>Have something to say about the subject? Let us hear!</label><br />
-        <InputText @bind-Value="MessageToAdd.Message" placeholder="Write something..."></InputText>
+        <InputText @bind-Value="MessageToAdd.Message" class="form-control" placeholder="Write something..."></InputText><br />
         <button class="btn btn-outline-success">Post message</button>
 </EditForm>
+<br />
 
 @code {
     [Parameter]
