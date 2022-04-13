@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,8 +23,22 @@ namespace Fora.Server.Controllers
         {
             List<ThreadModel> threads = new();
 
-            threads = _context.Threads.Where(t => t.InterestId == interestID).ToList();
-            
+            //threads = _context.Threads.Include(t => t.Messages).Where(t => t.InterestId == interestID).ToList();
+
+            threads = _context.Threads.Include(t => t.Messages).Where(t => t.InterestId == interestID).Select(t => new ThreadModel()
+            {
+                Id = t.Id,
+                Name = t.Name,
+                UserId = t.UserId,
+                User = t.User,
+                Messages = t.Messages.Select(m => new MessageModel()
+                {
+                    Id = m.Id,
+                    Message = m.Message,
+                    User = m.User
+                }).ToList()
+            }).ToList();
+
             return threads;
         }
 

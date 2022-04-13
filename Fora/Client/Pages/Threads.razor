@@ -13,47 +13,57 @@
 @if (showThreadInfo)
 {
     <h3>What are you curious about?</h3>
-        @foreach(var thread in AllThreads)
-        {
-            <div>
-            <h3><a href="/Messages/@thread.Id">@thread.Name</a></h3>@if (thread.UserId == ActiveUser.Id){<Button type="button" @onclick="(() => DeleteThread(thread.Id))" class="btn btn-danger">Delete thread</Button>}
-            
-            
-
-            @if (thread.Messages != null)
+    @foreach (var thread in AllThreads)
+    {
+        <div class="card bg-primary p-2 text-dark bg-opacity-10">
+            <div class="card-body">
+                <div>
+                    <h3><a href="/Messages/@thread.Id">@thread.Name</a></h3>@if (thread.UserId == ActiveUser.Id)
+                    {
+                        <Button type="button" @onclick="(() => DeleteThread(thread.Id))" class="btn btn-danger" style="float: right">Delete thread</Button>
+                    }
+                </div>
+                @if (thread.Messages != null)
                 {
                     <em>@thread.Messages.Count messages</em>
                 }
+                
+            </div>
+        </div>
+        <br />
+    }
 
-            </div>    
-        }
-<br />
 }
 <button class="btn btn-light" @onclick="DisplayThreadInfo">@threadButtonName</button> <button class="btn btn-light" @onclick="SortThreads">Sort</button>
 <br />
 <hr />
-
+<br />
+<br />
+<br />
 
 <h5>Can't find what you're looking for? Create a thread here!</h5>
 <EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
-        <label>New thread:</label>
-        <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
-        <button>Create thread!</button>
+    <label>New thread:</label>
+    <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
+    <button>Create thread!</button>
 </EditForm>
 
 
 
 @code {
     [Parameter]
-    public int Id { get; set; }
+    public int Id { get; set; } //interest id from previous page
     public SearchModel Search { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+
     public List<ThreadModel> SearchList { get; set; } = new();
     public List<ThreadModel> AllThreads { get; set; } = new();
     public ThreadModel ThreadToAdd { get; set; } = new();
-    public UserModel ActiveUser { get; set; } = new();
-    public UserStatusDTOModel UserStatus { get; set; } = new();
-    public List<InterestModel> AllInterests = new(); //för att hämta all interests
-    InterestModel ActiveInterest = new();
+
+    public List<InterestModel> AllInterests { get; set;} =new(); //för att hämta all interests
+    public InterestModel ActiveInterest { get; set;} =new();
+
     private string threadButtonName = "Hide";
     private bool showThreadInfo = true;
 
@@ -68,7 +78,7 @@
         UserStatus = result;
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
-
+        //hämtar alla threads som finns i det aktiva inresset 
         AllThreads = await DataManager.GetAllThreads(Id);
     }
 
