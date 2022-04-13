@@ -15,8 +15,8 @@
     {
         <div class="card bg-primary p-2 text-dark bg-opacity-10">
             <div class="card-body">
-                <strong>@interest.Name </strong><button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-light" style="float: right">Remove from fav</button>
-                <a type="button" href="Threads/@interest.Id" class="btn btn-success" style="float: right">Go to threads!</a>
+                <strong>@interest.Name </strong><button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-outline-light" style="float: right">Remove from fav</button>
+                <a type="button" href="Threads/@interest.Id" class="btn btn-outline-success" style="float: right">Go to threads!</a>
                 @if (interest.UserId == null)
                 {
                     <a style="float:right">Thread created by a deleted user</a>
@@ -40,7 +40,7 @@
 
 <form>
 
-    <button type="button" class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</button>
+    <button type="button" class="btn btn-outline-primary" @onclick="ShowAllInterests">Show all interests</button>
     <br />
     <br />
 
@@ -53,11 +53,11 @@
                     <div class="card-body">
                         <strong>@interest.Name </strong>
                         <a type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
-                        <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-success" style="float: right">Add to fav!</button>
+                        <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-outline-success" style="float: right">Add to fav!</button>
                         @if (interest.UserId == ActiveUser.Id)
                         {
 
-                            <button @onclick="(()=>DeleteFromInterest(interest.Id))" class="btn btn-danger" type="button" style="float: right">Delete interest </button>
+                            <button @onclick="(()=>DeleteFromInterest(interest.Id))" class="btn btn-outline-danger" type="button" style="float: right">Delete interest </button>
                         }
                         @if (interest.UserId == null)
                         {
@@ -72,7 +72,7 @@
                 </div>
                 <br />
             }
-            <button type="button" class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</button>
+            <button type="button" class="btn btn-outline-secondary" @onclick="HideAllInterests">Hide interests</button>
             <br />
         </div>
     }
@@ -90,7 +90,7 @@
     </div>
     <br />
     <div>
-        <button class="btn btn-primary" type="submit">Create interest!</button>
+        <button class="btn btn-outline-primary" type="submit">Create interest!</button>
     </div>
     <ValidationSummary />
 </EditForm>
