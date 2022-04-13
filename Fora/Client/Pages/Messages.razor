@@ -7,7 +7,26 @@
 @foreach (var mess in AllMessages)
 {
     <div class="card-body">
-        <p>@mess.Message</p>
+        @if(mess.UserId == ActiveUser.Id)
+        {
+            @*<div>
+                <p>@mess.Message</p>
+                <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
+            </div>*@
+
+            <div class="alert alert-primary" role="alert">
+                @*<h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>*@
+                <p>@mess.Message</p>
+                <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success" role="alert">    
+                @*<h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>*@  
+                <p>@mess.Message</p>
+            </div>
+        }
     </div>
 }
 <br />
@@ -30,8 +49,6 @@
     public UserModel ActiveUser { get; set; } = new();
     List<InterestModel> ActiveUsersInterests = new();
     ThreadModel ActiveThread = new();
-    public int InterestId = 1031;
-    public int ThreadId = 11;    
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,27 +62,33 @@
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
 
-        AllMessages = await DataManager.GetAllMessages(ThreadId);
+        AllMessages = await DataManager.GetAllMessages(Id);
     }
 
     private async void CreateMessage()
     {
-        // Sätter vem som skapade meddelandet
+        // Set the user that created the message
         MessageToAdd.User = ActiveUser;
 
-        //// Hämtar alla interessen & trådar
+        // Get all interests and threads
         AllInterests = await DataManager.GetAllInterests();
         ActiveUsersInterests = AllInterests.Where(i => i.UserId == ActiveUser.Id).ToList(); 
 
-
-        //AllThreads = await DataManager.GetAllThreads(InterestId);
-        //ActiveThread = AllThreads.FirstOrDefault(at => at.InterestId == ThreadId); // FAKE ID för tillfället
-
-        ActiveThread = await DataManager.GetThreadById(ThreadId);
+        ActiveThread = await DataManager.GetThreadById(Id);
 
         MessageToAdd.User.Interests = ActiveUsersInterests;
-        
+
         MessageToAdd.Thread = ActiveThread;
         await DataManager.CreateMessage(MessageToAdd);
+
+        // Re-renders the page with all messages
+        AllMessages = await DataManager.GetAllMessages(Id);
+        StateHasChanged();
+    }
+
+    private async Task DeleteMessage(int messageID)
+    {
+        await DataManager.DeleteMessage(messageID);
+        AllMessages = await DataManager.GetAllMessages(Id);
     }
 }
