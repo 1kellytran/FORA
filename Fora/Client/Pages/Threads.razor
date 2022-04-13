@@ -10,6 +10,7 @@
 
 <br />
 <br />
+
 @if (showThreadInfo)
 {
     <h3>What are you curious about?</h3>
@@ -47,7 +48,12 @@
     <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
     <button>Create thread!</button>
 </EditForm>
-
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 
 @code {
@@ -80,6 +86,9 @@
         ActiveUser = await UserManager.GetUserByToken(token);
         //hämtar alla threads som finns i det aktiva inresset 
         AllThreads = await DataManager.GetAllThreads(Id);
+        //hämta alla active interest för att visa eventuell NO THREADS - lös efter frdriks updatering
+        AllInterests = await DataManager.GetAllInterests();
+        ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == Id);
     }
 
     private async void CreateThread()
