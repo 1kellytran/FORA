@@ -4,98 +4,63 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
-
-
-
 <h1>Welcome to your page, @ActiveUser.Username!</h1>
 <br />
 <br />
 <h3>Your Current interest:</h3>
+
+<form>
 @foreach (var interest in UserInterests)
 {
     <div class="card bg-primary p-2 text-dark bg-opacity-10">
         <div class="card-body">
-            <strong>@interest.Name </strong><button class="btn btn-light" style="float: right">Remove from fav</button><button href="Threads/@interest.Id"class="btn btn-light" style="float: right">Go to interest</button>
+            <strong>@interest.Name </strong><button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-light" style="float: right">Remove from fav</button>
+            <a  type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
+
         </div>
     </div>
     <br />
-
 }
+</form>
+
+
 <hr />
-<ChangePassword></ChangePassword>
-<hr>
-
-
-
-
 
 
 <form>
 
-
-
-
-
-  
     <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
     <br />
     <br /> 
-
-
-
-
-
     @if (displayAllInterests)
     {
-       
         <div>
-
-
-
-
-
-          
-
-
-
-
             @foreach (var interest in AllInterests)
             {
                 <div class="card bg-primary p-2 text-dark bg-opacity-10">
                     <div class="card-body">
-                        <strong>@interest.Name </strong><button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-light" style="float: right">Add to fav!</button><button class="btn btn-light" style="float: right">Go to threads!</button>
+                        <strong>@interest.Name </strong>
+                        <a  type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
+                         <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-light" style="float: right">Add to fav!</button>
+                        @if (interest.UserId == ActiveUser.Id)
+                        {
+
+                            <button @onclick="(()=>DeleteFromInterest(interest.Id))" class="btn btn-danger" type="button" style="float: right">Delete interest </button>
+                        }
+                
                     </div>
                 </div>
                 <br />
             }
-
-            
             <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
             <br />
         </div>
-
-
-
-
-
-
     }
-
-
 
 </form>
 
-
-
-
-
-
 <br />
 <hr />
-
-
-
-
 
 <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
     <DataAnnotationsValidator />
@@ -107,32 +72,23 @@
     <div>
         <button class="btn btn-primary" type="submit">Create interest!</button>
     </div>
-
-
-
-
-
     <ValidationSummary />
 </EditForm>
 <br />
 <br />
 <hr />
-
-
+<ChangePassword></ChangePassword>
+<hr>
 
 @if (UserStatus.IsLoggedIn)
 {
     <h3>You only see this because you are logged in</h3>
 }
 
-
-
-
 @if (UserStatus.IsAdmin)
 {
     <h3>You only see this because you are an admin</h3>
 }
-
 
 
 
@@ -188,12 +144,25 @@
 
         await Datamanager.CreateNewUserInterest(modelToAdd);
 
-        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
-       
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);   
 
     }
 
+    public async Task RemoveFromFav(int interestId)
+    {
+        var userId = ActiveUser.Id;
+        await Datamanager.RemoveInterestFromFav(interestId, userId);
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
 
+    }
+
+    public async Task DeleteFromInterest(int interestId)
+    {
+       await Datamanager.DeleteFromInterest(interestId);
+        AllInterests = await Datamanager.GetAllInterests();
+         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+      
+    }
 
     private async Task AddPersonalInterest()
     {

@@ -39,10 +39,25 @@ namespace Fora.Client.Services
             return userInterest;
         }
 
+
+
+
+        public async Task RemoveInterestFromFav(int interestID, int userID)
+        {
+            await _httpClient.DeleteAsync($"api/interest/removefromfav?interestID={interestID}&&userID={userID}");
+        }
+
+        public async Task DeleteFromInterest(int interestId)
+        {
+            await _httpClient.DeleteAsync($"api/interest/deletefrominterest?interestId={interestId}");
+        }
+
+
+
         public async Task<string> DeleteInterest(int id)
         {
-            var result = await _httpClient.DeleteAsync("api/intesrest");
-            return result.ToString(); //är detta strängen message?
+            var result = await _httpClient.DeleteAsync("api/interest");
+            return result.ToString(); //är detta strängen message? 
         }
         // ***** THREAD *****
 
@@ -60,6 +75,16 @@ namespace Fora.Client.Services
             var response = await _httpClient.PostAsJsonAsync("api/thread", threadToAdd);
         }
 
+        public async Task<ThreadModel> GetThreadById(int threadId)
+        {
+            ThreadModel threadFromDb = new();
+            threadFromDb = await _httpClient.GetFromJsonAsync<ThreadModel>($"api/thread/getById?threadId={threadId}");
+
+            return threadFromDb;
+
+        }
+
+
         // ***** MESSAGES *****
 
         public async Task<List<MessageModel>> GetAllMessages(int threadID)
@@ -72,7 +97,9 @@ namespace Fora.Client.Services
 
         public async Task CreateMessage(MessageModel messageToAdd)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/messages", messageToAdd);
+            var response = await _httpClient.PostAsJsonAsync("api/message", messageToAdd);
         }
+
+        
     }
 }
