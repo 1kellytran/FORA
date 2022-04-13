@@ -11,17 +11,27 @@
 <h3>Your Current interest:</h3>
 
 <form>
-@foreach (var interest in UserInterests)
-{
-    <div class="card bg-primary p-2 text-dark bg-opacity-10">
-        <div class="card-body">
-            <strong>@interest.Name </strong><button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-light" style="float: right">Remove from fav</button>
-            <a  type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
+    @foreach (var interest in UserInterests)
+    {
+        <div class="card bg-primary p-2 text-dark bg-opacity-10">
+            <div class="card-body">
+                <strong>@interest.Name </strong><button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-light" style="float: right">Remove from fav</button>
+                <a type="button" href="Threads/@interest.Id" class="btn btn-success" style="float: right">Go to threads!</a>
+                @if (interest.UserId == null)
+                {
+                    <a style="float:right">Thread created by a deleted user</a>
+                }
+                @if (interest.Threads != null)
+                {
+                    <p>@interest.Threads.Count threads </p>
+                }
+                
+                
 
+            </div>
         </div>
-    </div>
-    <br />
-}
+        <br />
+    }
 </form>
 
 
@@ -30,9 +40,9 @@
 
 <form>
 
-    <buton class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</buton>
+    <button type="button" class="btn btn-primary" @onclick="ShowAllInterests">Show all interests</button>
     <br />
-    <br /> 
+    <br />
 
     @if (displayAllInterests)
     {
@@ -42,23 +52,27 @@
                 <div class="card bg-primary p-2 text-dark bg-opacity-10">
                     <div class="card-body">
                         <strong>@interest.Name </strong>
-                        <a  type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
-                         <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-light" style="float: right">Add to fav!</button>
+                        <a type="button" href="Threads/@interest.Id" class="btn btn-light" style="float: right">Go to threads!</a>
+                        <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-success" style="float: right">Add to fav!</button>
                         @if (interest.UserId == ActiveUser.Id)
                         {
 
                             <button @onclick="(()=>DeleteFromInterest(interest.Id))" class="btn btn-danger" type="button" style="float: right">Delete interest </button>
                         }
-                        @if(interest.UserId == null)
+                        @if (interest.UserId == null)
                         {
                             <a style="float:right">Thread created by a deleted user</a>
+                        }
+                        @if (interest.Threads != null)
+                        {
+                            <p>@interest.Threads.Count threads </p>
                         }
 
                     </div>
                 </div>
                 <br />
             }
-            <buton class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</buton>
+            <button type="button" class="btn btn-secondary" @onclick="HideAllInterests">Hide interests</button>
             <br />
         </div>
     }
@@ -87,7 +101,7 @@
 <hr>
 <form>
     <div>
-        <button  class="btn btn-danger" type="button">Inactivate user</button>
+        <button class="btn btn-danger" type="button">Inactivate user</button>
         <button @onclick="(()=>DeleteUser(ActiveUser.Id))" class="btn btn-danger" type="button">Remove user</button>
     </div>
 </form>
@@ -156,7 +170,7 @@
 
         await Datamanager.CreateNewUserInterest(modelToAdd);
 
-        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);   
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
 
     }
 
