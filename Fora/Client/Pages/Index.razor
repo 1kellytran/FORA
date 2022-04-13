@@ -1,8 +1,26 @@
 ﻿@page "/"
 @inject IUserManager UserManager
 @inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>Sign In</PageTitle>
+
+@if (SignedIn == true)
+{
+    <div class="navbar">
+        <a href="#MyPage">My Page</a>
+        <a href="#AllInterests">All Interests</a>
+        <a href="#Settings">Settings</a>
+        <a href="#SignOut">Sign Out</a>
+    </div>
+}
+else
+{
+    <div class="navbar">
+        <a href="#SignIn">Sign In</a>
+        <a href="#SignUp">Sign Up</a>
+    </div>    
+}
 
 <h1>WELCOME TO <img src="/images/Fora - Logo.png" width="150" height="75"/></h1>
 
@@ -27,7 +45,26 @@
 
 @code{
     public SignInModel User { get; set; } = new();
-   
+    public UserStatusDTOModel UserStatus { get; set; }
+    private bool SignedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+
+        UserStatus = await UserManager.CheckUserLogin(token);
+
+        if(UserStatus.IsLoggedIn == true)
+        {
+            SignedIn = true;
+        }
+        else
+        {
+            SignedIn = false;
+        }
+    }
+
     private async Task SignInUser()
     {
         var storageList = await UserManager.SignInUser(User);
@@ -36,5 +73,6 @@
         {
             NavigationManager.NavigateTo($"/Welcome");
         }          
-    }    
+    } 
+    
 }

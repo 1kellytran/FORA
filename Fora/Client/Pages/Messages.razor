@@ -58,7 +58,6 @@
         AllInterests = await DataManager.GetAllInterests();
         ActiveUsersInterests = AllInterests.Where(i => i.UserId == ActiveUser.Id).ToList(); 
 
-
         //AllThreads = await DataManager.GetAllThreads(InterestId);
         //ActiveThread = AllThreads.FirstOrDefault(at => at.InterestId == ThreadId); // FAKE ID för tillfället
         ActiveThread = await DataManager.GetThreadById(ThreadId);
