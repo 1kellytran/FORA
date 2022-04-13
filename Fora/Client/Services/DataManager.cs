@@ -39,10 +39,25 @@ namespace Fora.Client.Services
             return userInterest;
         }
 
+
+
+
+        public async Task RemoveInterestFromFav(int interestID, int userID)
+        {
+            await _httpClient.DeleteAsync($"api/interest/removefromfav?interestID={interestID}&&userID={userID}");
+        }
+
+        public async Task DeleteFromInterest(int interestId)
+        {
+            await _httpClient.DeleteAsync($"api/interest/deletefrominterest?interestId={interestId}");
+        }
+
+
+
         public async Task<string> DeleteInterest(int id)
         {
-            var result = await _httpClient.DeleteAsync("api/intesrest");
-            return result.ToString(); //är detta strängen message?
+            var result = await _httpClient.DeleteAsync("api/interest");
+            return result.ToString(); //är detta strängen message? 
         }
         // ***** THREAD *****
 

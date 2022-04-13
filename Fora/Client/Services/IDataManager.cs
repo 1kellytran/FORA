@@ -12,11 +12,14 @@ namespace Fora.Client.Services
         Task<List<InterestModel>> GetUserInterests(int activeUserId);
 
         Task CreateNewUserInterest(UserInterestModel UserInterestToAdd);
+        Task DeleteFromInterest(int interestId);
+        Task RemoveInterestFromFav(int interestID, int userID);
 
 
         // ***** THREADS *****
         Task<List<ThreadModel>> GetAllThreads(int interestID);
         Task CreateThread(ThreadModel threadToAdd);
+        
 
 
         // ***** MESSAGES *****
