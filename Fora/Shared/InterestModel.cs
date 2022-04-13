@@ -14,7 +14,7 @@ namespace Fora.Shared
         public List<UserInterestModel>? UserInterests { get; set; }
 
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public UserModel? User { get; set; }
     }
 }
