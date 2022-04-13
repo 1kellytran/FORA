@@ -16,8 +16,11 @@
         @foreach(var thread in AllThreads)
         {
             <div>
-                <a href="/Message">@thread.Name</a><br />
-                @if (thread.Messages != null)
+            <h3><a href="/Messages/@thread.Id">@thread.Name</a></h3>@if (thread.UserId == ActiveUser.Id){<Button class="btn btn-danger">Delete thread</Button>}
+            
+            
+
+            @if (thread.Messages != null)
                 {
                     <em>@thread.Messages.Count messages</em>
                 }
@@ -27,9 +30,11 @@
 <br />
 }
 <button class="btn btn-light" @onclick="DisplayThreadInfo">@threadButtonName</button> <button class="btn btn-light" @onclick="SortThreads">Sort</button>
+<br />
+<hr />
 
 
-<h5>Can't find what you're looking for? Create one here!</h5>
+<h5>Can't find what you're looking for? Create a thread here!</h5>
 <EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
         <label>New thread:</label>
         <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
@@ -93,7 +98,7 @@
 
     private void SearchThread()
     {
-        SearchList = AllThreads.Where(t => t.Name.Contains(Search.SearchWord)).ToList();
+        SearchList = AllThreads.Where(t => t.Name.ToLower().Contains(Search.SearchWord.ToLower())).ToList();
         AllThreads = SearchList;
         StateHasChanged();
     }
