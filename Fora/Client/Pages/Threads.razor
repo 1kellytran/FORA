@@ -113,6 +113,7 @@ else
         ThreadToAdd.Interest = ActiveInterest;
         await DataManager.CreateThread(ThreadToAdd);
         AllThreads = await DataManager.GetAllThreads(Id);
+        ThreadToAdd = new(); // tar bort från fältet
         StateHasChanged();
         
 
