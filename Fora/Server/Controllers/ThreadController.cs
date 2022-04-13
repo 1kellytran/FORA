@@ -60,8 +60,13 @@ namespace Fora.Server.Controllers
 
         // DELETE api/<ThreadController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            ThreadModel threadToDelete = new();
+            threadToDelete = _context.Threads.FirstOrDefault(t => t.Id == id);
+            _context.Threads.Remove(threadToDelete);
+            _context.SaveChanges();
+
         }
     }
 }
