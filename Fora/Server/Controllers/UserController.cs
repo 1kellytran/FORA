@@ -146,16 +146,19 @@ namespace Fora.Server.Controllers
         //}
 
         // DELETE api/<UserController>/5 test alex
-        [HttpDelete("{id}")]
-        public async Task DeleteUser(int id)
+        [HttpDelete]
+        [Route("deleteuser")]
+        public async Task DeleteUser([FromQuery] int userId, string token)
         {
-            UserModel user = _context.Users.FirstOrDefault(x => x.Id == id);
+            var userToDelete = _context.Users.FirstOrDefault(x => x.Id == userId);
+            var userToDeleteAuth = _authContext.Users.FirstOrDefault(x => x.Token== token);
+            var interestToDelete= _context.Interests.Where(x => x.UserId == userId);
 
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                //var createUserResult = await _signInManager.UserManager.DeleteAsync(); //flytta till AccountManager?
-            }
+            _context.Users.Remove(userToDelete);
+            await _context.SaveChangesAsync();
+            _authContext.Users.Remove(userToDeleteAuth);
+            await _authContext.SaveChangesAsync();
+
         }
 
         [HttpPut]
