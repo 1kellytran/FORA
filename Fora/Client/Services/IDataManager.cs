@@ -22,5 +22,6 @@ namespace Fora.Client.Services
         // ***** MESSAGES *****
         Task<List<MessageModel>> GetAllMessages(int threadID);
         Task CreateMessage(MessageModel messageToAdd);
+        Task<ThreadModel> GetThreadById(int id);
     }
 }

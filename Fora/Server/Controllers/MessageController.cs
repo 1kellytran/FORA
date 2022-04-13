@@ -37,13 +37,14 @@ namespace Fora.Server.Controllers
         [HttpPost]
         public async void CreateMessage([FromBody]MessageModel messageToAdd)
         {
-            var interest = _context.Threads.FirstOrDefault(i => i.Id == messageToAdd.Thread.Id);
+            var thread = _context.Threads.FirstOrDefault(i => i.Id == messageToAdd.Thread.Id);
             var user = _context.Users.FirstOrDefault(u => u.Id == messageToAdd.User.Id);
 
+            messageToAdd.Thread = thread;
             messageToAdd.User = user;
 
-            await _context.Messages.AddAsync(messageToAdd);
-            await _context.SaveChangesAsync();
+             await _context.Messages.AddAsync(messageToAdd);
+             _context.SaveChanges();
         }
 
         // PUT api/<MessageController>/5
