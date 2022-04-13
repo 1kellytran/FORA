@@ -2,16 +2,22 @@
 @inject IDataManager DataManager
 @inject IUserManager UserManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
-
+@if(ActiveInterest.Threads.Count == 0)
+{
+    <h3>This interest have no threads :(</h3>
+}
+else
+{
 <EditForm Model="Search" OnSubmit="SearchThread">
     <InputText @bind-Value="Search.SearchWord" placeholder="Search"></InputText>
-    <button class="btn btn-light">Search</button>
+    <button class="btn btn-outline-light">Search</button>
 </EditForm>
 
 <br />
 <br />
 
-@if (showThreadInfo)
+
+    @if (showThreadInfo)
 {
     <h3>What are you curious about?</h3>
     @foreach (var thread in AllThreads)
@@ -21,7 +27,7 @@
                 <div>
                     <h3><a href="/Messages/@thread.Id">@thread.Name</a></h3>@if (thread.UserId == ActiveUser.Id)
                     {
-                        <Button type="button" @onclick="(() => DeleteThread(thread.Id))" class="btn btn-danger" style="float: right">Delete thread</Button>
+                        <Button type="button" @onclick="(() => DeleteThread(thread.Id))" class="btn btn-outline-danger" style="float: right">Delete thread</Button>
                     }
                 </div>
                 @if (thread.Messages != null)
@@ -45,8 +51,10 @@
 <h5>Can't find what you're looking for? Create a thread here!</h5>
 <EditForm Model="ThreadToAdd" OnSubmit="CreateThread">
     <label>New thread:</label>
-    <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"></InputText>
-    <button>Create thread!</button>
+    <InputText @bind-Value="ThreadToAdd.Name" placeholder="Thread name"  class="form-control"></InputText>
+    <br />
+    <button class="btn btn-outline-secondary">Create thread!</button>
+    
 </EditForm>
 <br />
 <br />
@@ -54,6 +62,9 @@
 <br />
 <br />
 <br />
+
+
+}
 
 
 @code {
