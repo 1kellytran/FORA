@@ -112,7 +112,7 @@ namespace Fora.Client.Services
 
         public async Task EditMessage(int messageID, MessageModel messageToEdit)
         {
-            //await _httpClient.PutAsync($"api/message/editMessage?messageID={messageID}/messageToEdit={messageToEdit}");
+            await _httpClient.PutAsJsonAsync($"api/message/editMessage/{messageID}", messageToEdit);
         }
     }
 }
