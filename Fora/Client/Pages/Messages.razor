@@ -3,7 +3,7 @@
 @inject IUserManager UserManager
 @inject IDataManager DataManager
 
-<div class="form-control">
+<div class="card-body bg-info">
     <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
     <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
     <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
@@ -13,7 +13,7 @@
 <h3>Read what others feel about the subject!</h3>
 @foreach (var mess in AllMessages)
 {
-    <div class="card-body">
+    <div class="card-body" style="color: lightblue">
         @if(mess.UserId == ActiveUser.Id)
         {
             <div class="alert alert-primary" role="alert">
