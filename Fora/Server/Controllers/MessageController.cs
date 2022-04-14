@@ -66,21 +66,18 @@ namespace Fora.Server.Controllers
         }
 
         // PUT api/<MessageController>/5
-        [HttpPut("{id}")]
-        [Route("editMessage")]
-        public async Task EditMessage(int messageId, [FromBody]MessageModel messageToEdit)
+        [HttpPut]
+        [Route("editMessage/{messageId}")]
+        public async Task EditMessage([FromRoute]int messageId, [FromBody]MessageModel messageToEdit)
         {
             MessageModel message = new();
 
             message = _context.Messages.FirstOrDefault(m => m.Id == messageId);
 
-            message.Id = messageToEdit.Id;
-            message.UserId = messageToEdit.UserId;
             message.Message = messageToEdit.Message;
-            message.ThreadId = messageToEdit.ThreadId;
             message.Edited = true;
 
-            await _context.Messages.AddAsync(message);
+            _context.Messages.Update(message);
             await _context.SaveChangesAsync();
         }
 
@@ -90,20 +87,6 @@ namespace Fora.Server.Controllers
         public async Task<string> Delete(int messageID)
         {
             string message = "";
-
-            //MessageModel messageToDelete = new();
-            //messageToDelete = _context.Messages.FirstOrDefault(m => m.Id == messageID);
-
-            //if (messageToDelete != null)
-            //{
-            //    _context.Messages.Remove(messageToDelete);
-            //    await _context.SaveChangesAsync();
-            //    return message = "Message deleted";
-            //}
-            //else
-            //{
-            //    return message = "Something went wrong, unable to delete message";
-            //}
 
             MessageModel messageToDelete = new();
             messageToDelete = _context.Messages.FirstOrDefault(m => m.Id == messageID);

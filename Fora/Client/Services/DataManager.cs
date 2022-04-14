@@ -18,7 +18,7 @@ namespace Fora.Client.Services
         }
         public async Task CreateNewUserInterest(UserInterestModel UserInterestToAdd)
         {
-            var res= await _httpClient.PostAsJsonAsync("api/interest/uta", UserInterestToAdd);
+            var res = await _httpClient.PostAsJsonAsync("api/interest/uta", UserInterestToAdd);
 
         }
 
@@ -34,7 +34,7 @@ namespace Fora.Client.Services
         public async Task<List<InterestModel>> GetUserInterests(int activeUserId)
         {
             List<InterestModel> userInterest = new();
-            userInterest= await _httpClient.GetFromJsonAsync<List<InterestModel>>($"api/interest/check?activeUserId={activeUserId}");
+            userInterest = await _httpClient.GetFromJsonAsync<List<InterestModel>>($"api/interest/check?activeUserId={activeUserId}");
 
             return userInterest;
         }
