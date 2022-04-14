@@ -28,14 +28,19 @@
                 }                
                 @if(mess.Message != "Message has been deleted")
                 {
-                    <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button> 
-                    @*<button style="float: right" class="btn btn-warning" @onclick="() => EditMessage(mess.Id, mess)">Edit</button>*@                    
+                    <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button> @*
+                    <a class="btn btn-warning" style="float: right" @onclick="() => EditMessage(mess.Id, mess)">Edit</a>*@
+                    <button style="float: right" class="btn btn-warning" @onclick="() => EditMessage(mess.Id, mess)">Edit</button>                                   
+                @if(Edit == true)
+                    {
+                        <input type="text" @bind-value="editText"/>
+                        <button @onclick="() => SaveEditMessage(mess.Id, mess)">Save</button>
+                    }
                 }
             </div>
         }
         else
-        {
-            
+        {            
             <div class="alert alert-success" role="alert">    
                 <h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>  
                 @if(@mess.Message == "Message has been deleted")
@@ -71,6 +76,8 @@
     public UserModel ActiveUser { get; set; } = new();
     List<InterestModel> ActiveUsersInterests = new();
     ThreadModel ActiveThread = new();
+    private bool Edit;
+    private string? editText;
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,7 +125,16 @@
 
     private async Task EditMessage(int messageID, MessageModel messageToEdit)
     {
+        Edit = true;
+    }
+
+    private async Task SaveEditMessage(int messageID, MessageModel messageToEdit)
+    {
+        messageToEdit.Message = editText;
         await DataManager.EditMessage(messageID, messageToEdit);
+        Edit = false;
+
         AllMessages = await DataManager.GetAllMessages(Id);
+        StateHasChanged();
     }
 }
