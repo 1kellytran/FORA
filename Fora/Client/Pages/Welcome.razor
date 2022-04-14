@@ -4,23 +4,15 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject IUserManager UserManager
 
-@*@if (SignedIn)
-{*@
+
+
     <div class="card-body bg-info">
         <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
         <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
         <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
     </div>
     <br />
-@*}*@
-@*else
-{
-    <div class="form-control">
-    <a class="btn btn-group" href="/"><b>Sign In</b></a>
-    <a class="btn btn-group" href="/SignUp"><b>Sign Up</b></a>
-</div>
-<br />
-}*@
+
 
 
 <div class="row">
@@ -31,28 +23,7 @@
 </div>
 
 @code {
-    public UserStatusDTOModel UserStatus { get; set; } = new();
-    private bool SignedIn = false;
+    
 
-    protected override async Task OnInitializedAsync()
-    {
-        //*****CHECK USER LOGIN (att användas på alla sidor)
-        //Hämtar token från localstorage
-        var token = await localStorage.GetItemAsync<string>("Token");
-        token = token.Replace("\"", "");
-        //kollar att user finns i databas med token
-        var result = await UserManager.CheckUserLogin(token);
-        UserStatus = result;
-
-        // 3. Rendera endast delar av sidan som man ska se m.h.a. bools:arna             
-
-        if(UserStatus.IsLoggedIn == true)
-        {
-            SignedIn = true;
-        }
-        else
-        {
-            SignedIn = false;
-        }
-    }
+   
 }
