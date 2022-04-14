@@ -35,9 +35,17 @@
         }
         else
         {
+            
             <div class="alert alert-success" role="alert">    
                 <h5>@mess.User.Username</h5><h6 style="float: right">@mess.Created</h6>  
-                <p>@mess.Message</p>
+                @if(@mess.Message == "Message has been deleted")
+                {
+                    <em style="color: red">@mess.Message</em>
+                }
+                else
+                {
+                    <p>@mess.Message</p>
+                } 
             </div>
         }
     </div>
