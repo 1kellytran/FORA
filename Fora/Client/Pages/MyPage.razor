@@ -186,14 +186,14 @@
         //adding user id to interestmodel
         InterestToAdd.UserId = ActiveUser.Id;
         //creating intesrest in db
-        await Datamanager.CreateInterest(InterestToAdd);
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        await Datamanager.CreateInterest(InterestToAdd, token );
         AllInterests = await Datamanager.GetAllInterests();
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
         InterestToAdd = new();
 
-        ////adding created interest to usermodel, is this neccessary? :/
-        //ActiveUser.Interests.Add(InterestToAdd);
-        //await UserManager.UpdateUserModel(ActiveUser);
+       
     }
 
     //Allinterest button

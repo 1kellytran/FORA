@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fora.Server.Controllers
@@ -8,10 +9,12 @@ namespace Fora.Server.Controllers
     public class InterestController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public InterestController(AppDbContext context)
+        public InterestController(AppDbContext context, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
+            _signInManager = signInManager;
         }
 
         // GET: api/<InterestController>
@@ -103,28 +106,30 @@ namespace Fora.Server.Controllers
         //}
 
         [HttpPost]
-        public async Task CreateInterest([FromBody] InterestModel interestToAdd)
+        [Route("create")]
+        public async Task CreateInterest([FromBody] InterestModel interestToAdd, [FromQuery]string token)
         {
-            InterestModel interestModel = new();
-            UserInterestModel userInterestModel = new();
-            UserModel activeUser = new();
 
-            await _context.Interests.AddAsync(interestToAdd);
+            var authUser = _signInManager.UserManager.Users.FirstOrDefault(u => u.Token == token);
+            var user = _context.Users.FirstOrDefault(u => u.Username == authUser.UserName);
+
+            // Add interest to all interests
+            await _context.Interests.AddAsync(new InterestModel()
+            {
+                Name = interestToAdd.Name,
+                User = user,
+            });
             await _context.SaveChangesAsync();
 
+            // Add interest to user interests
 
+            var interest = _context.Interests.FirstOrDefault(i => i.Name == interestToAdd.Name);
 
-            interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
-            activeUser = _context.Users.FirstOrDefault(x => x.Id == interestModel.UserId);
-
-            userInterestModel.Interest= interestToAdd;
-
-            userInterestModel.User = activeUser;
-
-            
-           
-
-            var result = await _context.UserInterests.AddAsync(userInterestModel);
+            var result = await _context.UserInterests.AddAsync(new UserInterestModel()
+            {
+                User = user,
+                Interest = interest
+            });
             await _context.SaveChangesAsync();
         }
 

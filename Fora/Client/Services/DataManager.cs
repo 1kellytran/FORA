@@ -11,9 +11,9 @@ namespace Fora.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task CreateInterest(InterestModel interestToAdd)
+        public async Task CreateInterest(InterestModel interestToAdd, string token)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/interest", interestToAdd);
+            var response = await _httpClient.PostAsJsonAsync($"api/interest/create?token={token}", interestToAdd);
 
         }
         public async Task CreateNewUserInterest(UserInterestModel UserInterestToAdd)
