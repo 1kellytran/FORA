@@ -84,5 +84,15 @@ namespace Fora.Client.Services
         {
             await _httpClient.PutAsJsonAsync<PasswordDTOModel>("api/user", UserToUpdate);
         }
+
+        public async Task ChangeDeletedStateToTrue(UserModel UserToChange)
+        {
+            await _httpClient.PutAsJsonAsync<UserModel>("api/user/cstt", UserToChange);
+        }
+         public async Task ChangeDeletedStateToFalse(UserModel UserToChange)
+        {
+            await _httpClient.PutAsJsonAsync<UserModel>("api/user/cstf", UserToChange);
+        }
+
     }
 }

@@ -2,15 +2,28 @@
 @inherits LayoutComponentBase
 @inject HttpClient Http
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IDataManager Datamanager
 @inject IUserManager UserManager
 
 
-
-    <div class="card-body bg-info">
-        <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+    @if (!ActiveUser.Deleted)
+    {
+        <div class="card-body bg-info">
+    <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
         <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
         <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
     </div>
+    }
+    else
+    {
+
+        <h3>Your account is Deactivated. Reactivate?</h3>
+        <a class="btn btn-group" @onclick="ResetDeleted" href="/MyPage"><b>Yes</b></a>
+        <a class="btn btn-group" href=""><b>No</b></a>
+
+
+    }
+    
     <br />
 
 
@@ -23,6 +36,33 @@
 </div>
 
 @code {
+
+
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
+
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+
+    }
+
+    public async Task ResetDeleted()
+    {
+        UserManager.ChangeDeletedStateToFalse(ActiveUser);
+
+
+    }
+
     
 
    
