@@ -177,5 +177,28 @@ namespace Fora.Server.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut]
+        [Route("cstt")]
+        public async Task ChangeDeletedStateToTrue(UserModel userToChange)
+        {
+            
+            userToChange.Deleted = true;
+               
+            _context.Update(userToChange);
+            await _context.SaveChangesAsync();
+        }
+
+        [HttpPut]
+        [Route("cstf")]
+        public async Task ChangeDeletedStateToFalse(UserModel userToChange)
+        {
+            
+            userToChange.Deleted = false;
+               
+            _context.Update(userToChange);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

@@ -103,8 +103,9 @@
 <hr>
 <form>
     <div>
-        <button class="btn btn-danger" type="button">Inactivate user</button>
-        <button @onclick="(()=>DeleteUser(ActiveUser.Id))" class="btn btn-danger" type="button">Remove user</button>
+        
+        <button @onclick="(()=>DeleteUser(ActiveUser.Id))" class="btn btn-danger" type="button">Delete user</button>
+        <button @onclick="(()=>DeActivateUser(ActiveUser))" href="" class="btn btn-danger" type="button">Deactivate user</button>
     </div>
 </form>
 <hr />
@@ -193,8 +194,14 @@
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
         InterestToAdd = new();
 
-       
     }
+
+    private async Task DeActivateUser(UserModel ActiveUser)
+    {
+        await UserManager.ChangeDeletedStateToTrue(ActiveUser);
+        navigation.NavigateTo("");
+    }
+  
 
     //Allinterest button
     private void ShowAllInterests()
