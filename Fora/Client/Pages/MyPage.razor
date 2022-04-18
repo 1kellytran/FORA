@@ -11,11 +11,11 @@
 </div>
 <br />
 <div>
-<h1 stylr="text-align:center">Welcome to your page, @ActiveUser.Username!</h1>
+<h1 style="text-align:center">Welcome to your page, @ActiveUser.Username!</h1>
 </div>
 <br />
 <br />
-<h3>Your favourite interests:</h3>
+<h3 style="text-decoration:underline">Your favourite interests</h3>
 
 <form>
     @foreach (var interest in UserInterests)
@@ -46,7 +46,7 @@
 <hr />
 
 <form>
-    <h3>All interests on Fora:</h3>
+    <h3 style="text-decoration:underline">All interests on Fora</h3>
     <button type="button" class="btn btn-outline-primary" @onclick="ShowAllInterests">@buttonName</button>
     <br />
     <br />
@@ -100,11 +100,10 @@
 
 <br />
 <hr />
-
+<h3 style="text-decoration:underline">Create an interest here</h3>
 <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
     <DataAnnotationsValidator />
     <div>
-        <label><strong>Create an interest you want to discuss:</strong></label>
         <InputText @bind-Value="InterestToAdd.Name" placeholder="Interest" class="form-control"></InputText>
     </div>
     <br />
@@ -120,7 +119,7 @@
 <ChangePassword></ChangePassword>
 <hr>
 <hr />
-<h3>Had enough of discussions? Remove your account here: </h3>
+<h3 style="text-decoration:underline">Had enough of discussions? Remove your account here</h3>
 <form>
     <div>
         
@@ -141,9 +140,9 @@
     public List<InterestModel> AllInterests { get; set; } = new();
     public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
     public List<InterestModel> UserInterests { get; set; } = new();
-    public bool displayAllInterests = false;
     public List<UserModel> AllUsers { get; set; } = new();
     private string buttonName = "Show all interests";
+    public bool displayAllInterests = false;
 
     protected override async Task OnInitializedAsync()
     {

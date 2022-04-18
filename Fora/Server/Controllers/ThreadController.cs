@@ -70,7 +70,7 @@ namespace Fora.Server.Controllers
         // GET api/<ThreadController>/5
         [HttpGet]
         [Route("getUserThreads")]
-        public async Task<List<ThreadModel>> GetActiveUserThreds(int userId)
+        public async Task<List<ThreadModel>> GetActiveUserThreads(int userId)
         {
             List<ThreadModel> threads = new();
             threads = _context.Threads.ToList();

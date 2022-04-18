@@ -70,7 +70,7 @@ namespace Fora.Client.Services
             return allThreads;
         }
 
-        public async Task<List<ThreadModel>> GetActiveUserThreds(int userId) 
+        public async Task<List<ThreadModel>> GetActiveUserThreads(int userId) 
         {
             List<ThreadModel> threads = new();
             threads = await _httpClient.GetFromJsonAsync<List<ThreadModel>>($"api/thread/getUserThreads?userId={userId}");
