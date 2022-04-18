@@ -74,6 +74,7 @@ namespace Fora.Server.Controllers
         {
             List<ThreadModel> threads = new();
             threads = _context.Threads.ToList();
+            threads = threads.Where(t => t.UserId == userId).ToList();
             return threads;
         }
 
