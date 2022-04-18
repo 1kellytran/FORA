@@ -21,7 +21,7 @@
 
     @if (showThreadInfo)
 {
-    <h3>What are you curious about?</h3>
+    <h3>All threads in <b>@ActiveInterest.Name</b></h3>
     @foreach (var thread in AllThreads)
     {
         <div class="card bg-primary p-2 text-dark bg-opacity-10">
@@ -31,6 +31,11 @@
                     {
                         <Button type="button" @onclick="(() => DeleteThread(thread.Id))" class="btn btn-outline-danger" style="float: right">Delete thread</Button>
                     }
+                     @if (thread.UserId == null)
+                        {
+                            <em style="color:red">Thread created by a deleted user</em>
+                        }
+
                 </div>
                 @if (thread.Messages != null)
                 {
@@ -99,7 +104,7 @@
         //hämtar den aktiva användaren
         ActiveUser = await UserManager.GetUserByToken(token);
         //hämtar alla threads som finns i det aktiva inresset 
-        AllThreads = await DataManager.GetAllThreads(Id);
+        AllThreads = await DataManager.GetAllThreadsById(Id);
         //hämta alla active interest för att visa eventuell NO THREADS - lös efter frdriks updatering
         AllInterests = await DataManager.GetAllInterests();
         ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == Id);
@@ -116,7 +121,7 @@
 
         ThreadToAdd.Interest = ActiveInterest;
         await DataManager.CreateThread(ThreadToAdd);
-        AllThreads = await DataManager.GetAllThreads(Id);
+        AllThreads = await DataManager.GetAllThreadsById(Id);
         ThreadToAdd = new(); // tar bort från fältet
         StateHasChanged();
         
@@ -150,7 +155,7 @@
         {
             showThreadInfo = true;
             threadButtonName = "Hide";
-            AllThreads = await DataManager.GetAllThreads(Id);
+            AllThreads = await DataManager.GetAllThreadsById(Id);
         }
         else if (showThreadInfo)
         {

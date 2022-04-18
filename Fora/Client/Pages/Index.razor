@@ -32,6 +32,7 @@
 
     private async Task SignInUser()
     {
+        await UserManager.SignOutUser();
         var storageList = await UserManager.SignInUser(User);
         
         if(storageList != null)
