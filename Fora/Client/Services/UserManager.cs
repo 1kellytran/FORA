@@ -28,6 +28,18 @@ namespace Fora.Client.Services
             return null;
         }
 
+        public async Task<List<UserModel>> GetAllUsers()
+        {
+            var response = await _httpClient.GetAsync($"api/user/gau");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var userFromDb = JsonConvert.DeserializeObject<List<UserModel>>(result);
+                return userFromDb;
+            }
+            return null;
+        }
+
         public async Task<List<string>> SignUpUser(UserDTOModel user)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user", user);
