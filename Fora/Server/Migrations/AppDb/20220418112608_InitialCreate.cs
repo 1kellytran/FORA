@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Fora.Server.Migrations
+namespace Fora.Server.Migrations.AppDb
 {
     public partial class InitialCreate : Migration
     {
@@ -71,7 +72,7 @@ namespace Fora.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserInterestModel",
+                name: "UserInterests",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -79,15 +80,15 @@ namespace Fora.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserInterestModel", x => new { x.UserId, x.InterestId });
+                    table.PrimaryKey("PK_UserInterests", x => new { x.UserId, x.InterestId });
                     table.ForeignKey(
-                        name: "FK_UserInterestModel_Interests_InterestId",
+                        name: "FK_UserInterests_Interests_InterestId",
                         column: x => x.InterestId,
                         principalTable: "Interests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserInterestModel_Users_UserId",
+                        name: "FK_UserInterests_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -101,7 +102,11 @@ namespace Fora.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThreadId = table.Column<int>(type: "int", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    Edited = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThreadId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -111,8 +116,7 @@ namespace Fora.Server.Migrations
                         name: "FK_Messages_Threads_ThreadId",
                         column: x => x.ThreadId,
                         principalTable: "Threads",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Messages_Users_UserId",
                         column: x => x.UserId,
@@ -147,8 +151,8 @@ namespace Fora.Server.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInterestModel_InterestId",
-                table: "UserInterestModel",
+                name: "IX_UserInterests_InterestId",
+                table: "UserInterests",
                 column: "InterestId");
         }
 
@@ -158,7 +162,7 @@ namespace Fora.Server.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "UserInterestModel");
+                name: "UserInterests");
 
             migrationBuilder.DropTable(
                 name: "Threads");

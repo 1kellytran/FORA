@@ -11,6 +11,7 @@ namespace Fora.Shared
         public bool Deleted { get; set; }
         public bool Edited { get; set; }
         public DateTime? Created { get; set; }
+        public string? Username { get; set; }
 
         // Relations
         [ForeignKey(nameof(Thread))]

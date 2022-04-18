@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Fora.Server.Migrations.AuthDb
+namespace Fora.Server.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220405093355_InitialCreate")]
+    [Migration("20220418112534_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

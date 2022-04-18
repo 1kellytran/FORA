@@ -23,21 +23,22 @@ namespace Fora.Server.Controllers
         {
             List<MessageModel> messages = new();
 
-            messages = _context.Messages.Include(m => m.User).Where(m => m.ThreadId == threadID)
-                .Select(m => new MessageModel()
-                {
-                    Id = m.Id,
-                    Message = m.Message,
-                    Created = m.Created,
-                    UserId = m.UserId,
-                    Deleted = m.Deleted,
-                    Edited = m.Edited,
-                    User = new UserModel()
-                    {
-                        Id = m.User.Id,
-                        Username = m.User.Username,
-                    }
-                }).ToList();
+            messages = _context.Messages.Where(m => m.ThreadId == threadID).ToList();
+            //messages = _context.Messages.Include(m => m.User).Where(m => m.ThreadId == threadID)
+            //    .Select(m => new MessageModel()
+            //    {
+            //        Id = m.Id,
+            //        Message = m.Message,
+            //        Created = m.Created,
+            //        UserId = m.UserId,
+            //        Deleted = m.Deleted,
+            //        Edited = m.Edited,
+            //        User = new UserModel()
+            //        {
+            //            Id = m.User.Id,
+            //            Username = m.User.Username,
+            //        }
+            //    }).ToList();
             return messages;
         }
 
@@ -57,6 +58,7 @@ namespace Fora.Server.Controllers
 
             messageToAdd.Thread = thread;
             messageToAdd.User = user;
+            messageToAdd.Username = user.Username;
             messageToAdd.Created = DateTime.Now;
             messageToAdd.Deleted = false;
             messageToAdd.Edited = false;
