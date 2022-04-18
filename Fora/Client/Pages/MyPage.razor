@@ -15,7 +15,7 @@
 </div>
 <br />
 <br />
-<h3 style="text-decoration:underline">Your favourite interests</h3>
+<h3>Your favourite interests</h3>
 
 <form>
     @foreach (var interest in UserInterests)
@@ -46,7 +46,7 @@
 <hr />
 
 <form>
-    <h3 style="text-decoration:underline">All interests on Fora</h3>
+    <h3>All interests on Fora</h3>
     <button type="button" class="btn btn-outline-primary" @onclick="ShowAllInterests">@buttonName</button>
     <br />
     <br />
@@ -100,7 +100,7 @@
 
 <br />
 <hr />
-<h3 style="text-decoration:underline">Create an interest here</h3>
+<h3>Create an interest here</h3>
 <EditForm Model="InterestToAdd" OnValidSubmit="AddPersonalInterest">
     <DataAnnotationsValidator />
     <div>
@@ -116,13 +116,25 @@
 <br />
 <hr />
 <hr />
+<h3 style="text-decoration:underline">Threads created by you</h3>
+@foreach (var thread in ActiveUsersThreads)
+{
+    <div class="card bg-primary p-2 text-dark bg-opacity-10">
+        <div class="card-body">
+             <a href="/Messages/@thread.Id">@thread.Name</a>
+        </div>
+    </div>
+}
+<br />
+<br />
+<hr /> 
+<hr /> 
 <ChangePassword></ChangePassword>
 <hr>
-<hr />
-<h3 style="text-decoration:underline">Had enough of discussions? Remove your account here</h3>
+<hr /> 
+<h3>Had enough of discussions? Remove your account here</h3>
 <form>
     <div>
-        
         <button @onclick="(()=>DeleteUser(ActiveUser.Id))" class="btn btn-danger" type="button">Delete user</button>
         <button @onclick="(()=>DeActivateUser(ActiveUser))" href="" class="btn btn-danger" type="button">Deactivate user</button>
     </div>
@@ -141,6 +153,7 @@
     public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
     public List<InterestModel> UserInterests { get; set; } = new();
     public List<UserModel> AllUsers { get; set; } = new();
+    public List<ThreadModel> ActiveUsersThreads { get; set; } = new();
     private string buttonName = "Show all interests";
     public bool displayAllInterests = false;
 
@@ -163,7 +176,7 @@
 
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
 
-
+        ActiveUsersThreads = await Datamanager.GetActiveUserThreads(ActiveUser.Id);
     }
 
     public async Task AddToFav(int interestid)
