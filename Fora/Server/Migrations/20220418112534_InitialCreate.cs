@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Fora.Server.Migrations.AuthDb
+namespace Fora.Server.Migrations
 {
     public partial class InitialCreate : Migration
     {
