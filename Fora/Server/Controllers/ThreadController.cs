@@ -67,10 +67,14 @@ namespace Fora.Server.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // PUT api/<ThreadController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // GET api/<ThreadController>/5
+        [HttpGet]
+        [Route("getUserThreads")]
+        public async Task<List<ThreadModel>> GetActiveUserThreds(int userId)
         {
+            List<ThreadModel> threads = new();
+            threads = _context.Threads.ToList();
+            return threads;
         }
 
         // DELETE api/<ThreadController>/5

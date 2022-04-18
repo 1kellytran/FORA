@@ -61,7 +61,7 @@ namespace Fora.Client.Services
         }
         // ***** THREAD *****
 
-        public async Task<List<ThreadModel>> GetAllThreads(int interestID)
+        public async Task<List<ThreadModel>> GetAllThreadsById(int interestID)
         {
             List<ThreadModel> allThreads = new();
 
@@ -70,7 +70,15 @@ namespace Fora.Client.Services
             return allThreads;
         }
 
-        public async Task CreateThread(ThreadModel threadToAdd)
+        public async Task<List<ThreadModel>> GetActiveUserThreds(int userId) 
+        {
+            List<ThreadModel> threads = new();
+            threads = await _httpClient.GetFromJsonAsync<List<ThreadModel>>($"api/thread/getUserThreads?userId={userId}");
+            return threads;
+
+        }
+
+    public async Task CreateThread(ThreadModel threadToAdd)
         {
             var response = await _httpClient.PostAsJsonAsync("api/thread", threadToAdd);
         }
