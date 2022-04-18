@@ -15,6 +15,7 @@ namespace Fora.Client.Services
         Task UpdatePassword(PasswordDTOModel UserToUpdate);
         Task ChangeDeletedStateToTrue(UserModel UserToChange);
         Task ChangeDeletedStateToFalse(UserModel UserToChange);
+        Task<List<UserModel>> GetAllUsers();
 
 
     }

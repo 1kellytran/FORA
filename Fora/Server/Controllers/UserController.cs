@@ -127,23 +127,15 @@ namespace Fora.Server.Controllers
             }
         }
 
-        //// PUT api/<UserController>/5 test alex
-        //[HttpPut]
-        //public async Task UpdateUser([FromBody] UserModel updatedUser)
-        //{
-        //    UserModel userToUpdate = new();
-        //    userToUpdate.Id = updatedUser.Id;
-        //    userToUpdate.Username = updatedUser.Username;
-        //    userToUpdate.UserInterests = updatedUser.UserInterests;
-        //    userToUpdate.Interests = updatedUser.Interests;
-        //    userToUpdate.Messages = updatedUser.Messages;
-        //    userToUpdate.Banned = updatedUser.Banned;
-        //    userToUpdate.Deleted = updatedUser.Deleted;
-        //    userToUpdate.Threads = updatedUser.Threads;
+        [HttpGet]
+        [Route("gau")]
+        public async Task<List<UserModel>> GetUsers()
+        {
+           List<UserModel> allUsers= _context.Users.ToList();
+            return allUsers;
+        }
 
-        //    _context.Users.Update(userToUpdate);
-        //    _context.SaveChanges();
-        //}
+       
 
         // DELETE api/<UserController>/5 test alex
         [HttpDelete]

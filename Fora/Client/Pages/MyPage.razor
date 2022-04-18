@@ -65,6 +65,14 @@
                         {
                             <a style="float:right">Thread created by a deleted user</a>
                         }
+                        @foreach(var user in AllUsers)
+                        {
+                            if(interest.UserId == user.Id && user.Deleted)
+                            {
+                                <a style=float:right>Thread created by a Deactivated user</a>
+                            }
+                        }
+                       
                         @if (interest.Threads != null)
                         {
                             <p>@interest.Threads.Count threads </p>
@@ -130,6 +138,7 @@
     public List<UserInterestModel> ActiveUserInterest { get; set; } = new();
     public List<InterestModel> UserInterests { get; set; } = new();
     public bool displayAllInterests = false;
+    public List<UserModel> AllUsers { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -146,7 +155,11 @@
         //hämtar alla intressen
         AllInterests = await Datamanager.GetAllInterests();
 
+        AllUsers = await UserManager.GetAllUsers();
+
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+
+       
     }
 
     public async Task AddToFav(int interestid)
