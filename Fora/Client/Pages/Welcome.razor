@@ -5,14 +5,13 @@
 @inject IDataManager Datamanager
 @inject IUserManager UserManager
 
-
     @if (!ActiveUser.Deleted)
     {
-        <div class="card-body bg-info">
-    <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
-        <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
-        <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
-    </div>
+        <div class="form-control" style="background-color:lightblue">
+            <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+            <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
+            <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
+        </div>
     }
     else
     {
@@ -39,16 +38,12 @@
         //Hämtar token från localstorage
         //Thread.Sleep(100);
         var token = await localStorage.GetItemAsync<string>("Token");
-        token = token.Replace("\"", "");
-       
+        token = token.Replace("\"", "");       
 
         //hämtar den aktiva användaren
-        ActiveUser = await UserManager.GetUserByToken(token);
-        
-       
+        ActiveUser = await UserManager.GetUserByToken(token);      
     }
    
-
     public async Task ResetDeleted()
     {
         UserManager.ChangeDeletedStateToFalse(ActiveUser);
