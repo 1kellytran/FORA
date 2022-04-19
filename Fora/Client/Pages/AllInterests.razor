@@ -12,6 +12,7 @@
 
 <form>
     <h1 style="text-align:center">All interests on Fora</h1>
+    <h6 style="text-align:center">You can see and delete your favorite interests on <strong><a href="/mypage">My Page</a></strong></h6>
     <br />
     <br />
         <div>
@@ -23,13 +24,13 @@
                         @if (interest.UserId == null)
                         {
                             
-                            <em style="float:right;color:red" >Thread created by a deleted user</em>
+                            <em style="float:right;color:red" >Interest created by a deleted user</em>
                         }
                         @foreach(var user in AllUsers)
                         {
                             if(interest.UserId == user.Id && user.Deleted)
                             {
-                                <em style="float:right;color:blueviolet" >Thread created by a deactivated user</em>
+                                <em style="float:right;color:blueviolet" >Interest created by a deactivated user</em>
                             }
                         }
                        
