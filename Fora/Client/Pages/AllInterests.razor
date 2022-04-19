@@ -1,0 +1,105 @@
+﻿@page "/AllInterests"
+@inject IDataManager Datamanager
+@inject IUserManager UserManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<div class="card-body bg-info">
+    <a class="btn btn-group" href="/MyPage"><b>My Page</b></a>
+    <a class="btn btn-group" href="/AllInterests"><b>All Interests</b></a>
+    <a class="btn btn-group" href="/SignOut"><b>Sign Out</b></a>
+</div>
+<br />
+
+<form>
+    <h1 style="text-align:center">All interests on Fora</h1>
+    <br />
+    <br />
+        <div>
+            @foreach (var interest in AllTheInterests)
+            {
+                <div class="card bg-primary p-2 text-dark bg-opacity-10">
+                    <div class="card-body">
+                        <h3><a  href="Threads/@interest.Id"> @interest.Name </a> </h3>
+                        @if (interest.UserId == null)
+                        {
+                            
+                            <em style="float:right;color:red" >Thread created by a deleted user</em>
+                        }
+                        @foreach(var user in AllUsers)
+                        {
+                            if(interest.UserId == user.Id && user.Deleted)
+                            {
+                                <em style="float:right;color:blueviolet" >Thread created by a deactivated user</em>
+                            }
+                        }
+                       
+                        @if (interest.Threads != null)
+                        {
+                            <p>@interest.Threads.Count threads </p>
+                        }
+
+                        <div class="d-grid gap-2 d-md-block" style="float: right">
+                            <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-outline-success" >Add to fav!</button>
+                            
+                        </div>
+                         
+                    </div>
+                </div>
+                <br />
+            }
+            
+            <br />
+        </div>
+  
+
+</form>
+@code {
+    public List<InterestModel> AllTheInterests { get; set; } = new();
+    public List<UserModel> AllUsers { get; set; } = new();
+    public UserModel ActiveUser { get; set; } = new();
+    public List<InterestModel> UserInterests { get; set; } = new();
+    public UserStatusDTOModel UserStatus { get; set; } = new();
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        var result = await UserManager.CheckUserLogin(token);
+        UserStatus = result;
+
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+        AllUsers = await UserManager.GetAllUsers();
+        AllTheInterests = await Datamanager.GetAllInterests();
+    }
+
+
+    public async Task AddToFav(int interestid)
+    {
+        
+        UserInterestModel modelToAdd = new();
+        modelToAdd.Interest = AllTheInterests.FirstOrDefault(x => x.Id == interestid);
+        modelToAdd.User = ActiveUser;
+
+        await Datamanager.CreateNewUserInterest(modelToAdd);
+        
+
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+}
