@@ -36,6 +36,13 @@
                         {
                             <em style="color:red">Thread created by a deleted user</em>
                         }
+                        @foreach(var user in AllUsers)
+                        {
+                            if(thread.UserId == user.Id && user.Deleted)
+                            {
+                                <em style="float:right;color:blueviolet" >Thread created by a deactivated user</em>
+                            }
+                        }
 
                 </div>
                 @if (thread.Messages != null)
@@ -85,7 +92,7 @@
     public List<ThreadModel> SearchList { get; set; } = new();
     public List<ThreadModel> AllThreads { get; set; } = new();
     public ThreadModel ThreadToAdd { get; set; } = new();
-
+    public List<UserModel> AllUsers { get; set; } = new();
     public List<InterestModel> AllInterests { get; set;} =new(); //för att hämta all interests
     public InterestModel ActiveInterest { get; set;} =new();
     private bool SignedIn;
@@ -109,6 +116,7 @@
         //hämta alla active interest för att visa eventuell NO THREADS - lös efter frdriks updatering
         AllInterests = await DataManager.GetAllInterests();
         ActiveInterest = AllInterests.FirstOrDefault(I => I.Id == Id);
+        AllUsers = await UserManager.GetAllUsers();
         
     }
 

@@ -81,29 +81,9 @@ namespace Fora.Server.Controllers
 
         
 
-        // GET api/<InterestController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+     
 
-         //POST api/<InterestController>
-        //[HttpPost]
-        //public async Task CreateInterest([FromBody] InterestModel interestToAdd)
-        //{
-        //    InterestModel interestModel = new();
-        //    UserInterestModel userInterestModel = new();
-
-        //    await _context.Interests.AddAsync(interestToAdd);
-        //    await _context.SaveChangesAsync();
-
-        //    interestModel = _context.Interests.FirstOrDefault(x => x.Name == interestToAdd.Name);
-        //    userInterestModel.InterestId = interestToAdd.Id;
-        //    userInterestModel.UserId = (int)interestToAdd.UserId;
-        //    var result = await _context.UserInterests.AddAsync(userInterestModel);
-        //    await _context.SaveChangesAsync();
-        //}
+       
 
         [HttpPost]
         [Route("create")]
@@ -133,12 +113,7 @@ namespace Fora.Server.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // PUT api/<InterestController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-
-        }
+      
 
         // DELETE api/<InterestController>/5
         [HttpDelete("{id}")]

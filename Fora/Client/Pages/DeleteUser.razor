@@ -1,0 +1,40 @@
+﻿@page "/deleteuser"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IUserManager UserManager
+@inject NavigationManager Navigation
+
+
+<h3 style="text-align:center">Are you sure you want to delete your accout?</h3>
+<h6 style="text-align:center">You can not restore your account after deleting it</h6>
+<div style="text-align:center">
+       <button class="btn btn-success" @onclick="DeleteAccount">Yes</button>  <button class="btn btn-danger" @onclick="NotDeleted">No</button>
+    </div>
+
+@code {
+    public UserModel ActiveUser { get; set; } = new();
+    private string token = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        token = await LocalStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+        //kollar att user finns i databas med token
+        await UserManager.CheckUserLogin(token);
+
+        ActiveUser = await UserManager.GetUserByToken(token);
+        
+    }
+
+    public void NotDeleted()
+    {
+        Navigation.NavigateTo("/mypage");
+    }
+     public async Task DeleteAccount()
+    {
+        token = await LocalStorage.GetItemAsync<string>("Token");
+        UserManager.DeleteUser(ActiveUser.Id, token);
+        Navigation.NavigateTo("/");
+    }
+}
