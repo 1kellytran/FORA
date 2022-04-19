@@ -75,10 +75,38 @@
                         {
                             <p>@interest.Threads.Count threads </p>
                         }
+                        @foreach (var userInterest in UserInterests)
+                    {
+                        if (userInterest.Id == interest.Id)
 
+                        {
+                            addedToFavvis = true;
+                        }
+                    }
+
+                    @if (!addedToFavvis)
+                    {
                         <div class="d-grid gap-2 d-md-block" style="float: right">
-                            <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-outline-success" >Add to fav!</button>
+                            <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-outline-success">Add to fav!</button>
                         </div>
+                    }
+
+                    else
+                    {   
+                        <div style="float: right; color:red">
+                        <p>Interest already added!</p>
+                        </div>
+                        addedToFavvis = false;
+                    }
+
+
+
+                       
+
+
+
+
+
                          @if (interest.UserId == ActiveUser.Id)
                         {
     
@@ -154,6 +182,7 @@
     public List<ThreadModel> ActiveUsersThreads { get; set; } = new();
     private string buttonName = "Show all interests";
     public bool displayAllInterests = false;
+    public bool addedToFavvis;
 
     protected override async Task OnInitializedAsync()
     {
@@ -186,6 +215,7 @@
         await Datamanager.CreateNewUserInterest(modelToAdd);
 
         UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
+        AllInterests = await Datamanager.GetAllInterests();
     }
 
     public async Task RemoveFromFav(int interestId)
