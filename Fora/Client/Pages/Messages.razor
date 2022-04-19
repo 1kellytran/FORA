@@ -21,7 +21,16 @@
         @if(mess.UserId == ActiveUser.Id)
         {
             <div class="alert alert-primary" role="alert">
-                <h5>@mess.Username</h5><h6 style="float: right">@mess.Created</h6>
+                @if(mess.Edited == true)
+                {
+                    <h5>@mess.Username</h5><h6 style="float: right"><i>Message has been edited</i></h6>
+                    <h6>@mess.Created</h6>
+                }
+                else
+                {
+                    <h5>@mess.Username</h5>
+                    <h6>@mess.Created</h6>
+                }
                 @if(@mess.Message == "Message has been deleted")
                 {
                     <em style="color: red">@mess.Message</em>
@@ -35,7 +44,7 @@
                     <button style="float: right" class="btn btn-danger" @onclick="() => DeleteMessage(mess.Id)">Delete</button> @*
                     <a class="btn btn-warning" style="float: right" @onclick="() => EditMessage(mess.Id, mess)">Edit</a>*@
                     <button style="float: right" class="btn btn-warning" @onclick="() => EditMessage(mess.Id, mess)">Edit</button>                                   
-                @if(Edit == true)
+                @if(WantToEdit == true)
                     {
                         <input type="text" @bind-value="editText"/>
                         <button @onclick="() => SaveEditMessage(mess.Id, mess)">Save</button>
@@ -46,7 +55,16 @@
         else
         {            
             <div class="alert alert-success" role="alert">    
-                <h5>@mess.Username</h5><h6 style="float: right">@mess.Created</h6>  
+                @if(mess.Edited == true)
+                {
+                    <h5>@mess.Username</h5><h6 style="float: right"><i>Message has been edited</i></h6>
+                    <h6>@mess.Created</h6>
+                }
+                else
+                {
+                    <h5>@mess.Username</h5>
+                    <h6>@mess.Created</h6>
+                }
                 @if(@mess.Message == "Message has been deleted")
                 {
                     <em style="color: red">@mess.Message</em>
@@ -80,6 +98,7 @@
     public UserModel ActiveUser { get; set; } = new();
     List<InterestModel> ActiveUsersInterests = new();
     ThreadModel ActiveThread = new();
+    private bool WantToEdit;
     private bool Edit;
     private string? editText;
 
@@ -129,14 +148,14 @@
 
     private async Task EditMessage(int messageID, MessageModel messageToEdit)
     {
-        Edit = true;
+        WantToEdit = true;
     }
 
     private async Task SaveEditMessage(int messageID, MessageModel messageToEdit)
     {
         messageToEdit.Message = editText;
         await DataManager.EditMessage(messageID, messageToEdit);
-        Edit = false;
+        WantToEdit = false;
 
         AllMessages = await DataManager.GetAllMessages(Id);
         StateHasChanged();
