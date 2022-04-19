@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Fora.Server.Migrations.AppDb
+namespace Fora.Server.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
