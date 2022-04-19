@@ -45,7 +45,13 @@ namespace Fora.Client.Services
             var response = await _httpClient.PostAsJsonAsync("api/user", user);
             var list = await response.Content.ReadFromJsonAsync<List<string>>();
 
-            return list;
+            if (list != null)
+            {
+                await _localStorage.SetItemAsync("Token", list[0]);
+                await _localStorage.SetItemAsync("Name", list[1]);
+                return list;
+            }
+            return null;
         }
 
         public async Task<List<string>> SignInUser(SignInModel user)

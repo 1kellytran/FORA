@@ -22,7 +22,7 @@
     {
         <div class="card bg-primary p-2 text-dark bg-opacity-10">
             <div class="card-body">
-                <strong>@interest.Name </strong>
+                <h3><a  href="Threads/@interest.Id"> @interest.Name </a> </h3>
                 
                 @if (interest.UserId == null)
                 {
@@ -33,7 +33,6 @@
                     <p>@interest.Threads.Count threads </p>
                 }   
                 <div class="d-grid gap-2 d-md-block" style="float: right">
-                <a type="button" href="Threads/@interest.Id" class="btn btn-outline-secondary">Go to threads!</a>
                 <button type="button" @onclick="(() =>RemoveFromFav(interest.Id))" class="btn btn-outline-success" >Remove from fav</button>
                  </div>
                 
@@ -58,7 +57,7 @@
             {
                 <div class="card bg-primary p-2 text-dark bg-opacity-10">
                     <div class="card-body">
-                        <strong>@interest.Name </strong>
+                         <h3><a  href="Threads/@interest.Id"> @interest.Name </a> </h3>
                         @if (interest.UserId == null)
                         {
                             
@@ -78,7 +77,6 @@
                         }
 
                         <div class="d-grid gap-2 d-md-block" style="float: right">
-                            <a type="button" href="Threads/@interest.Id" class="btn btn-outline-secondary" >Go to threads!</a>
                             <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-outline-success" >Add to fav!</button>
                         </div>
                          @if (interest.UserId == ActiveUser.Id)

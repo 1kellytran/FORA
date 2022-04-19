@@ -37,11 +37,12 @@
                         {
                             <p>@interest.Threads.Count threads </p>
                         }
-
-                        <div class="d-grid gap-2 d-md-block" style="float: right">
+                    
+                             <div class="d-grid gap-2 d-md-block" style="float: right">
                             <button type="button" @onclick="(() =>AddToFav(interest.Id))" class="btn btn-outline-success" >Add to fav!</button>
-                            
-                        </div>
+                            </div>
+                    
+                    
                          
                     </div>
                 </div>
@@ -75,6 +76,8 @@
         ActiveUser = await UserManager.GetUserByToken(token);
         AllUsers = await UserManager.GetAllUsers();
         AllTheInterests = await Datamanager.GetAllInterests();
+
+        UserInterests = await Datamanager.GetUserInterests(ActiveUser.Id);
     }
 
 

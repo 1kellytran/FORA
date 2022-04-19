@@ -31,6 +31,7 @@
 </div>
 
 @code {
+     public UserModel ActiveUser { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,7 +47,7 @@
         
        
     }
-    public UserModel ActiveUser { get; set; } = new();
+   
 
     public async Task ResetDeleted()
     {
