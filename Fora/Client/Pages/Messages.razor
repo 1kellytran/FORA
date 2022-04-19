@@ -17,6 +17,18 @@
     {
         mess.Username = "Deleted User";
     }
+    @foreach(var user in AllUsers)
+    {
+        @if(mess.UserId == user.Id && user.Deleted)
+        {
+            mess.Username = "Deactivated User";
+        }
+        else if(mess.UserId == user.Id)
+        {
+            mess.Username = user.Username;
+        }
+    }    
+
     <div class="card-body" style="color: lightblue">
         @if(mess.UserId == ActiveUser.Id)
         {
@@ -92,6 +104,7 @@
     public List<MessageModel> AllMessages { get; set; } = new();
     public List<ThreadModel> AllThreads { get; set; } = new();
     public List<InterestModel> AllInterests { get; set; } = new();
+    public List<UserModel> AllUsers { get; set; } = new();
 
     public MessageModel MessageToAdd { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
@@ -115,6 +128,7 @@
         ActiveUser = await UserManager.GetUserByToken(token);
 
         AllMessages = await DataManager.GetAllMessages(Id);
+        AllUsers = await UserManager.GetAllUsers();
     }
 
     private async void CreateMessage()
