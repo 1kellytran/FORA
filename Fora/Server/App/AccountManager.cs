@@ -24,11 +24,10 @@ namespace Fora.Server.App
             return token;
         }
 
-        //in prgress, dont know if it works
+        
         public async Task ChangePassword(ApplicationUser user, PasswordDTOModel userToUpdate)
         {
-            //string oldpassword = userToUpdate.OldPassword;
-            //string newpassword = userToUpdate.NewPassword;
+            
             await _signInManager.UserManager.ChangePasswordAsync(user, userToUpdate.OldPassword, userToUpdate.NewPassword);
             
         }

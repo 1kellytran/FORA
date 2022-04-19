@@ -26,7 +26,7 @@
                 
                 @if (interest.UserId == null)
                 {
-                    <a style="float:right">Thread created by a deleted user</a>
+                    <a style="float:right">Interest created by a deleted user</a>
                 }
                 @if (interest.Threads != null)
                 {
@@ -61,13 +61,13 @@
                         @if (interest.UserId == null)
                         {
                             
-                            <em style="float:right;color:red" >Thread created by a deleted user</em>
+                            <em style="float:right;color:red" >Interest created by a deleted user</em>
                         }
                         @foreach(var user in AllUsers)
                         {
                             if(interest.UserId == user.Id && user.Deleted)
                             {
-                                <em style="float:right;color:blueviolet" >Thread created by a deactivated user</em>
+                                <em style="float:right;color:blueviolet" >Interest created by a deactivated user</em>
                             }
                         }
                        
@@ -143,7 +143,7 @@
 @code {
     private bool SignedIn;
 
-    //Sets new userinterest
+    
     public InterestModel InterestToAdd { get; set; } = new();
     public UserStatusDTOModel UserStatus { get; set; } = new();
     public UserModel ActiveUser { get; set; } = new();
@@ -204,9 +204,7 @@
 
     public async Task DeleteUser(int activeUser)
     {
-        var token = await localStorage.GetItemAsync<string>("Token");
-        UserManager.DeleteUser(activeUser, token);
-        navigation.NavigateTo("");
+        navigation.NavigateTo("/DeleteUser");
     }
 
     private async Task AddPersonalInterest()
@@ -226,8 +224,8 @@
 
     private async Task DeActivateUser(UserModel ActiveUser)
     {
-        await UserManager.ChangeDeletedStateToTrue(ActiveUser);
-        navigation.NavigateTo("");
+        
+        navigation.NavigateTo("/DeactivateUser");
     }
 
 
