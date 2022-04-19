@@ -31,6 +31,21 @@
 </div>
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        //*****CHECK USER LOGIN (att användas på alla sidor)
+        //Hämtar token från localstorage
+        //Thread.Sleep(100);
+        var token = await localStorage.GetItemAsync<string>("Token");
+        token = token.Replace("\"", "");
+       
+
+        //hämtar den aktiva användaren
+        ActiveUser = await UserManager.GetUserByToken(token);
+        
+       
+    }
     public UserModel ActiveUser { get; set; } = new();
 
     public async Task ResetDeleted()
